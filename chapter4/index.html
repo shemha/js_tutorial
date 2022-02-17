@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4章 条件分岐</title>
+</head>
+<body>
+    <script type="module">
+        // 4.1 比較演算子について--等価演算子と厳密等価演算子について
+
+        console.log('5' == 5);  // true
+
+        console.log('5' === 5); // false
+    </script>
+
+
+    <script type="module">
+        // 4.2 IF文の使い方
+
+        const user = ['田中太郎','佐藤一郎','山田次郎', '山田三郎', '伊藤花子'];
+
+        user.forEach(name => {
+            if(name === '山田三郎') {
+    
+                console.log('山田三郎さんは存在します');
+    
+            }
+        });
+    </script>
+    <script type="module">
+        const user = ['田中三郎','佐藤一郎', '山田三郎', '伊藤花子'];
+
+        user.forEach(name => {
+            if(name === '山田三郎') {
+        
+                console.log('山田三郎さんは存在します');
+        
+            } else if(name === '山田花子') {
+        
+                console.log('山田花子さんは存在します');
+        
+            } else if(name === '田中三郎') {
+        
+                console.log('田中三郎さんは存在します');
+        
+            } else {
+                console.log('該当するユーザーは存在しません');
+            }
+        });
+    </script>
+
+
+    <script type="module">
+        // 4.2 IF文の使い方--三項演算子について
+
+        const user = ['田中太郎','佐藤一郎','山田次郎', '山田三郎', '伊藤花子'];
+
+        user.forEach(name => {
+            if(name === '山田三郎') {
+                
+                console.log('存在します');
+                
+            }
+        });
+    </script>
+    <script type="module">
+        const user = ['田中太郎','佐藤一郎','山田次郎', '山田三郎', '伊藤花子'];
+
+        user.forEach(name => {
+
+            name === '山田三郎' ? console.log('存在します') : false;
+
+        });
+    </script>
+
+
+    <script type="module">
+        // 4.2 IF文の使い方--falseになる条件
+
+        console.log('' ? true : false); // false
+        console.log(0 ? true: false);  // false
+        console.log(NaN ? true: false); // false
+        console.log(null ? true : false); // false
+        console.log(undefined ? true : false); // false
+    </script>
+
+
+    <script type="module">
+        // 4.3 Switch文の使い方
+
+        const user = ['田中太郎','佐藤一郎','山田次郎', '伊藤三郎'];
+
+        user.forEach(name => {
+
+            switch(name) {
+                case '田中太郎':
+                    console.log(name + 'は営業部 第一課です');
+                break;
+
+                case '山田次郎':
+                    console.log(name + 'は製造部 生産管理課です');
+                break;
+
+                default:
+                    console.log(name + 'は該当データがありません');
+            }
+
+        });
+    </script>
+    <script type="module">
+        const user = ['田中太郎','佐藤一郎','山田次郎', '伊藤三郎'];
+
+        user.forEach(name => {
+
+            switch(name) {
+                case '田中太郎':
+                    console.log(name + 'は営業部 第一課です');
+                break;
+
+                case '山田次郎':
+                    console.log(name + 'は製造部 生産管理課です');
+                default:
+                    console.log(name + 'は該当データがありません');
+            }
+
+        });
+    </script>
+
+
+    <script type="module">
+        // 4.4 演習問題--問題1
+
+        /*
+        80kg以上の場合は「もっと頑張りましょう」のメッセージ
+        70kg以上80kg未満の場合は「確実に成果が出ていますよ」のメッセージ
+        60kgより重く70kg未満の場合は「ついにここまで来ましたね」のメッセージ
+        60kg以下の場合は「ダイエット成功です！」のメッセージ
+        */
+        let weight =  Math.floor( Math.random() * 50 + 50 );
+
+        if(weight >= 80){
+            console.log("もっと頑張りましょう");
+        }else if(weight >= 70){
+            console.log("確実に成果が出ていますよ");
+        }else if(weight > 60){
+            console.log("ついにここまで来ましたね");
+        }else{
+            console.log("ダイエット成功です！");
+        }
+    </script>
+    <script type="module">
+        // switch文の場合
+
+        let weight =  Math.floor( Math.random() * 50 + 50 );
+
+        switch(true){
+            case weight >= 80:
+                console.log("もっと頑張りましょう");
+                break;
+            
+            case weight >= 70:
+                console.log("確実に成果が出ていますよ");
+                break;
+            
+            case weight > 60:
+                console.log("ついにここまで来ましたね");
+                break;
+            
+            default:
+                console.log("ダイエット成功です！");
+        }
+    </script>
+
+
+    <script type="module">
+        // 4.4 演習問題--問題2
+
+        /*
+        犬（ワンワン！）
+        猫（にゃーん！）
+        牛（モー！）
+        ライオン（ガオー！）
+        豚（ブー！）
+        */
+        let animal = ['犬','猫','牛', 'ライオン', '豚'];
+
+        let cry = animal[ Math.floor( Math.random() * animal.length ) ];
+
+        switch(cry) {
+            case '犬':
+                console.log('ワンワン！');
+            break;
+
+            case '猫':
+                console.log('にゃーん！');
+            break;
+            
+            case '牛':
+                console.log('モー！');
+            break;
+
+            case 'ライオン':
+                console.log('ガオー！');
+            break;
+
+            case '豚':
+                console.log('ブー！');
+            break;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>9章 DOM操作の基本--9.3 HTML要素を作成する</title>
+</head>
+<body>
+    <h1>サンプルタイトル</h1>
+    <h2>小見出し１</h2>
+
+    <script>
+        const h2 = document.createElement('h2');
+
+        h2.textContent = '小見出し２';
+
+        h2.innerHTML = '<a href="#">小見出し２</a>';
+    </script>
+</body>
+</html>

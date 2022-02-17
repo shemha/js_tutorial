@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>11章 非同期処理とAjax--11.4 Ajaxプログラムの作り方</title>
+</head>
+<body>
+    <script>
+        const url = 'https://qiita.com/api/v2/tags/javascript/items';
+        
+        fetch(url)
+        .then(data => data.json()) // JSONデータとして取得する
+        .then(data => console.log(data))
+    </script>
+</body>
+</html>

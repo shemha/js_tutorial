@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>9章 DOM操作の基本--9.4 イベント処理</title>
+</head>
+<body>
+
+    <button id="btn">実行</button>  
+    
+    <script>
+        /* 構文
+        【HTML要素】.addEventListener('【イベントの種類】', () => {
+
+            // イベント処理を記述する
+
+        });
+        */
+
+        const btn = document.getElementById('btn');
+
+        btn.addEventListener('click', () => {
+
+            console.log('クリックされました！');
+
+        });
+    </script>
+</body>
+</html>

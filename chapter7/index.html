@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>7章 オブジェクト</title>
+</head>
+<body>
+    <script type="module">
+        // 7.1 オブジェクトとは
+
+        const user = ['山田太郎', '田中俊哉', '伊藤大輔', '木村涼子'];
+    </script>
+    <script type="module">
+        const user = [
+
+            [ ['山田太郎',30,'東京都'],['田中俊哉',40,'大阪府'] ],
+
+            [ ['伊藤大輔',28,'東京都'],['木村涼子',23,'大阪府'] ]
+
+        ];
+
+        console.log(user[0][1][0]);
+    </script>
+    <script type="module">
+        const user = {
+
+            free_plan: {
+
+                tokyo: { name: '山田太郎', age: 30 },
+                osaka: { name: '田中俊哉', age: 40 }
+
+            },
+
+            standard_plan: {
+
+                tokyo: { name: '伊藤大輔', age: 28 },
+                osaka: { name: '木村涼子', age: 23 }
+
+            }
+
+        }
+
+        console.log(user.free_plan.osaka.name);
+    </script>
+
+
+    <script type="module">
+        // 7.2 オブジェクトの作り方
+
+        const myObj = {};
+    </script>
+
+
+    <script type="module">
+        // 7.2 オブジェクトの作り方--プロパティの作り方
+
+        const user = {
+        
+            name: '太郎',
+            age: 30,
+            area: '東京都'
+            
+        };
+
+        console.log(user);
+    </script>
+    <script type="module">
+        const user = {
+            
+            name: '太郎',
+            age: 30,
+            area: '東京都'
+            
+        };
+    
+        console.log(user.name);
+        console.log(user.age);
+        console.log(user.area);
+    </script>
+
+
+    <script type="module">
+        // 7.2 オブジェクトの作り方--プロパティを変更する
+        const user = {
+            
+            name: '太郎',
+            age: 30,
+            area: '東京都'
+
+        };
+
+        user.name = '山田太郎';
+        
+        console.log(user);
+    </script>
+    <script type="module">
+        const user = {
+            
+            name: '太郎',
+            age: 30,
+            area: '東京都'
+        
+        };
+    
+        // hobbyプロパティを新規追加
+        user.hobby = '映画鑑賞';
+        
+        // areaプロパティを削除
+        delete user.area;
+        
+        console.log(user);
+    </script>
+
+
+    <script type="module">
+        // 7.2 オブジェクトの作り方--メソッドの作り方
+
+        const user = {
+            
+            name: '山田太郎',
+            age: 30,
+
+            getName: function() {
+                console.log(this.name);
+            }
+        
+        }
+
+        user.getName();
+    </script>
+
+
+    <script type="module">
+        // 7.2 オブジェクトの作り方--thisについて
+
+        const obj = {
+            
+            getThis1: function() { return this },
+            
+            getThis2: () => this
+
+        };
+        
+        console.log(obj.getThis1());
+        console.log(obj.getThis2());
+    </script>
+
+    <script type="module">
+        // 7.2 オブジェクトの作り方--問題2
+
+        /*
+        ユーザーに名前と電話番号を入力してもらい、
+        その値をuserオブジェクトに格納します。
+        そして、コンソールログにuserオブジェクトの中身を出力できれば完成です。
+        （ユーザーから入力してもらうには、5章で学習したpromptメソッドを使います）
+        */
+
+        let user = {};
+        
+        user.name = prompt('名前を入力してください');
+
+        user.tell = prompt('電話番号を入力してください');
+
+        console.log(user);
+    </script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>9章 DOM操作の基本--9.2 HTML要素を取得・更新する</title>
+</head>
+<body>
+    <ul>
+        <li id="text" class="sample">１つ目の項目</li>
+        <li class="sample">２つ目の項目</li>
+    </ul>
+    
+    <script>
+        const sample = document.getElementsByClassName('sample');
+        
+        for(let i=0; i<sample.length; i++) {
+            console.log(sample[i]);
+        }
+    </script>
+</body>
+</html>

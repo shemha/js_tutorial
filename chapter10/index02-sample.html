@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>10章 DOM操作の応用--10.2 文字をアニメーションさせてみよう</title>
+</head>
+<body>
+    <h1 id="text">こんにちは</h1>
+    
+    <script>
+        const h1 = document.getElementById("text");
+
+        //関数を実行してアニメーションさせる
+        runAnimation(h1, "marginLeft", 100, "px");
+        runAnimation(h1, "fontSize", 100, "px");
+        runAnimationAfter(h1, "opacity", 1, "");
+
+        //アニメーション化する関数を作成
+        //引数にHTML要素・CSSプロパティ・値・単位を指定する
+        function runAnimation(element, type, value, unit) {
+            let count = 0;
+
+            const timer = setInterval(() => {
+                element.style[type] = count + unit;
+                count = count + value / 300;
+                if (count >= value) clearInterval(timer);
+            }, 10);
+        }
+
+        //setTimeout()は指定した時間が経過したら実行される
+        //以下の場合は3秒後にアニメーションが動き出す
+        function runAnimationAfter(element, type, value, unit) {
+            const timer = setTimeout(() => {
+                runAnimation(element, type, value, unit);
+            }, 3000);
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>10章 DOM操作の応用--10.1 テキストエリア内の文字数をカウントする</title>
+</head>
+<body>
+    <textarea id="text" cols="50" rows="7"></textarea>
+    <p id="count">0文字</p>
+    
+    <script>
+        const text = document.getElementById("text");
+        const count = document.getElementById("count");
+
+        text.addEventListener("keyup", () => {
+
+            // テキストエリアの文字列を取得する
+            const inputText = text.value.replace(/[\n\s]/g, "");
+
+            // 文字数を取得＆出力する
+            count.textContent = inputText.length + '文字';
+
+        });
+    </script>
+
+</body>
+</html>

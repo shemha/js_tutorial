@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>9章 DOM操作の基本--9.6 演習問題--問題1</title>
+</head>
+<body>
+    <form name="myForm">
+
+        名前：<input type="text" name="myName" />
+        <br>
+
+        メールアドレス：<input type="text" name="myEmail" />
+        <br>
+
+        年齢：
+        <input type="radio" name="age" value="20" />20代
+        <input type="radio" name="age" value="30" />30代
+        <input type="radio" name="age" value="40" />40代
+        <input type="radio" name="age" value="50" />50代
+
+        <br>
+        <br>
+        <label>普段使っているスマホは？</label><br/>
+        <input type="checkbox" name="sp" value="iphone" />iPhone
+        <input type="checkbox" name="sp" value="android" />Android
+        <input type="checkbox" name="sp" value="feature" />ガラケー
+        <input type="checkbox" name="sp" value="another" />その他
+    </form>
+    <br>
+
+    <button id="btn">実行</button>
+
+    <script>
+        btn.addEventListener("click", () => {
+
+            const form = document.forms.myForm;
+
+            // 名前の取得
+            console.log(form.myName.value);
+
+            // メールアドレスの取得
+            console.log(form.myEmail.value);
+
+            // 年齢の取得
+            console.log(form.age.value);
+
+            // スマホの種類を取得
+            form.sp.forEach(item => {
+                if(item.checked) console.log(item.value);
+            })
+        });
+    </script>
+</body>
+</html>

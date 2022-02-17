@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>10章 DOM操作の応用--10.2 文字をアニメーションさせてみよう</title>
+</head>
+<body>
+    <h1 id="text">こんにちは</h1>
+    
+    <script>
+        const h1 = document.getElementById("text");
+        let count = 0;
+    
+        const timer = setInterval(() => {
+            h1.style.fontSize = count + 'px';
+            count++;
+    
+            if (count >= 100) clearInterval(timer);
+        }, 10);
+    </script>
+
+</body>
+</html>

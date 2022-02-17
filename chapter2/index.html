@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2章 変数とは何か</title>
+</head>
+<body>
+    <script type="module">
+        // 2.2 変数の作り方--letを使う
+
+        // let myString = 'サンプルテキスト';
+        // let myNumber = 12345;
+        // let myBoolean = true;
+
+        let myString = 'ユーザー名';
+    
+        myString = '太郎'; // 再代入(変数の更新)
+    
+        console.log('ようこそ、' + myString + 'さん');
+    </script>
+    <script type="module">
+        let myString = '太郎';
+        // let myString = '花子'; // 再宣言はNG
+
+        console.log( myString )
+    </script>
+
+
+    <script type="module">
+        // 2.2 変数の作り方--constを使う
+
+        // const myString = 'サンプルテキスト';
+        // const myNumber = 12345;
+        // const myBoolean = true;
+
+        const myString = 'ユーザー名';
+        // myString = '太郎'; // 再代入はNG
+
+        console.log( myString )
+    </script>
+
+
+    <script type="module">
+        // 2.2 変数の作り方--varによる変数定義について
+
+        var myNumber = 100;
+        var myNumber = 50; // エラーにならない
+    </script>
+
+
+    <script type="module">
+        // 2.2 変数の作り方--変数名のTips
+
+        // 変数名の意味・意図がよく分からない
+        const xyz = 50;
+
+        // 変数名が長すぎる
+        const isKeywordButNothingOrSomething = true;
+
+        // 変数名は英単語にするべき
+        const korehasugoi = 'これはすごい';
+    </script>
+
+
+    <script type="module">
+        // 2.3 スコープの意味
+
+        const myNumber = 100;
+
+        console.log(myNumber); // 出力結果 → 100
+    </script>
+    <script type="module">
+        { const myNumber = 100; }
+
+        // console.log(myNumber); // 出力結果 → エラー
+    </script>
+    <script type="module">
+        { var myNumber = 100; }
+
+        console.log(myNumber); // 出力結果 → 100
+    </script>
+
+
+    <script type="module">
+        // 2.4 演習問題
+
+        let name = "山田太郎";
+        let age = 30;
+
+        console.log('私の名前は、' + name + '。年齢は、' + age + '。');
+    </script>
+</body>
+</html>

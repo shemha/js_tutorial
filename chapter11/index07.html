@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>11章 非同期処理とAjax--11.4 Ajaxプログラムの作り方--記事一覧を画面に表示する</title>
+</head>
+<body>
+    <h1>JavaScript関連の最新記事 by Qiita</h1>
+    
+    <button id="btn">更新</button>
+    <ul id="list"></ul>
+    
+    <script>    
+        const url = 'https://qiita.com/api/v2/tags/javascript/items';
+        const btn = document.getElementById('btn');
+        const list = document.getElementById('list');
+        
+        const createList = item => {
+            const li = document.createElement('li');
+            const a = document.createElement('a');
+    
+            a.href = item.url;
+            li.textContent = item.title;
+    
+            a.appendChild(li);
+            list.appendChild(a);
+        }
+    
+        btn.addEventListener('click', () => {
+            list.innerHTML = ''; // 結果表示部分をリセット
+    
+            fetch(url)
+            .then(data => data.json())
+            .then(data => {
+    
+                data.forEach(item => createList(item))
+    
+            })
+    
+        })
+    </script>
+</body>
+</html>

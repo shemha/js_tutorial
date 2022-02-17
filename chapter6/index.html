@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>6章 関数</title>
+</head>
+<body>
+    <script type="module">
+        // 6.2 関数を使わなければどうなるか
+
+        let user = [ ['田中一郎', 30, '読書'] ];
+
+        // 配列の中身をすべて出力
+        for(let i=0; i<user.length; i++) {
+            console.log('名前：' + user[i][0]);
+            console.log('年齢：' + user[i][1]);
+            console.log('趣味：' + user[i][2]);
+            console.log('----------------------');
+        }
+
+
+        // 新規ユーザーを追加
+        user.push(['伊藤花子', 26, '映画鑑賞']);
+
+        for(let i=0; i<user.length; i++) {
+            console.log('名前：' + user[i][0]);
+            console.log('年齢：' + user[i][1]);
+            console.log('趣味：' + user[i][2]);
+            console.log('----------------------');
+        }
+
+        // 新規ユーザーを追加
+        user.push(['木村涼子', 18, 'ウォーキング']);
+
+        for(let i=0; i<user.length; i++) {
+            console.log('名前：' + user[i][0]);
+            console.log('年齢：' + user[i][1]);
+            console.log('趣味：' + user[i][2]);
+            console.log('----------------------');
+        }
+
+
+        let user = [['田中一郎', 30, '東京都']];
+
+        output(user);
+
+        // 新規ユーザーを追加
+        user.push(['伊藤花子', 23, '音楽鑑賞']);
+
+        output(user);
+
+        // 新規ユーザーを追加
+        user.push(['木村涼子', 18, 'ウォーキング']);
+
+        output(user);
+
+
+        // 配列の中身をすべて出力する関数を作成
+        function output(array) {
+            for(let i=0; i<array.length; i++) {
+                console.log('名前：' + user[i][0]);
+                console.log('年齢：' + user[i][1]);
+                console.log('趣味：' + user[i][2]);
+                console.log('----------------------');
+            }
+        }
+    </script>
+
+
+    <script type="module">
+        // 6.4 関数の実行方法
+
+        // 関数宣言の場合
+        function myFunc1() {
+            console.log('これは関数宣言です');
+        }
+
+        myFunc1(); // 関数の実行
+
+
+        // 関数式の場合
+        const myFunc2 = () => {
+            console.log('これは関数式です');
+        };
+
+        myFunc2(); // 関数の実行
+    </script>
+
+    <script type="module">
+        // 6.4 関数の実行方法--関数宣言と関数式の違い
+
+        function myFunc() {
+            console.log('これは関数宣言です');
+        }
+
+        function myFunc() {
+            console.log('これは2つ目の関数宣言です')
+        }
+        
+        myFunc();
+    </script>
+    <script type="module">
+        const myFunc = () => {
+            console.log('これは関数式です')
+        };
+
+        const myFunc = () => {
+            console.log('これは2つ目の関数式です')
+        };
+
+        myFunc();
+    </script>
+
+
+    <script type="module">
+        // 6.5 引数
+
+        const myFunc = (keyword) => {
+            console.log('指定した文字は、「' + keyword + '」ですね？');
+        };
+        
+        myFunc('プログラミング');
+    </script>
+
+
+    <script type="module">
+        // 6.5 引数--検索機能を作ってみる
+
+        const products = ['テレビ','冷蔵庫','机','スマホ','本棚','椅子','テーブル'];
+
+        const result = products.filter( (item) => item === 'スマホ');
+        
+        console.log(result);
+    </script>
+    <script type="module">
+        const products = ['テレビ','冷蔵庫','机','スマホ','本棚','椅子','テーブル'];
+
+        const search = (items, target) => {
+
+            const result = items.filter(item => item === target);
+
+            if(result.length) {
+                console.log('商品が見つかりました！');
+            } else {
+                console.log('お探しの商品は見つかりませんでした');
+            }
+
+        };
+
+        search(products, 'スマホ');
+    </script>
+    <script type="module">
+        const products = ['テレビ','冷蔵庫','机','スマホ','本棚','椅子','テーブル'];
+
+        const search = (items, target) => {
+
+            const result = items.filter(item => item === target);
+
+            if(result.length) {
+                console.log('商品が見つかりました！');
+            } else {
+                console.log('お探しの商品は見つかりませんでした');
+            }
+
+        };
+
+        search(products, 'スマホ');
+    </script>
+
+
+    <script type="module">
+        // 6.6 戻り値
+
+        const myNumber = 10;
+
+        const getDouble = (number) => {
+            return number * 2;
+        }
+
+        console.log(getDouble(myNumber));
+    </script>
+    <script type="module">
+        const products = ['テレビ','冷蔵庫','机','スマホ','本棚','椅子','テーブル'];
+
+        const search = (items, target) => {
+
+            const result = items.filter(item => item === target);
+
+            // returnを利用して戻り値を指定する
+            if(result.length) {
+                return '商品が見つかりました！';
+            } else {
+                return 'お探しの商品は見つかりませんでした';
+            }
+
+        }
+
+        console.log(search(products, 'スマホ'));
+    </script>
+
+
+    <script type="module">
+        // 6.7 演習問題--問題1
+
+        /*
+        prompt()を利用してドルを入力できるようにする
+        関数を利用した換算処理を作る
+        繰り返し何度も入力できる
+        「キャンセル」をクリックするとプログラムは終了
+        何も入力せずに「OK」ボタンをクリックしても終了すること
+        換算結果は「◯円です」のように出力する
+        1ドル108円で計算する
+        */
+
+        function conversion(dollar){
+            let yen = 108 * dollar;
+            return yen;
+        }
+
+        while(true){
+            let popUp = prompt('ドル⇨円換算機\n数値を入力してください');
+
+            if(popUp){
+                alert(conversion(popUp) + '円です');
+            }else{
+                break;
+            }
+        }
+    </script>
+</body>
+</html>

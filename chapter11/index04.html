@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>11章 非同期処理とAjax--11.2 Promise処理の作り方--then()の使い方</title>
+</head>
+<body>
+    <script type="module">
+        const promise = new Promise(() => {
+
+            setTimeout(() => {
+                console.log('処理が完了');
+            }, 2000)
+
+        })
+    </script>
+    <script type="module">
+        const promise = new Promise(resolve => {
+
+            setTimeout(() => {
+                resolve();
+            }, 2000)
+
+        });
+    </script>
+    <script type="module">
+        const promise = new Promise(resolve => {
+    
+            setTimeout(() => {
+                resolve('処理が完了');
+            }, 2000)
+    
+        });
+        
+        // then()を使って完了通知を受け取る
+        // 引数resultには渡された文字列が格納されている
+        promise.then(result => console.log(result));
+    </script>
+</body>
+</html>

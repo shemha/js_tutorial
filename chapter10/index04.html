@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .screenBlue {
+            height: 100vh;
+            color: #fff;
+            font-size: 5em;
+            text-align: center;
+            background-color: #88f;
+        }
+    
+        .screenRed {
+            height: 100vh;
+            color: #fff;
+            font-size: 5em;
+            text-align: center;
+            background-color: #f88;
+        }
+
+        .pagetop {
+            display: none;
+
+            padding: 40px 10px;
+            background-color: #fff;
+            color: #000;
+            text-decoration: none;
+            border-radius: 50%;
+
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+        }
+    </style>
+    <title>10章 DOM操作の応用--10.4 スクロールで追尾するボタンを作成しよう</title>
+</head>
+<body>
+    <div class="screenBlue">ここがトップページです</div>
+    <div class="screenRed">2ページ目</div>
+    <div class="screenBlue">3ページ目</div>
+    <div class="screenRed">4ページ目</div>
+    <div class="screenBlue">5ページ目</div>
+
+    <a class="pagetop" id="top" href="#">TOPに戻る</a>
+    
+    <script>
+        const topLink = document.getElementById("top");
+    
+        //画面のスクロール量を測定＆取得する
+        window.addEventListener("scroll", () => {
+
+            const scrollValue = document.scrollingElement.scrollTop;
+        
+            //スクロール量が300を超えるかどうかでボタンの表示・非表示を切り替える
+            if (scrollValue >= 300) {
+        
+                topLink.style.display = "inline"; //ボタンを表示
+        
+            } else if (scrollValue < 300) {
+        
+                topLink.style.display = "none"; //ボタンを非表示
+        
+            }
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>9章 DOM操作の基本--9.4 イベント処理--リスト要素を追加するサンプルアプリを作ってみよう</title>
+</head>
+<body>
+    <button id="btn">追加</button>
+    <ul id="list"></ul>
+    
+    <script>
+        const list = document.getElementById('list');
+        const btn = document.getElementById('btn');
+
+        btn.addEventListener('click', () => {
+            const li = document.createElement('li'); // li要素を生成する
+
+            li.textContent = 'これはリスト要素です'; // li要素にテキストを追加する
+            list.appendChild(li); // li要素をul要素内に追加して表示する
+        });
+    </script>
+</body>
+</html>

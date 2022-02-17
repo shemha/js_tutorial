@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>11章 非同期処理とAjax--非同期処理を作ってみる</title>
+</head>
+<body>
+    <script type="module">
+        console.log('スタート');
+
+        console.log('処理が完了');
+
+        console.log('終了');
+    </script>
+    <script type="module">
+        console.log('スタート');
+
+        setTimeout(() => {
+            console.log('処理が完了');
+        }, 2000) // 2秒(2000ミリ秒)の待ち時間を設定
+
+        console.log('終了');
+    </script>
+</body>
+</html>

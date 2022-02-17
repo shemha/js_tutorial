@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>11章 非同期処理とAjax--11.1 非同期処理とは--setTimeout()の問題点</title>
+</head>
+<body>
+    <script type="module">
+        setTimeout(() => {
+            console.log('１つ目の処理が完了');
+        
+            setTimeout(() => {
+                console.log('２つ目の処理が完了');
+
+                setTimeout(() => {
+                    console.log('３つ目の処理が完了');
+                }, 1000)
+
+            }, 3000)
+        
+        }, 2000)
+    </script>
+</body>
+</html>
