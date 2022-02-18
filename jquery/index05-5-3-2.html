@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>typeプロパティを使った複数のイベント処理理</title>
+</head>
+<body>
+    <p>クリックするかキーを押してください</p>
+    <div></div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        $(document).on('click keydown', (e) => {
+        
+            // typeプロパティを利用してイベントの種類を判断する
+            if(e.type === 'click') $('div').text('クリックされました！');
+            if(e.type === 'keydown') $('div').text('キーが押されました！');
+
+        });
+    </script> 
+</body>
+</html>

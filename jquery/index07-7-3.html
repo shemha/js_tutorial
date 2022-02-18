@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        img {
+            width: 30px; /*画像サイズを極小にする*/
+            opacity: 0; /*透明にして見えないようにする*/
+        }
+    </style>
+    <title>7.3 複数のCSSプロパティを操作する方法</title>
+</head>
+<body>
+    <img src="sample.jpg" width="50" />
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        $('img').animate({
+            opacity: 1, //画像を見えるようにする
+            width: 400, //画像サイズを大きくする
+            marginLeft: '200px' //画像を右方向へ移動させる
+        }, 1000);
+    </script>
+</body>
+</html>

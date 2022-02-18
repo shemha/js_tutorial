@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>6.2 フォーム要素の値を取得する方法--テキストボックス</title>
+</head>
+<body>
+    <form>
+        性別：
+        <input type="radio" name="sex" value="male">男
+        <input type="radio" name="sex" value="female">女
+    
+        <input type="button" value="確認"/>
+    </form>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        $('input[type="button"]').on('click', () => {
+
+            //checkedプロパティがtrueになった要素の値を取得する
+            const result = $('[name="sex"]:checked').val();
+
+            console.log(result);
+        })
+    </script> 
+</body>
+</html>

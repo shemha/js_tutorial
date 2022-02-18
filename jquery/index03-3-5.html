@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8">
+        <title>jQueryの練習</title>
+        <style>
+            #wrap {
+                width: 800px;
+                margin: auto;
+            }
+            .list {
+                width: 20%;
+                padding: 10px 30px;
+                margin: 30px 10px;
+                list-style-type: circle;
+                font-weight: bold;
+                line-height: 2;
+                border: 1px solid #aaa;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div id="wrap">
+            <div id="title">
+                <h1>サンプルタイトル</h1>
+                <time>2020-04-06</time>
+            </div>
+            <p>テキストテキストテキストテキストテキストテキストテキストテキスト</p>
+            <p>テキストテキストテキストテキスト</p>
+            <ul>
+                <li>テスト項目1</li>
+                <li>テスト項目2</li>
+                <li>テスト項目3</li>
+            </ul>
+        </div>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script>
+
+            /*
+            id属性値がtitleのdiv要素に対してmargin-bottomの値を50pxにする
+            h1要素に対してtext-alignの値をcenterにする
+            ul要素に対してstyleタグ内に記述されたlistクラスを適用させる
+            time要素に対して以下のCSSを設定する
+            */
+
+            $('#title').css('margin-bottom', '50px');
+
+            $('h1').css('text-align', 'center');
+
+            $('ul').addClass('list');
+
+            $('time').css({
+                "padding": "5px 10px",
+                "background-color": "#666",
+                "color": "#fff"
+            })
+        
+        </script>
+    </body>
+</html>

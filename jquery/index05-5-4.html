@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        #wrap {
+            width: 400px;
+            text-align: center;
+        }
+        #text {
+            width: 400px;
+            height: 180px;
+            margin: auto;
+            display: table-cell;
+            vertical-align: middle;
+            font-size: 2em;
+            color: #fff;
+            background-color: #666;
+            user-select: none;
+        }
+    </style>
+    <title>5.4 演習問題</title>
+</head>
+<body>
+    <div id="wrap">
+        <h1></h1>
+        <div id="text">ここをクリックする！</div>
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        let time = 10;
+        let score = 0;
+
+        let count = $('h1');
+    
+        const id = setInterval(() => {
+                
+            if(time <= 0) {
+                // タイマーが0になったとき
+                alert(`結果は${score}回でした！`);
+                clearInterval(id);
+            }
+            
+            // カウントダウンを表示する
+            count.text(time--);
+            
+        },1000);
+        
+        // クリックしたときにスコアを1ずつ加算する
+        $(document).on('click', (e) => {
+            e = score++;
+        });
+
+    </script>
+</body>
+</html>

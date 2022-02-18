@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4.3 HTML要素の生成・追加</title>
+</head>
+<body>
+    <ul>
+        <li>Python</li>
+        <li>Ruby</li>
+        <li>PHP</li>
+    </ul>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        const list = $('<li>',{
+            text: 'JavaScript'
+        });
+
+        // 生成したHTML要素を画面に表示する
+        $('ul').append(list);
+    </script>
+</body>
+</html>

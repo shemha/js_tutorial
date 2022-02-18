@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        h1 {
+            position: absolute;
+        }
+    </style>
+    <title>7.4 アニメーションを連続で実行する方法</title>
+</head>
+<body>
+    <h1 id="text">テキスト</h1>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        /*
+        アニメーションを連続で実行
+        $(対象要素)
+            .animate({CSSプロパティ}, 1000) //1つ目のアニメーション
+            .animate({CSSプロパティ}, 500)  //2つ目のアニメーション
+            .animate({CSSプロパティ}, 1000) //3つ目のアニメーション
+            .animate({CSSプロパティ}, 1500) //4つ目のアニメーション
+        */
+
+        $('#text')
+            .animate({left: '90%'}, 1000)
+            .animate({left: '40%'}, 1500)
+            .animate({fontSize: '8em'}, 500)
+            .animate({left: '60%',top: '40%'}, 300)
+            .animate({left: 0,top: 0,fontSize: '1em'}, 1000)
+    </script>
+</body>
+</html>

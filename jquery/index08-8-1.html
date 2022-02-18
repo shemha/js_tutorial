@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /*ポップアップウィンドウの背景*/
+        .popup {
+            /*メッセージのコンテンツを中央に配置する*/
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            /*半透明の黒背景にする*/
+            height: 100vh;
+            width: 100%;
+            background: rgba(0,0,0,0.6);
+
+            /*画面がスクロールしないように固定する*/
+            position: fixed;
+            top: 0;
+            left: 0;
+        }
+
+        /*メッセージのコンテンツ部分*/
+        .content {
+            background: rgba(255,255,255,1);
+            padding: 30px;
+            width: 50%;
+        }
+    </style>
+    <title>8.1 ポップアップウィンドウを作ろう</title>
+</head>
+<body>
+    <button id="open">表示</button>
+    <div class="popup">
+        <div class="content">
+            <p>これはポップアップウィンドウです。「閉じる」ボタンでウィンドウが閉じます</p>
+            <button id="close">閉じる</button>
+        </div>
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+
+        // 最初はポップアップウィンドウを非表示にしておく
+        $('.popup').hide();
+
+        $('#open').on('click', () => {
+            $('.popup').fadeIn();
+        });
+
+        $('#close').on('click', () => {
+            $('.popup').fadeOut();
+        });
+            
+    </script>
+</body>
+</html>

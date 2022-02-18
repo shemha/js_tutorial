@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>9章 サーバー連携とAjax--9.4 演習問題</title>
+</head>
+<body>
+    <input id="target" type="text"/>
+    <button>取得</button>
+    <ul></ul>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        const url = 'https://api.github.com/search/repositories?q=';
+
+        $('button').on('click', () => {
+            $.ajax({
+                url:url + $('#target').val(),
+                dataType:"json",
+            }).done(data => {
+                $('ul').empty();
+                
+                $.each(data.items, (index, value) => {
+                    const elements = `<a href=${value.html_url}><li>${value.full_name}</li></a>`;
+
+                    $('ul').append(elements);
+                })
+            })
+        })
+    </script>
+</body>
+</html>

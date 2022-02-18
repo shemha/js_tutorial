@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>2章 セレクタ</title>
+</head>
+<body>
+    <div id="wrap">
+        <h1>サンプルタイトル</h1>
+        <div>
+            <p class="text">こんにちは</p>
+        </div>
+        <p class="text">今日は良い天気ですね！</p>
+    </div>
+    <ul>
+        <li class="list">項目1</li>
+        <li class="list">項目2</li>
+        <li class="list">項目3</li>
+    </ul>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        // リスト要素のテキストをすべて取得
+        const element01 = $('li').text();
+        console.log(element01);
+
+        const element02 = $('.list').text();
+        console.log(element02);
+
+        // 「こんにちは」というテキストを持つp要素を取得
+        const element03 = $('#wrap>div>p').text();
+        console.log(element03);
+
+        // 「こんにちは」というテキストを持つp要素とリスト要素をすべて取得
+        const element04 = $('#wrap>div>p, .list').text();
+        console.log(element04);
+
+    </script>
+</body>
+</html>

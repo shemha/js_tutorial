@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5.3 on()メソッドを使った複数のイベント処理</title>
+</head>
+<body>
+    <div style="width:100px;
+            height:100px;
+            background-color:#555;">
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+
+        /*
+        複数イベントの記述方法
+        $('div').on({
+            'click': () => { },
+            'dblclick': () => { },
+            'mouseenter': () => { },
+        })
+        */
+
+        $('div').on({
+            'click': () =>{
+                $('div').css('background-color', 'red');
+            },
+            'dblclick': () => {
+                $('div').css('background-color', 'black')
+            },
+            'mouseenter': () => {
+                $('div').css('background-color', 'blue');
+            },
+        })
+
+    </script>
+</body>
+</html>

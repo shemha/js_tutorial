@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <style>
-
         body {
             font-size: 6em; 
             text-align: center;
@@ -36,17 +35,27 @@
     <title>タイピングアプリ</title>
 </head>
 <body>
-    <p id="count">60</p>
+    <p id="count"></p>
     <div id="wrap">
         <p id="text"></p>
     </div>
     <button id="start">スタート</button>
 
     <script>
-    
+        // タイマーの初期値を設定（60秒）
+        let time = 10;
+
         // 必要なHTML要素の取得
         const wrap = document.getElementById('wrap');
         const start = document.getElementById('start');
+        const p = document.getElementById('text');
+        const count = document.getElementById('count');
+
+        count.textContent = time;
+        // 新しい配列を用意する
+        let checkTexts = [];
+        // スコアの初期値を設定する
+        let score = 0;
 
         // 複数のテキストを格納する配列
         const textLists = [
@@ -65,16 +74,8 @@
             'programming'
         ];
 
-        // 新しい配列を用意する
-        let checkTexts = [];
-
-        // スコアの初期値を設定する
-        let score = 0;
-
         // ランダムなテキストを画面に表示する
         const createText = () => {
-
-            const p = document.getElementById('text');
             const rnd = Math.floor(Math.random() * textLists.length);
 
             // p要素の中身を空っぽにする
@@ -128,7 +129,6 @@
 
         // ランク判定とメッセージ生成処理
         const rankCheck = score => {
-
             // テキストを格納する変数を作る
             let text = '';
             
@@ -139,7 +139,7 @@
                 text = `あなたのランクはBです。\nAランクまであと${200 - score}文字です。`;    
             } else if(score < 300) {
                 text = `あなたのランクはAです。\nSランクまであと${300 - score}文字です。`;    
-            } else if(score >= 300) {
+            } else {
                 text = `あなたのランクはSです。\nおめでとうございます！`;    
             }
             
@@ -151,7 +151,6 @@
 
         // ゲームの終了処理
         const gameOver = id => {
-
             // タイマーをストップする
             clearInterval(id);
 
@@ -165,15 +164,7 @@
 
         // タイマー処理
         const timer = () => {
-
-            // タイマーの初期値を設定（60秒）
-            let time = 60;
-
-            // タイマー要素を取得する
-            const count = document.getElementById('count');
-
             const id = setInterval(() => {
-
                 // カウントが0になったらタイマーを停止する
                 // カウントが0になったらタイマーのIDをgameOver()に渡す
                 if(time <= 0) gameOver(id);

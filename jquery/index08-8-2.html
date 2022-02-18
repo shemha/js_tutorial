@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            text-align:center;
+        }
+        #slide img{
+            width: 1000px; /*画像サイズを極小にする*/
+            margin: auto;
+            display: none;
+        }
+    </style>
+    <title>8.2 スライドショーを作ろう</title>
+</head>
+<body>
+    <div id="slide">
+        <!-- スライドショーで使う複数の画像を配置する -->
+        <img src="sample1.jpg">
+        <img src="sample2.jpg">
+        <img src="sample3.jpg">
+    </div>
+    <button id="rev">前へ</button>
+    <button id="next">次へ</button>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        const images = $('#slide img');
+        let counter = 0;
+        let index = 0;
+
+        // 最初の画像だけ表示させる
+        images.eq(index).show();
+
+        $('#next').click(() => {
+            images.eq(index).hide();
+
+            index = ++counter % images.length;
+
+            images.eq(index).fadeIn();
+        })
+
+
+        $('#rev').click(() => {
+            images.eq(index).hide();
+
+            index = --counter % images.length;
+
+            images.eq(index).fadeIn();
+        })
+    </script>
+</body>
+</html>
