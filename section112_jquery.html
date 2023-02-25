@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Section112</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script> -->
+    <script src="section112_jquery.js"></script>
+    <style>
+      .mark {
+        border: 2px dotted red;
+        background-color: yellow;
+        width: 160px;
+        text-align: center;
+        padding: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>囲んでいる要素を消去する</h1>
+    <form>
+      <input type="button" value="画像を囲んでいるdiv要素を消去" />
+    </form>
+    <div id="imageList">
+      <div class="mark">
+        <img src="112/0.jpg" width="128" height="72" alt="松本城" />
+      </div>
+      <div class="mark">
+        <img src="112/1.jpg" width="128" height="72" alt="味噌川ダム" />
+      </div>
+      <p class="mark">
+        <img src="112/2.jpg" width="128" height="72" alt="妻籠宿" />
+      </p>
+    </div>
+  </body>
+</html>
