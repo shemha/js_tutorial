@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      .target-wrapper {
+        width: 100px;
+        height: 100px;
+        margin: 40px 0 20px;
+      }
+      .circle-target {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+      }
+      .bg-blue {
+        background-color: #85a0f5;
+      }
+    </style>
+    <title>window.getComputedStyle() で現在のスタイル値を取得</title>
+  </head>
+  <body>
+    <div class="target-wrapper">
+      <div id="target" class="circle-target bg-blue"></div>
+    </div>
+    <button type="button" id="left">Left</button>
+    <button type="button" id="right">Right</button>
+
+    <script>
+      const target = document.getElementById("target");
+      let animation;
+
+      //キーフレームの開始点 transformStart 引数は不要なので削除
+      const move = (transformEnd) => {
+        //現在アニメーションが実行されていれば一時停止
+        animation?.pause();
+        //現在の transform の値を取得して変数 transformStart に代入
+        let transformStart = getComputedStyle(target).transform;
+        //現在のアニメーションをキャンセル
+        animation?.cancel();
+
+        animation = target.animate(
+          [{ transform: transformStart }, { transform: transformEnd }],
+          {
+            duration: 1000,
+            easing: "ease-in",
+            fill: "forwards",
+          }
+        );
+      };
+
+      const moveRight = () => {
+        //キーフレームの開始点 transformStart 引数は不要なので削除
+        move("translateX(300px)");
+      };
+      const moveLeft = () => {
+        //キーフレームの開始点 transformStart 引数は不要なので削除
+        move("translateX(0)");
+      };
+      document.getElementById("left").addEventListener("click", () => {
+        moveLeft();
+      });
+      document.getElementById("right").addEventListener("click", () => {
+        moveRight();
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>暗黙の開始/終了キーフレーム</title>
+  </head>
+  <body>
+    <style>
+      .target-wrapper {
+        width: 100px;
+        height: 100px;
+        margin: 40px 0 20px;
+      }
+      #target {
+        width: 100px;
+        height: 100px;
+        background-color: #72de87;
+      }
+    </style>
+
+    <div class="target-wrapper">
+      <div id="target"></div>
+    </div>
+    <button id="start" type="button">Start</button>
+
+    <script>
+      document.getElementById("start").addEventListener("click", () => {
+        document
+          .getElementById("target")
+          .animate(
+            [{ transform: "rotate(1080deg)", backgroundColor: "pink" }],
+            {
+              duration: 2000,
+              easing: "ease-in-out",
+            }
+          );
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>擬似要素の CSS アニメーション</title>
+    <style>
+      #target {
+        line-height: 40px;
+        height: 40px;
+      }
+      #target span {
+        vertical-align: top;
+        color: silver;
+      }
+      #target::before {
+        content: "";
+        display: inline-block;
+        width: 40px;
+        height: 40px;
+        margin-right: 15px;
+        background-color: #85a0f5;
+        /*疑似要素にアニメーションを設定*/
+        animation: pseudoAnimation 2s ease-in-out 0s infinite alternate;
+      }
+
+      @keyframes pseudoAnimation {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+          background-color: pink;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <p id="target"><span>Target</span></p>
+    <button type="button" id="play">Play</button>
+    <button type="button" id="pause">Pause</button>
+    <button type="button" id="cancel">Cancel</button>
+
+    <script>
+      //疑似要素を設定してある要素を取得
+      const target = document.getElementById("target");
+      //getAnimations() に { subtree: true } を指定して疑似要素のアニメーションを取得
+      const animation = target.getAnimations({ subtree: true })[0];
+      //アニメーションを停止
+      animation.cancel();
+
+      //ボタンの要素にクリックイベントを設定して操作
+      document.getElementById("play").addEventListener("click", () => {
+        animation.play();
+      });
+      document.getElementById("pause").addEventListener("click", () => {
+        animation.pause();
+      });
+      document.getElementById("cancel").addEventListener("click", () => {
+        animation.cancel();
+      });
+    </script>
+  </body>
+</html>

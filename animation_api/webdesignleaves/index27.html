@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      .target-wrapper {
+        width: 100px;
+        height: 100px;
+        margin: 40px 0 20px;
+      }
+      .circle-target {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+      }
+      .bg-blue {
+        background-color: #85a0f5;
+      }
+    </style>
+    <title>getComputedTiming() タイミング情報</title>
+  </head>
+  <body>
+    <div class="target-wrapper">
+      <div id="target" class="circle-target bg-blue"></div>
+    </div>
+    <button type="button" id="start" class="control">Start</button>
+    <button type="button" id="check" class="control">Check</button>
+    <button type="button" id="cancel" class="control">Cancel</button>
+    <div
+      class="output"
+      id="output"
+      style="min-height: 160px; max-width: 540px"
+    ></div>
+
+    <script>
+      const target = document.getElementById("target");
+      const animation = target.animate(
+        [{ transform: "translateX(0px)" }, { transform: "translateX(300px)" }],
+        {
+          duration: 2000,
+          delay: 500,
+          endDelay: 800,
+          easing: "ease-in-out",
+          iterations: 6,
+          direction: "alternate",
+        }
+      );
+      animation.cancel();
+      const start = document.getElementById("start");
+      start.addEventListener("click", (e) => {
+        animation.play();
+      });
+      const outputProps = () => {
+        const timing = animation.effect.getComputedTiming();
+        const endTime = timing.endTime;
+        const activeDuration = timing.activeDuration;
+        const localTime = timing.localTime;
+        const completed = Math.floor((localTime * 100) / endTime);
+        const progress = timing.progress;
+        const currentIteration = timing.currentIteration;
+        const animationCurrentTime = animation.currentTime;
+        output.innerText =
+          "endTime ( = delay＋activeDuration＋endDelay): " +
+          endTime +
+          "\n" +
+          "activeDuration ( = duration * iterationCount): " +
+          activeDuration +
+          "\n" +
+          "localTime: " +
+          localTime +
+          "\n" +
+          "animation.currentTime ( = localTime): " +
+          animationCurrentTime +
+          "\n" +
+          "completed : " +
+          completed +
+          "% \n" +
+          "progress: " +
+          progress +
+          "\n" +
+          "currentIteration: " +
+          currentIteration +
+          "（" +
+          (currentIteration + 1) +
+          "回目）\n";
+      };
+      const check = document.getElementById("check");
+      const output = document.getElementById("output");
+      check.addEventListener("click", (e) => {
+        animation.pause();
+        outputProps();
+      });
+      const cancel = document.getElementById("cancel");
+      cancel.addEventListener("click", (e) => {
+        animation.cancel();
+        outputProps();
+      });
+    </script>
+  </body>
+</html>

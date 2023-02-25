@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      .target-wrapper {
+        width: 100px;
+        height: 100px;
+        margin: 40px 0 20px;
+      }
+      .circle-target {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+      }
+      .bg-blue {
+        background-color: #85a0f5;
+      }
+      .bg-green {
+        background-color: #72de87;
+      }
+      .bg-pink {
+        background-color: #f39294;
+      }
+      .small {
+        width: 50px;
+        height: 50px;
+      }
+    </style>
+    <title>異なる currentTime を設定したアニメーション</title>
+  </head>
+  <body>
+    <div class="target-wrapper">
+      <div id="target1" class="circle-target bg-blue small"></div>
+    </div>
+    <div class="target-wrapper">
+      <div id="target2" class="circle-target bg-green small"></div>
+    </div>
+    <div class="target-wrapper">
+      <div id="target3" class="circle-target bg-pink small"></div>
+    </div>
+    <button type="button" id="set">Set</button>
+    <button type="button" id="cancel">Cancel</button>
+    <div id="output"></div>
+    <script>
+      //キーフレーム
+      const frames = [
+        { transform: "translateX(0px)" },
+        { transform: "translateX(300px)" },
+      ];
+      //タイミングプロパティ
+      const timing = {
+        duration: 2000,
+        direction: "alternate",
+        iterations: Infinity,
+      };
+      //それぞれの要素に上記キーフレームとタイミングプロパティを使ってアニメーションを設定
+      const animation1 = document
+        .getElementById("target1")
+        .animate(frames, timing);
+      const animation2 = document
+        .getElementById("target2")
+        .animate(frames, timing);
+      const animation3 = document
+        .getElementById("target3")
+        .animate(frames, timing);
+      const animations = [animation1, animation2, animation3];
+      //全てのアニメーションの自動再生を停止
+      animations.forEach((animation) => {
+        animation.cancel();
+      });
+
+      const output = document.getElementById("output");
+      //タイムラインの現在の値とそれぞれの startTime を出力する関数
+      const printStartTimes = () => {
+        output.innerText =
+          "animation1.timeline.currentTime: " +
+          animation1.timeline.currentTime +
+          "\n" +
+          "animation1.startTime: " +
+          animation1.startTime +
+          "\n" +
+          "animation2.startTime: " +
+          animation2.startTime +
+          "\n" +
+          "animation3.startTime: " +
+          animation3.startTime +
+          "\n";
+      };
+      printStartTimes();
+
+      document.getElementById("set").addEventListener("click", (e) => {
+        //過去の時刻（1秒前）を設定
+        animation1.startTime = animation1.timeline.currentTime - 1000;
+        //現在の時刻を設定（この場合 animation2.play(); と同じ）
+        animation2.startTime = animation1.timeline.currentTime;
+        //未来の時刻（1秒後）を設定
+        animation3.startTime = animation1.timeline.currentTime + 1000;
+        //クリックした時点のタイムラインの値とそれぞれの startTime を出力
+        printStartTimes();
+      });
+
+      document.getElementById("cancel").addEventListener("click", (e) => {
+        //全てのアニメーションを停止
+        animations.forEach((animation) => {
+          animation.cancel();
+        });
+        printStartTimes();
+      });
+    </script>
+  </body>
+</html>

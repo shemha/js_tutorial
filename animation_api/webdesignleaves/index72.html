@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ホバーするとトランジションアニメーションを開始</title>
+    <style>
+      #target {
+        width: 60px;
+        height: 60px;
+        background-color: #85a0f5;
+        transition: background-color 2s, transform 2s ease-in-out;
+      }
+      .target-wrapper {
+        width: 300px;
+        height: 120px;
+        padding: 30px 0;
+        background-color: #e0f9ec;
+        cursor: pointer;
+      }
+      .target-wrapper:hover #target {
+        transform: translateX(240px) rotate(720deg);
+        background-color: pink;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="target-wrapper">
+      <div id="target"></div>
+    </div>
+
+    <script>
+      const target = document.getElementById("target");
+      const wrapper = document.querySelector(".target-wrapper");
+
+      wrapper.addEventListener("click", (e) => {
+        //対象の要素のアニメーションを全て取得
+        const animations = target.getAnimations();
+        //取得したアニメーションがあれば
+        if (animations.length > 0) {
+          //それぞれのアニメーションに対してメソッドを実行
+          animations.forEach((animation) => {
+            if (animation.playState === "running") {
+              animation.pause();
+            } else {
+              animation.play();
+            }
+          });
+        }
+      });
+    </script>
+  </body>
+</html>

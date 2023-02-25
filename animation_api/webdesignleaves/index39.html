@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      .target-wrapper {
+        width: 100px;
+        height: 100px;
+        margin: 40px 0 20px;
+      }
+      .circle-target {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+      }
+      .bg-blue {
+        background-color: #85a0f5;
+      }
+    </style>
+    <title>cancel() finish() pause()</title>
+  </head>
+  <body>
+    <div class="target-wrapper">
+      <div id="target" class="circle-target bg-blue"></div>
+    </div>
+    <button type="button" id="play">Play</button>
+    <button type="button" id="pause">Pause</button>
+    <button type="button" id="reverse">Reverse</button>
+    <button type="button" id="finish">Finish</button>
+    <button type="button" id="cansel">Cansel</button>
+
+    <script>
+      const target = document.getElementById("target");
+      const animation = target.animate(
+        [
+          { transform: "translateX(0px)", backgroundColor: "#85A0F5" },
+          { transform: "translateX(300px)", backgroundColor: "pink" },
+        ],
+        {
+          duration: 3000,
+          easing: "cubic-bezier(0.23, 1, 0.32, 1)", //easeOutQuint
+          fill: "forwards", //アニメーション終了後に効果を保持
+        }
+      );
+      animation.cancel(); //自動再生を停止
+
+      const play = document.getElementById("play");
+      const pause = document.getElementById("pause");
+      const finish = document.getElementById("finish");
+      const cancel = document.getElementById("cancel");
+
+      play.addEventListener("click", () => {
+        animation.play(); //再生
+      });
+      reverse.addEventListener("click", () => {
+        animation.reverse(); //逆再生
+      });
+      pause.addEventListener("click", () => {
+        animation.pause(); //一時停止
+      });
+      finish.addEventListener("click", () => {
+        animation.finish(); //終了
+      });
+      cancel.addEventListener("click", () => {
+        animation.cancel(); //停止（取り消し）
+      });
+    </script>
+  </body>
+</html>

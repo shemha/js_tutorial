@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      .target-wrapper {
+        width: 100px;
+        height: 100px;
+        margin: 40px 0 20px;
+      }
+      .circle-target {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+      }
+      .bg-blue {
+        background-color: #85a0f5;
+      }
+    </style>
+    <title>finish / cancel イベント</title>
+  </head>
+  <body>
+    <div class="target-wrapper">
+      <div id="target" class="circle-target bg-blue"></div>
+    </div>
+    <button type="button" id="play">Play</button>
+    <button type="button" id="finish">Finish</button>
+    <button type="button" id="cancel">Cancel</button>
+    <div id="output"></div>
+
+    <script>
+      //アニメーションを対象の要素に設定
+      const animation = document
+        .getElementById("target")
+        .animate(
+          [
+            { transform: "translateX(0px)" },
+            { transform: "translateX(300px)" },
+          ],
+          {
+            duration: 2000,
+            fill: "forwards",
+          }
+        );
+      animation.cancel(); // 自動再生の停止
+
+      const output = document.getElementById("output");
+
+      //finish イベントにリスナーを登録
+      animation.addEventListener("finish", (e) => {
+        //イベントオブジェクトのプロパティを出力
+        output.innerText =
+          "finish event" +
+          "\n" +
+          "e.type: " +
+          e.type +
+          "\n" +
+          "e.currentTime: " +
+          e.currentTime +
+          "\n" +
+          "e.timelineTime: " +
+          e.timelineTime;
+      });
+
+      //cancel イベントにリスナーを登録
+      animation.addEventListener("cancel", (e) => {
+        //イベントオブジェクトのプロパティを出力
+        output.innerText =
+          "cancel event" +
+          "\n" +
+          "e.type: " +
+          e.type +
+          "\n" +
+          "e.currentTime: " +
+          e.currentTime +
+          "\n" +
+          "e.timelineTime: " +
+          e.timelineTime;
+      });
+
+      document.getElementById("play").addEventListener("click", (e) => {
+        animation.play();
+      });
+      document.getElementById("finish").addEventListener("click", (e) => {
+        animation.finish();
+      });
+      document.getElementById("cancel").addEventListener("click", (e) => {
+        animation.cancel();
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CSS アニメーションを Web Animation API を使って書き換える</title>
+    <style>
+      .cp-sample {
+        position: relative;
+        width: 300px;
+      }
+      .cp-sample img {
+        max-width: 100%;
+      }
+      .bg-image {
+        opacity: 0.4;
+      }
+      .cp-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="cp-sample">
+      <img class="bg-image" src="01.jpeg" alt="" />
+      <img class="cp-image" src="01.jpeg" alt="" />
+    </div>
+    <button type="button" id="play">Play</button>
+    <button type="button" id="pause">Pause</button>
+    <button type="button" id="cancel">Cancel</button>
+
+    <script>
+      //アニメーションの対象の要素
+      const cpImage = document.querySelector(".cp-image");
+
+      //アニメーションを設定
+      const animation = cpImage.animate(
+        [
+          {
+            clipPath: "circle(0% at 100% 0)",
+            offset: 0,
+          },
+          {
+            clipPath: "circle(90% at 0 100%)",
+            offset: 0.5,
+          },
+          {
+            clipPath: "circle(40%)",
+            offset: 0.75,
+          },
+          {
+            clipPath: "circle(30% at 47% 50%)",
+            offset: 1.0,
+          },
+        ],
+        {
+          duration: 7000,
+          easing: "ease-in-out",
+          iterations: Infinity,
+          direction: "alternate",
+        }
+      );
+      //生成したアニメーションの自動再生を停止
+      animation.cancel();
+
+      //ボタンにアニメーションを制御するクリックイベントを設定
+      document.getElementById("play").addEventListener("click", () => {
+        animation.play();
+      });
+      document.getElementById("pause").addEventListener("click", () => {
+        animation.pause();
+      });
+      document.getElementById("cancel").addEventListener("click", () => {
+        animation.cancel();
+      });
+    </script>
+  </body>
+</html>

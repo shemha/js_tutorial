@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mortion Path によるアニメーション</title>
+    <style>
+      #motion-demo {
+        /* offset-path プロパティに path() を使って経路の形状を指定  */
+        offset-path: path("M20,20 C20,100 200,0 200,100");
+        /* キーフレームアニメーションを指定  */
+        animation: move 3000ms infinite alternate ease-in-out;
+        width: 40px;
+        height: 40px;
+        background: blue;
+        opacity: 0.5;
+        border: 1px solid #999;
+      }
+
+      /* offset-distance を使ったキーフレームアニメーションを設定  */
+      @keyframes move {
+        0% {
+          offset-distance: 0%; /* offset-distance プロパティ */
+        }
+        100% {
+          offset-distance: 100%; /* offset-distance プロパティ */
+        }
+      }
+
+      #toggle {
+        margin-top: 100px;
+        position: absolute;
+      }
+    </style>
+  </head>
+  <body>
+    <svg
+      width="200"
+      height="120"
+      viewBox="0 0 200 120"
+      style="position: absolute"
+    >
+      <path fill="none" stroke="#ccc" d="M20,20 C20,100 200,0 200,100" />
+      <!--パスの形状-->
+    </svg>
+    <div id="motion-demo"></div>
+    <div><button type="button" id="toggle">Toggle</button></div>
+
+    <script>
+      //モーションパスの CSS アニメーションを取得
+      const mpAnimation = document
+        .getElementById("motion-demo")
+        .getAnimations()[0];
+
+      //ボタンの要素を取得
+      const toggle = document.getElementById("toggle");
+
+      //ボタンの要素にクリックイベントを設定
+      toggle.addEventListener("click", () => {
+        //アニメーションの playState により pause() または play() を実行し、ボタンのラベルを変更
+        if (mpAnimation.playState === "running") {
+          mpAnimation.pause();
+          toggle.textContent = "Start";
+        } else {
+          mpAnimation.play();
+          toggle.textContent = "Pause";
+        }
+      });
+    </script>
+  </body>
+</html>

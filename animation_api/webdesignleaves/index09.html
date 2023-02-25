@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      .sample_wrapper {
+        position: relative;
+        width: 400px;
+        height: 100px;
+        margin: 50px 0 20px;
+      }
+      #target {
+        position: absolute;
+        width: 30px;
+        height: 30px;
+        background-color: #98e698;
+        border-radius: 50%;
+      }
+    </style>
+    <title>クリックする度に animate() でアニメーションを実行 - 別解</title>
+  </head>
+  <body>
+    <div class="sample_wrapper">
+      <div id="target"></div>
+    </div>
+    <button id="start" type="button">Start</button>
+
+    <script>
+      const keyframes = [
+        { transform: "translate(0px, 0px)" },
+        { transform: "translate(200px, 100px)" },
+        { transform: "translate(400px, 0px)" },
+      ];
+
+      const timingOpts = {
+        duration: 1000,
+        easing: "ease-in-out",
+        direction: "alternate",
+        iterations: 2,
+      };
+
+      //対象の要素を取得
+      const targetElem = document.getElementById("target");
+
+      //Animation オブジェクトを生成
+      const animation = targetElem.animate(keyframes, timingOpts);
+      //animate() メソッドによる自動再生のキャンセル
+      animation.cancel();
+
+      document.getElementById("start").addEventListener("click", () => {
+        //すでに実行されているアニメーションがあれば停止（キャンセル）
+        animation.cancel();
+        //アニメーションの再生
+        animation.play();
+      });
+    </script>
+  </body>
+</html>

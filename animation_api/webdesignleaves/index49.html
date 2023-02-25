@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      #target {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background-color: palevioletred;
+        margin: 20px 0;
+      }
+    </style>
+    <title>要素が見えたら開始（Intersection Observer）</title>
+  </head>
+  <body>
+    <div id="target"></div>
+    <!--アニメーション対象の要素-->
+
+    <script>
+      //キーフレーム
+      const frames = [
+        { transform: "translateX(0px)" },
+        { transform: "translateX(300px)" },
+      ];
+      //タイミング
+      const timing = {
+        duration: 1000,
+        direction: "alternate",
+        iterations: Infinity,
+        easing: "ease-out",
+      };
+      //アニメーション対象の要素
+      const target = document.getElementById("target");
+      //Animation オブジェクトを生成
+      const animation = target.animate(frames, timing);
+      //アニメーションの自動再生を停止
+      animation.cancel();
+
+      //オブザーバーのオプション
+      const options = {
+        //対象の要素が画面上に見えてから100pxを超えたら
+        rootMargin: "-100px 0px",
+        //対象の要素の全体が表示されたら
+        threshold: 1,
+      };
+
+      //オブザーバーのコールバック関数
+      const callback = (entries) => {
+        entries.forEach((entry) => {
+          //対象の要素が画面上に見えたら
+          if (entry.isIntersecting) {
+            //アニメーションを再生
+            animation.play();
+          } else {
+            //対象の要素が画面上から見えなくなった場合
+            //アニメーションを一時停止
+            animation.pause();
+            //animation.cancel();
+          }
+        });
+      };
+      //オブザーバーを生成
+      const observer = new IntersectionObserver(callback, options);
+      //対象の要素をオブザーバーに監視するように指定
+      observer.observe(target);
+    </script>
+  </body>
+</html>

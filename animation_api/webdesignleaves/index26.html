@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>getComputedTiming() タイミング情報</title>
+  </head>
+  <body>
+    <div id="target"></div>
+    <button type="button" id="start">Start</button>
+    <button type="button" id="check">Check</button>
+    <div class="output" id="output"></div>
+
+    <script>
+      //アニメーション対象の要素を取得
+      const target = document.getElementById("target");
+
+      // animate() でアニメーションを作成
+      const animation = target.animate(
+        [{ transform: "translateX(0px)" }, { transform: "translateX(300px)" }],
+        {
+          duration: 2000,
+          delay: 500,
+          endDelay: 800,
+          easing: "ease-in-out",
+          iterations: 6,
+          direction: "alternate",
+        }
+      );
+      //アニメーションの自動再生を停止
+      animation.cancel();
+
+      //Start ボタンの要素を取得
+      const start = document.getElementById("start");
+      //ボタンの要素にクリックイベントを設定
+      start.addEventListener("click", (e) => {
+        animation.play(); //アニメーションを再生
+      });
+
+      //プロパティの値を取得して出力する関数
+      const outputProps = () => {
+        //変数 timing にタイミングプロパティ（オブジェクト）を代入
+        const timing = animation.effect.getComputedTiming();
+        //それぞれのプロパティの値を取得
+        const endTime = timing.endTime;
+        const activeDuration = timing.activeDuration;
+        const localTime = timing.localTime;
+        //localTime を endTime で割って100をかけて進捗状況の％を取得
+        const completed = Math.floor((localTime * 100) / endTime);
+        const progress = timing.progress;
+        const currentIteration = timing.currentIteration;
+        //animation.currentTime プロパティ（localTime と等しい）
+        const animationCurrentTime = animation.currentTime;
+        //出力
+        output.innerText =
+          "endTime(=delay＋activeDuration＋endDelay): " +
+          endTime +
+          "\n" +
+          "activeDuration(=duration * iterationCount): " +
+          activeDuration +
+          "\n" +
+          "localTime: " +
+          localTime +
+          "\n" +
+          "animation.currentTime ( = localTime ): " +
+          animationCurrentTime +
+          "\n" +
+          "completed : " +
+          completed +
+          "% \n" +
+          "progress: " +
+          progress +
+          "\n" +
+          "currentIteration: " +
+          currentIteration +
+          "（" +
+          (currentIteration + 1) +
+          "回目）\n";
+      };
+
+      //Check ボタンの要素を取得
+      const check = document.getElementById("check");
+      //出力先の要素を取得
+      const output = document.getElementById("output");
+      //Check ボタンにクリックイベントを設定
+      check.addEventListener("click", (e) => {
+        //一時停止
+        animation.pause();
+        //プロパティを取得して出力
+        outputProps();
+      });
+
+      //Cancel ボタンの要素を取得
+      const cancel = document.getElementById("cancel");
+      //Cancel ボタンにクリックイベントを設定
+      cancel.addEventListener("click", (e) => {
+        //アニメーションを停止してアニメーション呼び出し前の状態に戻す
+        animation.cancel();
+        //プロパティを取得して出力
+        outputProps();
+      });
+    </script>
+  </body>
+</html>

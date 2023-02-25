@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>getAnimations() メソッドで実行中のアニメーションを取得</title>
+    <style>
+      svg {
+        position: absolute;
+        margin-top: 20px;
+      }
+      button {
+        margin-top: 100px;
+      }
+    </style>
+  </head>
+  <body>
+    <svg width="50" height="50" viewBox="0 0 50 50" style="overflow: visible">
+      <rect
+        id="target"
+        x="0"
+        y="0"
+        width="50"
+        height="50"
+        fill="darkseagreen"
+      ></rect>
+      <defs>
+        <style>
+          #target {
+            animation: cssAnim 3s linear 0s infinite;
+          }
+          @keyframes cssAnim {
+            0% {
+              fill: darkseagreen;
+              transform: translateX(0px);
+            }
+            50% {
+              fill: pink;
+              transform: translateX(100px);
+            }
+            100% {
+              fill: lightblue;
+              transform: translateX(0px);
+            }
+          }
+        </style>
+      </defs>
+    </svg>
+    <button type="button" id="toggle" class="control">Pause</button>
+
+    <script>
+      const target = document.getElementById("target");
+
+      document.getElementById("toggle").addEventListener("click", (e) => {
+        //アニメーションを取得
+        const animation = target.getAnimations()[0];
+        //この場合はアニメーションを取得できるで以下が実行される
+        if (animation) {
+          if (animation.playState === "running") {
+            animation.pause();
+            e.currentTarget.textContent = "Play";
+          } else {
+            animation.play();
+            e.currentTarget.textContent = "Pause";
+          }
+        }
+      });
+    </script>
+  </body>
+</html>

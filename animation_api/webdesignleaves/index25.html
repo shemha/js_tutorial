@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>effect プロパティ</title>
+  </head>
+  <body>
+    <div id="target"></div>
+
+    <script>
+      //アニメーションを生成
+      const animation = new Animation(
+        new KeyframeEffect(
+          document.getElementById("target"),
+          [
+            { transform: "translate(0px, 0px)", offset: 0 },
+            { transform: "translate(200px, 100px)", offset: 0.3 },
+            { transform: "translate(400px, 0px)", offset: 1 },
+          ],
+          {
+            duration: 1000,
+            easing: "ease-in-out",
+            direction: "alternate",
+            iterations: 2,
+          }
+        ),
+        document.timeline
+      );
+      animation.play(); //再生
+
+      //メソッドを使って KeyFrameEffect の情報を出力
+      console.log(animation.effect.getKeyframes());
+      console.log(animation.effect.getComputedTiming());
+      console.log(animation.effect.getTiming());
+    </script>
+  </body>
+</html>

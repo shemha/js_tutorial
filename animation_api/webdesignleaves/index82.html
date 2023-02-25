@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>requestAnimationFrame() の利用</title>
+    <style>
+      .small-target-red {
+        position: absolute;
+        margin-top: 30px;
+        width: 30px;
+        height: 30px;
+        background-color: red;
+        border-radius: 50%;
+      }
+      button {
+        margin-top: 100px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="target" class="small-target-red"></div>
+
+    <button type="button" id="play">Play</button>
+    <input
+      id="localTimeRange"
+      type="range"
+      min="0"
+      max="3000"
+      step="1"
+      value="0"
+      disabled
+    />
+    <p>progress: <span id="progress"></span></p>
+
+    <script>
+      const target = document.getElementById("target");
+      const play = document.getElementById("play");
+      const localTimeRange = document.getElementById("localTimeRange");
+      const progress = document.getElementById("progress");
+      const animation = target.animate(
+        {
+          transform: ["translateX(0px)", "translateX(200px)"],
+        },
+        {
+          duration: 2000,
+          delay: 1000,
+          easing: "ease-in-out",
+          fill: "both",
+        }
+      );
+      animation.pause();
+
+      //Play ボタンにクリックイベントを設定
+      play.addEventListener("click", () => {
+        animation.play();
+        //アニメーションの準備ができたら displayTiming() を呼び出す
+        animation.ready.then(displayTiming);
+      });
+
+      //進捗状況を表示する関数
+      const displayTiming = () => {
+        //タイミング情報を取得
+        const timing = animation.effect.getComputedTiming();
+        //localTime（再生位置）を取得
+        localTimeRange.value = timing.localTime;
+        //progress（CSS プロパティ値の補間位置）を取得
+        progress.textContent = timing.progress;
+        //アニメーションが再生中の間、requestAnimationFrame() でこの関数を呼出し続ける
+        if (animation.playState === "running") {
+          requestAnimationFrame(displayTiming);
+        }
+      };
+    </script>
+  </body>
+</html>

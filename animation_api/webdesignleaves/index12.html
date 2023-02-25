@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      #target {
+        width: 100px;
+        height: 100px;
+        background-color: #85a0f5;
+      }
+      .target-wrapper {
+        width: 100px;
+        height: 100px;
+        margin: 40px 0 20px;
+      }
+    </style>
+    <title>easing プロパティ</title>
+  </head>
+  <body>
+    <div class="target-wrapper">
+      <div id="target"></div>
+    </div>
+    <button id="start" type="button">Start</button>
+
+    <script>
+      document.getElementById("start").addEventListener("click", () => {
+        document.getElementById("target").animate(
+          [
+            {
+              transform: "translateX(0)",
+              backgroundColor: "#85A0F5",
+              offset: 0,
+              easing: "ease",
+            },
+            {
+              transform: "translateX(100px)",
+              backgroundColor: "pink",
+              offset: 0.2,
+              easing: "ease-in-out",
+            },
+            {
+              transform: "translateX(300px)",
+              backgroundColor: "red",
+              offset: 1.0,
+            },
+          ],
+          2000
+        );
+      });
+    </script>
+  </body>
+</html>

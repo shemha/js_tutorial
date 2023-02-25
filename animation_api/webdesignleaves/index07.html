@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      #target {
+        height: 80px;
+        width: 80px;
+        background-color: darkcyan;
+        /*角丸で楕円を作成*/
+        border-radius: 50% 80% 50% 80%/40% 70% 50% 70%;
+        /*カーソルの形状をポインターに*/
+        cursor: pointer;
+      }
+    </style>
+    <title>対象の要素自体にクリックイベントを設定</title>
+  </head>
+  <body>
+    <div id="target"></div>
+
+    <script>
+      const target = document.getElementById("target");
+      const animation = target.animate(
+        {
+          //border-radius の値を変化させるキーフレーム
+          borderRadius: [
+            "50% 80% 50% 80%/40% 70% 50% 70%",
+            "40% 60% 50% 60%/50% 40% 50% 30%",
+            "30% 40% 50% 40%/30% 80% 50% 40%",
+          ],
+          //translate で位置やサイズを変化させるキーフレーム
+          transform: [
+            "translate(0px, 0px) scale(1, 1)",
+            "translate(5px, 0px) scale(1.2, 1.1)",
+            "translate(-5px, 5px) scale(1.1, 0.9)",
+          ],
+        },
+        {
+          iterations: Infinity, //無限に繰り返し
+          direction: "alternate", //奇数回と偶数回で反対方向に再生
+          duration: 3000,
+        }
+      );
+      //自動再生を停止
+      animation.cancel();
+
+      target.addEventListener("click", () => {
+        //アニメーションの状態を取得
+        const playState = animation.playState;
+        if (playState === "running") {
+          //実行中であれば一時停止
+          animation.pause();
+        } else {
+          //実行中以外であれば再生
+          animation.play();
+        }
+      });
+    </script>
+  </body>
+</html>

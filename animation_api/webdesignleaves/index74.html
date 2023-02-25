@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>モーションパスアニメーションを Web Animation API で実装</title>
+    <style>
+      .motion-demo-wrapper {
+        position: relative;
+        width: 220px;
+        height: 120px;
+        margin: 30px 0;
+      }
+      #target {
+        width: 40px;
+        height: 40px;
+        background: red;
+        opacity: 0.5;
+        border: 3px solid #999;
+      }
+
+      button {
+        margin-top: 100px;
+      }
+    </style>
+  </head>
+  <body>
+    <svg
+      width="200"
+      height="120"
+      viewBox="0 0 200 120"
+      style="position: absolute"
+    >
+      <path fill="none" stroke="#ccc" d="M20,20 C20,100 200,0 200,100" />
+      <!--パスの形状-->
+    </svg>
+    <div id="motion-demo-wrapper"><div id="target"></div></div>
+    <button type="button" id="play">Play</button>
+    <button type="button" id="pause">Pause</button>
+    <button type="button" id="cancel">Cancel</button>
+
+    <script>
+      //アニメーションの対象の要素
+      const target = document.getElementById("target");
+      //要素のスタイルに offset-path を設定
+      target.style.offsetPath = "path('M20,20 C20,100 200,0 200,100')";
+      //アニメーションを作成
+      const animation = target.animate(
+        {
+          // CSS の offset-distance に該当
+          offsetDistance: ["0%", "100%"],
+        },
+        {
+          duration: 3000,
+          easing: "ease-in-out",
+          iterations: Infinity,
+          direction: "alternate",
+        }
+      );
+      //アニメーションの自動再生を停止
+      animation.cancel();
+
+      //ボタンにクリックイベントを設定
+      document.getElementById("play").addEventListener("click", () => {
+        animation.play();
+      });
+      document.getElementById("pause").addEventListener("click", () => {
+        animation.pause();
+      });
+      document.getElementById("cancel").addEventListener("click", () => {
+        animation.cancel();
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>effect プロパティ</title>
+  </head>
+  <body>
+    <div id="target"></div>
+
+    <script>
+      const target = document.getElementById("target");
+      //アニメーションを作成して実行
+      const animation = target.animate(
+        [
+          { transform: "translateX(0px)", backgroundColor: "blue" },
+          { transform: "translateX(300px)", backgroundColor: "pink" },
+        ],
+        {
+          duration: 1000,
+          easing: "ease",
+        }
+      );
+
+      //アニメーションの effect プロパティ（KeyFrameEffect オブジェクト）をコンソールに出力
+      console.log(animation.effect);
+      //KeyFrameEffect オブジェクトの target プロパティ（対象の要素）をコンソールに出力
+      console.log(animation.effect.target);
+    </script>
+  </body>
+</html>

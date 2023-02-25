@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      #target {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background-color: palevioletred;
+        margin: 20px 0;
+      }
+    </style>
+    <title>要素が見えたら開始（Intersection Observer）</title>
+  </head>
+  <body>
+    <div id="target"></div>
+    <!--アニメーション対象の要素-->
+
+    <script>
+      //キーフレーム
+      const frames = [
+        { transform: "translateX(0px)" },
+        { transform: "translateX(300px)" },
+      ];
+      //タイミング
+      const timing = {
+        duration: 1000,
+        direction: "alternate",
+        iterations: Infinity,
+        easing: "ease-out",
+      };
+      //アニメーション対象の要素
+      const target = document.getElementById("target");
+      //Animation オブジェクトを生成
+      const animation = target.animate(frames, timing);
+      //アニメーションの自動再生を停止
+      animation.cancel();
+
+      //オブザーバーを生成
+      const observer = new IntersectionObserver(
+        //コールバック関数
+        (entries) => {
+          if (entries[0].isIntersecting) {
+            animation.play();
+          } else {
+            animation.pause();
+          }
+        },
+        //オプション
+        {
+          rootMargin: "-100px 0px",
+          threshold: 1,
+        }
+      );
+    </script>
+  </body>
+</html>

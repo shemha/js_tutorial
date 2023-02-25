@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CSS アニメーションの取得</title>
+    <style>
+      .square-target-wrapper {
+        width: 100px;
+        height: 100px;
+        margin: 40px 0 20px;
+      }
+      .circle-target {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        /* position: absolute; */
+      }
+      .bg-blue {
+        background-color: #85a0f5;
+      }
+      #target {
+        animation: cssAnimation 2s ease-out 0s forwards;
+      }
+      @keyframes cssAnimation {
+        0% {
+          transform: translateX(0px);
+          background-color: #85a0f5;
+        }
+        100% {
+          transform: translateX(300px);
+          background-color: pink;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="square-target-wrapper">
+      <div id="target" class="circle-target bg-blue"></div>
+    </div>
+
+    <button type="button" id="play">Play</button>
+    <button type="button" id="pause">Pause</button>
+    <button type="button" id="reverse">Reverse</button>
+    <button type="button" id="cancel">Cancel</button>
+
+    <script>
+      //アニメーションが設定されている要素を取得
+      const target = document.getElementById("target");
+      //要素に設定されている CSS アニメーションを取得（配列なので最初の要素を取得）
+      const animation = target.getAnimations()[0];
+      //アニメーションの自動再生を停止
+      animation.cancel();
+
+      //ボタンの要素にクリックイベントを設定して操作
+      document.getElementById("play").addEventListener("click", () => {
+        animation.play();
+      });
+      document.getElementById("pause").addEventListener("click", () => {
+        animation.pause();
+      });
+      document.getElementById("reverse").addEventListener("click", () => {
+        animation.reverse();
+      });
+      document.getElementById("cancel").addEventListener("click", () => {
+        animation.cancel();
+      });
+    </script>
+  </body>
+</html>

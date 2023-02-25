@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>composite の値</title>
+  </head>
+  <body>
+    <div>
+      <svg width="200" height="200" viewBox="-100 -100 200 200">
+        <g>
+          <circle r="15" fill="red" />
+          <g id="target">
+            <circle cx="70" r="8" fill="blue" />
+            <circle cx="95" r="3" fill="orange" />
+          </g>
+        </g>
+      </svg>
+    </div>
+    <p>
+      composite: <strong><span id="output_composite">add</span></strong>
+    </p>
+    <div>
+      <button type="button" id="add" class="control">Add</button>
+      <button type="button" id="accumulate" class="control">accumulate</button>
+      <button type="button" id="replace" class="control">Replace</button>
+    </div>
+    <div>
+      <button type="button" id="start" class="control">Start</button>
+      <button type="button" id="pause" class="control">Pause</button>
+      <button type="button" id="cancel" class="control">Cancel</button>
+    </div>
+
+    <script>
+      const target = document.getElementById("target");
+      const animation1 = target.animate(
+        [{ transform: "rotate(0deg)" }, { transform: "rotate(360deg)" }],
+        {
+          duration: 12000,
+          iterations: Infinity,
+        }
+      );
+      animation1.cancel();
+
+      const animation2 = target.animate(
+        [
+          { transform: "translate(70px, 0) rotate(0deg) translate(-70px, 0)" },
+          {
+            transform: "translate(70px, 0) rotate(-360deg) translate(-70px, 0)",
+          },
+        ],
+        {
+          duration: 1400,
+          iterations: Infinity,
+          composite: "add", //composite プロパティ
+        }
+      );
+      animation2.cancel();
+
+      const animations = [animation1, animation2];
+
+      document.getElementById("start").addEventListener("click", (e) => {
+        animations.forEach((animation) => {
+          animation.play();
+        });
+      });
+      document.getElementById("pause").addEventListener("click", (e) => {
+        animations.forEach((animation) => {
+          animation.pause();
+        });
+      });
+      document.getElementById("cancel").addEventListener("click", (e) => {
+        animations.forEach((animation) => {
+          animation.cancel();
+        });
+      });
+
+      const output_composite = document.getElementById("output_composite");
+
+      document.getElementById("add").addEventListener("click", (e) => {
+        if (animation2.effect.composite !== "add") {
+          //composite プロパティを変更
+          animation2.effect.composite = "add";
+          output_composite.textContent = animation2.effect.composite;
+        }
+      });
+      document.getElementById("accumulate").addEventListener("click", (e) => {
+        if (animation2.effect.composite !== "accumulate") {
+          //composite プロパティを変更
+          animation2.effect.composite = "accumulate";
+          output_composite.textContent = animation2.effect.composite;
+        }
+      });
+      document.getElementById("replace").addEventListener("click", (e) => {
+        if (animation2.effect.composite !== "replace") {
+          //composite プロパティを変更
+          animation2.effect.composite = "replace";
+          output_composite.textContent = animation2.effect.composite;
+        }
+      });
+    </script>
+  </body>
+</html>

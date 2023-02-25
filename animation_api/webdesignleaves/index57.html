@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>全てのアニメーションが完了したらメッセージを表示</title>
+    <style>
+      .target-wrapper {
+        width: 100px;
+        height: 100px;
+        margin: 40px 0 20px;
+      }
+      .circle-target-sm {
+        margin-top: 20px;
+        margin-bottom: 20px;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        /* position: absolute; */
+      }
+      .bg-blue {
+        background-color: #85a0f5;
+      }
+      .bg-pink {
+        background-color: #f39294;
+      }
+      .bg-green {
+        background-color: #72de87;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="target circle-target-sm bg-blue"></div>
+    <div class="target circle-target-sm bg-pink"></div>
+    <div class="target circle-target-sm bg-green"></div>
+    <button type="button" id="play">Play</button>
+    <div id="output"></div>
+    <p>removed count: <span id="rc">0</span></p>
+    <script>
+      //全てのアニメーションの対象の要素
+      const targets = document.querySelectorAll(".target");
+      //メッセージの出力先の要素
+      const output = document.getElementById("output");
+      //削除カウントの出力先の要素
+      const rc = document.getElementById("rc");
+      //Animation オブジェクトが削除された回数を入れる変数の初期化
+      let removedCount = 0;
+      document.getElementById("play").addEventListener("click", () => {
+        //メッセージの出力先のテキストをクリア
+        output.textContent = "";
+        //作成した Animation オブジェクトを格納する配列
+        const animations = [];
+        //全ての対象の要素にアニメーションを作成
+        targets.forEach((target) => {
+          const animation = new Animation(
+            new KeyframeEffect(
+              target,
+              [
+                { transform: "translateX(0px)" },
+                { transform: "translateX(300px)" },
+              ],
+              {
+                duration: 700 + Math.random() * 1000, //ランダムな値を設定
+                easing: "ease-in",
+                fill: "forwards",
+                iterations: 1,
+              }
+            ),
+            document.timeline
+          );
+          //Animation オブジェクトが削除されたらカウントして出力
+          animation.addEventListener("remove", () => {
+            removedCount++;
+            rc.textContent = removedCount;
+          });
+          //生成した Animation オブジェクトを配列に追加
+          animations.push(animation);
+        });
+
+        Promise.all(
+          //各アニメーションの ready プロミスの配列を作成
+          animations.map((animation) => animation.ready)
+        ).then((anims) =>
+          //準備ができたら各アニメーションの startTime にタイムラインの currentTime を指定して同時に再生
+          anims.forEach(
+            (anim) => (anim.startTime = document.timeline.currentTime)
+          )
+        );
+
+        Promise.all(
+          //各アニメーションの finished プロミスの配列を作成
+          animations.map((animation) => animation.finished)
+          //全てのアニメーションが終了したらメッセージを表示
+        ).then(() => (output.textContent = "全て終了"));
+      });
+    </script>
+  </body>
+</html>

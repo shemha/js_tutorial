@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>transform プロパティに２つのアニメーションを設定する例</title>
+  </head>
+  <body>
+    <svg width="200" height="200" viewBox="-100 -100 200 200">
+      <g>
+        <circle r="15" fill="red" />
+        <g id="targetCmpst">
+          <circle cx="70" r="8" fill="blue" />
+          <circle cx="95" r="3" fill="orange" />
+        </g>
+      </g>
+    </svg>
+
+    <div style="margin: 50px 0 30px">
+      <input
+        type="radio"
+        name="composite"
+        id="composit_add"
+        value="add"
+        checked
+      />
+      <label for="composit_add"> add </label>
+      <input
+        type="radio"
+        name="composite"
+        id="composit_accumulate"
+        value="accumulate"
+      />
+      <label for="composit_accumulate"> accumulate </label>
+      <input
+        type="radio"
+        name="composite"
+        id="composit_replace"
+        value="replace"
+      />
+      <label for="composit_replace"> replace </label>
+    </div>
+
+    <button type="button" id="toggleCmpst">Start</button>
+
+    <script>
+      //アニメーションの対象の要素を取得
+      let composite_value = "replace";
+      const compositeRadios = document.querySelectorAll(
+        'input[name="composite"]'
+      );
+      const composite_code_span = document.getElementById(
+        "composite_code_span"
+      );
+      for (let i = 0; i < compositeRadios.length; i++) {
+        compositeRadios[i].addEventListener("change", (e) => {
+          composite_value = e.currentTarget.value;
+          composite_code_span.textContent = composite_value;
+          composite_code_span.style.color = "aqua";
+        });
+      }
+      const targetCmpst = document.getElementById("targetCmpst");
+      const animationCmpst1 = targetCmpst.animate(
+        [{ transform: "rotate(0deg)" }, { transform: "rotate(360deg)" }],
+        {
+          duration: 12000,
+          iterations: Infinity,
+        }
+      );
+      animationCmpst1.cancel();
+      const animationCmpst2 = targetCmpst.animate(
+        [
+          { transform: "translate(70px, 0) rotate(0deg) translate(-70px, 0)" },
+          {
+            transform: "translate(70px, 0) rotate(-360deg) translate(-70px, 0)",
+          },
+        ],
+        {
+          duration: 1400,
+          iterations: Infinity,
+          composite: "add",
+        }
+      );
+      animationCmpst2.cancel();
+      const toggleCmpst = document.getElementById("toggleCmpst");
+      toggleCmpst.addEventListener("click", (e) => {
+        [animationCmpst1, animationCmpst2].forEach((animation) => {
+          if (animation.playState !== "running") {
+            animation.play();
+            toggleCmpst.textContent = "Pause";
+          } else {
+            animation.pause();
+            toggleCmpst.textContent = "Start";
+          }
+        });
+      });
+      let composite_value2 = "add";
+      const compositeRadios2 = document.querySelectorAll(
+        'input[name="composite"]'
+      );
+      for (let i = 0; i < compositeRadios2.length; i++) {
+        compositeRadios2[i].addEventListener("change", (e) => {
+          composite_value2 = e.currentTarget.value;
+          animationCmpst2.effect.composite = composite_value2;
+        });
+      }
+    </script>
+  </body>
+</html>

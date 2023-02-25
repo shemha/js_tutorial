@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      .target-wrapper {
+        width: 100px;
+        height: 100px;
+        margin: 40px 0 20px;
+      }
+      .circle-target {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+      }
+      .bg-blue {
+        background-color: #85a0f5;
+      }
+    </style>
+    <title>playbackRate の値</title>
+  </head>
+  <body>
+    <div class="target-wrapper">
+      <div id="target" class="circle-target bg-blue"></div>
+    </div>
+    <button type="button" id="play">Play</button>
+    <button type="button" id="doubleUp">2x</button>
+    <button type="button" id="halfDown">1/2</button>
+    <button type="button" id="toggle">Toggle</button>
+    <button type="button" id="pause">Pause</button>
+    <button type="button" id="cancel">Cancel</button>
+    <div
+      class="output"
+      id="output"
+      style="min-height: 160px; max-width: 540px"
+    ></div>
+
+    <script>
+      const target = document.getElementById("target");
+      const animation = target.animate(
+        [
+          { transform: "translateX(0px)", backgroundColor: "#85A0F5" },
+          { transform: "translateX(300px)", backgroundColor: "lightgreen" },
+        ],
+        {
+          duration: 3000,
+        }
+      );
+      //自動再生を停止
+      animation.cancel();
+      //ボタンと出力先の要素を取得
+      const play = document.getElementById("play");
+      const doubleUp = document.getElementById("doubleUp");
+      const halfDown = document.getElementById("halfDown");
+      const pause = document.getElementById("pause");
+      const toggle = document.getElementById("toggle");
+      const cancel = document.getElementById("cancel");
+      const output = document.getElementById("output");
+
+      play.addEventListener("click", () => {
+        //アニメーションを再生
+        animation.play();
+        //playbackRate を出力
+        output.textContent = "playbackRate: " + animation.playbackRate;
+      });
+      doubleUp.addEventListener("click", () => {
+        //playbackRate を2倍に
+        animation.playbackRate *= 2;
+        output.textContent = "playbackRate: " + animation.playbackRate;
+      });
+      halfDown.addEventListener("click", () => {
+        //playbackRate を半分に
+        animation.playbackRate *= 0.5;
+        output.textContent = "playbackRate: " + animation.playbackRate;
+      });
+      toggle.addEventListener("click", () => {
+        //playbackRate の正負を反転
+        animation.playbackRate = animation.playbackRate * -1;
+        output.textContent = "playbackRate: " + animation.playbackRate;
+      });
+      pause.addEventListener("click", () => {
+        animation.pause();
+      });
+      cancel.addEventListener("click", () => {
+        animation.cancel();
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      .target-wrapper {
+        width: 100px;
+        height: 100px;
+        margin: 40px 0 20px;
+      }
+      .circle-target {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+      }
+      .bg-blue {
+        background-color: #85a0f5;
+      }
+    </style>
+    <title>Animation.finished</title>
+  </head>
+  <body>
+    <div class="target-wrapper">
+      <div id="target" class="circle-target bg-blue"></div>
+    </div>
+    <button type="button" id="play" class="control">Play</button>
+    <button type="button" id="pause" class="control">Pause</button>
+    <button type="button" id="reverse" class="control">Reverse</button>
+    <button type="button" id="finish" class="control">Finish</button>
+    <button type="button" id="cancel" class="control">Cancel</button>
+    <div
+      class="output"
+      id="output"
+      style="min-height: 40px; max-width: 390px"
+    ></div>
+
+    <script>
+      //アニメーションを作成
+      const animation = document
+        .getElementById("target")
+        .animate({ transform: ["translateX(0px)", "translateX(300px)"] }, 2000);
+      animation.cancel(); //自動再生を停止
+
+      //メッセージの出力先要素
+      const output = document.getElementById("output");
+      //ready プロミスを使ってアニメーションの準備ができたらその際の playState を表示する関数
+      const checkFinishedPromise = (method) => {
+        animation.finished
+          .then((anim) => {
+            output.innerText = method + " :  finished ";
+          })
+          .catch(
+            (error) =>
+              (output.innerText =
+                method + " : animation cancelled" + " (" + error + ")")
+          );
+      };
+      //上記関数を実行（一度だけ実行される）
+      document.getElementById("play").addEventListener("click", (e) => {
+        output.textContent = "";
+        animation.play();
+        checkFinishedPromise("play()"); //play ボタンをクリックする度に確認
+      });
+      document.getElementById("pause").addEventListener("click", (e) => {
+        output.textContent = "";
+        animation.pause();
+        //pending 状態を表示
+        output.textContent = "pending: " + animation.pending;
+      });
+      document.getElementById("reverse").addEventListener("click", (e) => {
+        output.textContent = "";
+        animation.reverse();
+        checkFinishedPromise("reverse()"); //reverse ボタンをクリックする度に確認
+      });
+      document.getElementById("finish").addEventListener("click", (e) => {
+        output.textContent = "";
+        animation.finish();
+        checkFinishedPromise("finish()"); //finish ボタンをクリックする度に確認
+      });
+      document.getElementById("cancel").addEventListener("click", (e) => {
+        output.textContent = "";
+        animation.cancel();
+        checkFinishedPromise("cancel()"); //cancel ボタンをクリックする度に確認
+      });
+    </script>
+  </body>
+</html>

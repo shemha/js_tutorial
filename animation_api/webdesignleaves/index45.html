@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      .target-wrapper {
+        width: 100px;
+        height: 100px;
+        margin: 40px 0 20px;
+      }
+      .circle-target {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+      }
+      .bg-blue {
+        background-color: #85a0f5;
+      }
+      .bg-green {
+        background-color: #72de87;
+      }
+      .small {
+        width: 50px;
+        height: 50px;
+      }
+    </style>
+    <title>異なる currentTime を設定したアニメーション</title>
+  </head>
+  <body>
+    <div class="target-wrapper">
+      <div id="targetSync1" class="circle-target bg-blue small"></div>
+    </div>
+    <div class="target-wrapper">
+      <div id="targetSync2" class="circle-target bg-green small"></div>
+    </div>
+    <button type="button" id="playSync" class="control">Play</button>
+    <button type="button" id="syncSync" class="control">Sync</button>
+    <button type="button" id="randomizeSync" class="control">Randamize</button>
+    <button type="button" id="pauseSync" class="control">Pause</button>
+    <button type="button" id="cancelSync" class="control">Cancel</button>
+
+    <script>
+      const framesSync = [
+        { transform: "translateX(0px)" },
+        { transform: "translateX(300px)" },
+      ];
+      const timingsSync = {
+        duration: 1000,
+        iterations: Infinity,
+        direction: "alternate",
+        fill: "forwards",
+        delay: 0,
+        easing: "ease-in-out",
+      };
+      const animationSync1 = document
+        .getElementById("targetSync1")
+        .animate(framesSync, timingsSync);
+      animationSync1.cancel();
+      const animationSync2 = document
+        .getElementById("targetSync2")
+        .animate(framesSync, timingsSync);
+      animationSync2.cancel();
+      const animationSyncs = [animationSync1, animationSync2];
+      document.getElementById("playSync").addEventListener("click", (e) => {
+        if (animationSync2.playState !== "paused") {
+          const rand = Math.random();
+          animationSync2.currentTime = 500 * rand;
+        }
+        animationSyncs.forEach((animation) => {
+          animation.play();
+        });
+      });
+      document.getElementById("syncSync").addEventListener("click", (e) => {
+        animationSync2.currentTime = animationSync1.currentTime;
+      });
+      document
+        .getElementById("randomizeSync")
+        .addEventListener("click", (e) => {
+          const rand = Math.random();
+          animationSync2.currentTime = animationSync1.currentTime + 500 * rand;
+        });
+      document.getElementById("pauseSync").addEventListener("click", (e) => {
+        animationSyncs.forEach((animation) => {
+          animation.pause();
+        });
+      });
+      document.getElementById("cancelSync").addEventListener("click", (e) => {
+        animationSyncs.forEach((animation) => {
+          animation.cancel();
+        });
+      });
+    </script>
+  </body>
+</html>

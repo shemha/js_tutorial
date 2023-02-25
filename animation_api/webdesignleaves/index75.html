@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>モーションパスの入れ替え</title>
+    <style>
+      #target1 {
+        width: 20px;
+        height: 20px;
+        background-color: red;
+        opacity: 0.6;
+      }
+      #target2 {
+        width: 20px;
+        height: 20px;
+        background-color: blue;
+        opacity: 0.4;
+        margin-top: -20px; /*#target1 と重ねる*/
+      }
+      .motion-demo-wrapper {
+        position: relative;
+        width: 200px;
+        height: 200px;
+        margin: 30px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="motion-demo-wrapper">
+      <svg
+        width="200"
+        height="200"
+        viewBox="0 0 200 200"
+        style="position: absolute"
+      >
+        <path
+          id="path"
+          fill="none"
+          stroke="#ddd"
+          d="M 25 100 A 75 75 0 1 1 175 100 A 75 75 0 1 1 25 100"
+        />
+      </svg>
+      <div id="target1"></div>
+      <div id="target2"></div>
+    </div>
+    <button type="button" id="start">Start</button>
+    <button type="button" id="pause">Pause</button>
+    <button type="button" id="reverse">Reverse</button>
+    <button type="button" id="cancel">Cancel</button>
+    <button type="button" id="change">Change</button>
+
+    <script>
+      //path() に指定する d 属性の値を変数に代入
+      const d1 = "M 25 100 A 75 75 0 1 1 175 100 A 75 75 0 1 1 25 100"; //円のパス用
+      const d2 = "M 25 100 v-75 h150 v150 h-150 z"; //正方形のパス用
+
+      //path() の値を変数に代入
+      const path1 = `path('${d1}')`;
+      const path2 = `path('${d2}')`;
+
+      //アニメーションの対象の要素を取得
+      const target1 = document.getElementById("target1");
+      const target2 = document.getElementById("target2");
+
+      //対象の要素 に offset-path を設定
+      target1.style.offsetPath = path1;
+      target2.style.offsetPath = path1;
+
+      //１つ目の対象の要素にアニメーションを設定
+      const animation1 = target1.animate(
+        { offsetDistance: ["0%", "100%"] },
+        {
+          duration: 3000,
+          easing: "ease-in-out",
+          iterations: 1000 /*ある程度大きな適当な値を指定*/,
+        }
+      );
+      //こちらのアニメーションは初期状態では停止しておく
+      animation1.cancel();
+
+      //２つ目の対象の要素にアニメーションを設定
+      const animation2 = target2.animate(
+        { offsetDistance: ["0%", "100%"] },
+        {
+          duration: 3000,
+          easing: "linear" /*デフォルトの linear を指定（省略可能）*/,
+          iterations: Infinity /* 無限に繰り返し */,
+        }
+      );
+
+      //それぞれのボタンにクリックイベントを設定
+      document.getElementById("start").addEventListener("click", () => {
+        animation1.play();
+      });
+      document.getElementById("pause").addEventListener("click", () => {
+        animation1.pause();
+      });
+      document.getElementById("reverse").addEventListener("click", () => {
+        animation1.reverse();
+      });
+      document.getElementById("cancel").addEventListener("click", () => {
+        animation1.cancel();
+      });
+
+      //モーションパスの形状を表示している svg の path 要素を取得
+      const path = document.getElementById("path");
+
+      //現在使用しているモーションパスを判定するための変数
+      let usingPath1 = true;
+
+      //Change ボタンのクリックイベントの設定
+      document.getElementById("change").addEventListener("click", () => {
+        //現在１つ目のパスが使用されていれば
+        if (usingPath1) {
+          //対象の要素の offset-path に２つ目のパスを設定
+          target1.style.offsetPath = path2;
+          target2.style.offsetPath = path2;
+          //svg の path 要素の d 属性を２つ目のパスの値に変更
+          path.setAttribute("d", d2);
+          //判定用の変数を更新
+          usingPath1 = false;
+        } else {
+          target1.style.offsetPath = path1;
+          target2.style.offsetPath = path1;
+          path.setAttribute("d", d1);
+          usingPath1 = true;
+        }
+      });
+    </script>
+  </body>
+</html>

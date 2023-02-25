@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      .target-wrapper {
+        position: relative;
+        width: 400px;
+        height: 100px;
+        margin: 50px 0 20px;
+      }
+      #target {
+        position: absolute;
+        width: 30px;
+        height: 30px;
+        background-color: #98e698;
+        border-radius: 50%;
+      }
+    </style>
+    <title>
+      コンストラクタ Animation() の中で KeyframeEffect オブジェクトを生成
+    </title>
+  </head>
+  <body>
+    <div class="target-wrapper">
+      <div id="target"></div>
+    </div>
+    <button type="button" id="start" class="control">Start</button>
+
+    <script>
+      //アニメーション対象の要素を取得
+      const target = document.getElementById("target");
+      //ボタンの要素を取得
+      const start = document.getElementById("start");
+
+      // Animation オブジェクトを生成
+      const animation = new Animation(
+        //KeyFrameEffect オブジェクトを作成
+        new KeyframeEffect(
+          //アニメーション対象の要素
+          target,
+          //keyframes オブジェクト
+          [
+            { transform: "translate(0px, 0px)" },
+            { transform: "translate(200px, 100px)" },
+            { transform: "translate(400px, 0px)" },
+          ],
+          //オプション（タイミングプロパティ）
+          {
+            duration: 1000,
+            easing: "ease-in-out",
+            direction: "alternate",
+            iterations: 4,
+          }
+        ),
+        document.timeline
+      );
+
+      //ボタンの要素にクリックイベントを設定
+      start.addEventListener("click", (e) => {
+        //すでに実行されているアニメーションがあれば停止
+        animation.cancel();
+        //アニメーションを再生
+        animation.play();
+      });
+    </script>
+  </body>
+</html>

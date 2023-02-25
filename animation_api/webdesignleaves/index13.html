@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>イージングの効果</title>
+  </head>
+  <body>
+    <div class="target-wrapper">
+      <div id="target"></div>
+    </div>
+    <button id="start" type="button">Start</button>
+
+    <style>
+      .target-wrapper {
+        width: 300px;
+        height: 300px;
+        border: 1px solid #ccc;
+        position: relative;
+        margin: 30px 0;
+      }
+      #target {
+        position: absolute;
+        width: 30px;
+        height: 30px;
+        background-color: red;
+        border-radius: 50%;
+      }
+    </style>
+
+    <script>
+      const target = document.getElementById("target");
+
+      document.getElementById("start").addEventListener("click", () => {
+        //垂直方向のアニメーション
+        target.animate(
+          [
+            { top: "0px", easing: "ease-in-out" },
+            { top: "135px" },
+            { top: "270px" },
+          ],
+          2000
+        );
+        //水平方向のアニメーション
+        target.animate([{ left: "0px" }, { left: "270px" }], 2000);
+      });
+    </script>
+  </body>
+</html>

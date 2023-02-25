@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      .target-wrapper {
+        width: 100px;
+        height: 100px;
+        margin: 40px 0 20px;
+      }
+      .circle-target {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+      }
+      .bg-blue {
+        background-color: #85a0f5;
+      }
+    </style>
+    <title>特定のタイミングプロパティだけを更新</title>
+  </head>
+  <body>
+    <div class="target-wrapper">
+      <div id="target" class="circle-target bg-blue"></div>
+    </div>
+    <button type="button" id="start">Start</button>
+    <button type="button" id="change">Change</button>
+
+    <script>
+      const target = document.getElementById("target");
+      //タイミングプロパティ（１）
+      const timing1 = {
+        delay: 500,
+        duration: 500,
+        easing: "ease",
+        iterations: 4,
+        fill: "none",
+        direction: "alternate",
+      };
+      //タイミングプロパティ（２）
+      const timing2 = {
+        delay: 0,
+        duration: 1000,
+        easing: "ease-in-out",
+        iterations: 1,
+        fill: "forwards",
+        direction: "normal",
+      };
+
+      //アニメーションを生成
+      const animation = target.animate(
+        [{ transform: "translateX(0px)" }, { transform: "translateX(300px)" }],
+        {
+          delay: 500,
+          duration: 500,
+          easing: "ease",
+          iterations: 4,
+          fill: "none",
+          direction: "alternate",
+        }
+      );
+      animation.cancel();
+
+      const start = document.getElementById("start");
+      start.addEventListener("click", (e) => {
+        animation.play();
+      });
+      const change = document.getElementById("change");
+
+      change.addEventListener("click", (e) => {
+        //現在の direction プロパティの値を取得
+        const direction = animation.effect.getTiming().direction;
+
+        if (direction === "normal") {
+          //direction プロパティの値を reverse に変更
+          animation.effect.updateTiming({ direction: "reverse" });
+        } else {
+          //direction プロパティの値を normal に変更
+          animation.effect.updateTiming({ direction: "normal" });
+        }
+        animation.cancel();
+      });
+    </script>
+  </body>
+</html>

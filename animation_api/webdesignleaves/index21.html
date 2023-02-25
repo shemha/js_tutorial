@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      .target-wrapper {
+        width: 100px;
+        height: 100px;
+        margin: 40px 0 20px;
+      }
+      .circle-target {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+      }
+      .bg-blue {
+        background-color: #85a0f5;
+      }
+    </style>
+    <title>タイムライン</title>
+  </head>
+  <body>
+    <div class="target-wrapper">
+      <div id="target" class="circle-target bg-blue"></div>
+    </div>
+    <button type="button" id="start" class="control">Start</button>
+    <button type="button" id="check" class="control">Check</button>
+    <button type="button" id="cancel" class="control">Cancel</button>
+    <div
+      class="output"
+      id="output"
+      style="min-height: 100px; max-width: 540px"
+    ></div>
+
+    <script>
+      //アニメーション対象の要素
+      const target = document.getElementById("target");
+
+      //アニメーションを作成
+      const animation = target.animate(
+        [{ transform: "translateX(0px)" }, { transform: "translateX(300px)" }],
+        {
+          duration: 2000,
+          easing: "ease-in-out",
+          iterations: 4,
+          direction: "alternate",
+        }
+      );
+      //自動再生を停止
+      animation.cancel();
+
+      //Start ボタン
+      const start = document.getElementById("start");
+      //Start ボタンをクリックするとアニメーションを再生
+      start.addEventListener("click", (e) => {
+        animation.play();
+      });
+
+      //それぞれのプロパティを取得して出力する関数
+      const outputProps = () => {
+        const animationTimelineCurrentTime = animation.timeline.currentTime;
+        const animationstartTime = animation.startTime;
+        const animationCurrentTime = animation.currentTime;
+        output.innerText =
+          "animation.timeline.currentTime: " +
+          animationTimelineCurrentTime +
+          "\n" +
+          "animation.startTime: " +
+          animationstartTime +
+          "\n" +
+          "animation.currentTime: " +
+          animationCurrentTime +
+          "\n" +
+          (animationTimelineCurrentTime - animationstartTime) +
+          " ≒ " +
+          animationTimelineCurrentTime +
+          " - " +
+          animationstartTime;
+      };
+
+      //Check ボタン
+      const check = document.getElementById("check");
+      //メッセージの出力先
+      const output = document.getElementById("output");
+
+      //Check ボタンをクリックすると一時停止してその時点のプロパティを出力
+      check.addEventListener("click", (e) => {
+        //一時停止
+        animation.pause();
+        //それぞれのプロパティを取得して出力
+        outputProps();
+      });
+
+      //Cancel ボタン
+      const cancel = document.getElementById("cancel");
+      cancel.addEventListener("click", (e) => {
+        animation.cancel();
+        outputProps();
+      });
+    </script>
+  </body>
+</html>

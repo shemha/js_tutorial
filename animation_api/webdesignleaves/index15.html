@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      .animate_sample_wrapper {
+        position: relative;
+        width: 400px;
+        height: 100px;
+        margin: 50px 0 20px;
+      }
+      .animate_sample {
+        position: absolute;
+        width: 30px;
+        height: 30px;
+        background-color: #98e698;
+        border-radius: 50%;
+      }
+    </style>
+    <title>options タイミングプロパティ</title>
+  </head>
+  <body>
+    <div class="animate_sample_wrapper">
+      <div id="animate_sample02" class="animate_sample"></div>
+      <div
+        id="finished_msg"
+        style="position: absolute; left: 0px; bottom: 20px; color: #999"
+      >
+        Finished
+      </div>
+    </div>
+    <div class="table-responsive">
+      <table class="table controls" style="max-width: 640px">
+        <tbody>
+          <tr>
+            <th scope="row">delay</th>
+            <td>
+              <input
+                type="range"
+                id="delay_slider"
+                min="-1000"
+                max="5000"
+                value="0"
+                step="100"
+              />
+            </td>
+            <td style="width: 100px"><span id="delay_slider_span">0</span></td>
+          </tr>
+          <tr>
+            <th scope="row">duration</th>
+            <td>
+              <input
+                type="range"
+                id="duration_slider"
+                min="0"
+                max="5000"
+                value="1000"
+                step="100"
+              />
+            </td>
+            <td><span id="duration_slider_span">1000</span></td>
+          </tr>
+          <tr>
+            <th scope="row">endDelay</th>
+            <td>
+              <input
+                type="range"
+                id="endDelay_slider"
+                min="-1000"
+                max="5000"
+                value="0"
+                step="100"
+              />
+            </td>
+            <td><span id="endDelay_slider_span">0</span></td>
+          </tr>
+          <tr>
+            <th scope="row">iterations</th>
+            <td>
+              <input
+                type="range"
+                id="iterations_slider"
+                min="1"
+                max="5"
+                value="1"
+                step="1"
+              />
+            </td>
+            <td><span id="iterations_slider_span">1</span></td>
+          </tr>
+          <tr>
+            <th scope="row">iterationStart</th>
+            <td>
+              <input
+                type="range"
+                id="iterationStart_slider"
+                min="0"
+                max="1"
+                value="0"
+                step="0.1"
+              />
+            </td>
+            <td><span id="iterationStart_slider_span">0.0</span></td>
+          </tr>
+          <tr>
+            <th scope="row">direction</th>
+            <th colspan="2" scope="row">
+              <input
+                type="radio"
+                name="direction"
+                id="direction_normal"
+                value="normal"
+                checked
+              />
+              <label for="direction_normal"> normal </label>
+              <input
+                type="radio"
+                name="direction"
+                id="direction_reverse"
+                value="reverse"
+              />
+              <label for="direction_reverse"> reverse </label>
+              <input
+                type="radio"
+                name="direction"
+                id="direction_alternate"
+                value="alternate"
+              />
+              <label for="direction_alternate"> alternate </label>
+              <input
+                type="radio"
+                name="direction"
+                id="direction_alternate_reverse"
+                value="alternate-reverse"
+              />
+              <label for="direction_alternate_reverse">
+                alternate-reverse
+              </label>
+            </th>
+          </tr>
+          <tr>
+            <th scope="row">fill</th>
+            <th colspan="2" scope="row">
+              <input
+                type="radio"
+                name="fill"
+                id="fill_none"
+                value="none"
+                checked
+              />
+              <label for="fill_none"> none </label>
+              <input
+                type="radio"
+                name="fill"
+                id="fill_forwards"
+                value="forwards"
+              />
+              <label for="fill_forwards"> forwards </label>
+              <input
+                type="radio"
+                name="fill"
+                id="fill_backwards"
+                value="backwards"
+              />
+              <label for="fill_backwards"> backwards </label>
+              <input type="radio" name="fill" id="fill_both" value="both" />
+              <label for="fill_both"> both </label>
+            </th>
+          </tr>
+          <tr>
+            <th scope="row">easing</th>
+            <th colspan="2" scope="row">
+              <select name="easing">
+                <option value="linear" selected>linear</option>
+                <option value="ease">ease</option>
+                <option value="ease-in">ease-in</option>
+                <option value="ease-out">ease-out</option>
+                <option value="ease-in-out">ease-in-out</option>
+                <option value="cubic-bezier(1, 0, 0, 1)">
+                  cubic-bezier(1, 0, 0, 1)
+                </option>
+                <option value="cubic-bezier(0.68, -0.6, 0.32, 1.6)">
+                  cubic-bezier(0.68,-0.6 0.32,1.6)
+                </option>
+                <option value="cubic-bezier(0.16, 1, 0.3, 1)">
+                  cubic-bezier(0.16,1,0.3,1)
+                </option>
+                <option value="cubic-bezier(0.36, 0, 0.66, -0.56)">
+                  cubic-bezier(0.36,0,0.66,-0.56)
+                </option>
+              </select>
+            </th>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <button id="start_animate_sample02" type="button" class="start-button">
+      Start
+    </button>
+
+    <script>
+      const easingSelect = document.querySelector('select[name="easing"]');
+      const easing_code_span = document.getElementById("easing_code_span");
+      let easing_value = "linear";
+      easingSelect.addEventListener("change", (e) => {
+        easing_value = e.currentTarget.value;
+        easing_code_span.textContent = easing_value;
+        easing_code_span.style.color = codeColor;
+      });
+      const directionRadios = document.querySelectorAll(
+        'input[name="direction"]'
+      );
+      const direction_code_span = document.getElementById(
+        "direction_code_span"
+      );
+      let direction_value = "normal";
+      for (let i = 0; i < directionRadios.length; i++) {
+        directionRadios[i].addEventListener("change", (e) => {
+          direction_value = e.currentTarget.value;
+          direction_code_span.textContent = direction_value;
+          direction_code_span.style.color = codeColor;
+        });
+      }
+      const fillRadios = document.querySelectorAll('input[name="fill"]');
+      const fill_code_span = document.getElementById("fill_code_span");
+      let fill_value = "none";
+      for (let i = 0; i < fillRadios.length; i++) {
+        fillRadios[i].addEventListener("change", (e) => {
+          fill_value = e.currentTarget.value;
+          fill_code_span.textContent = fill_value;
+          fill_code_span.style.color = codeColor;
+        });
+      }
+      const delay_slider = document.getElementById("delay_slider");
+      const delay_slider_span = document.getElementById("delay_slider_span");
+      const delay_code_span = document.getElementById("delay_code_span");
+      let delay_value = 0;
+      delay_slider.addEventListener("input", (e) => {
+        delay_value = parseInt(e.currentTarget.value);
+        delay_slider_span.textContent = delay_value;
+        if (delay_value < 0) {
+          delay_slider_span.style.color = "red";
+        } else {
+          delay_slider_span.style.color = "#333";
+        }
+        delay_code_span.textContent = delay_value;
+        delay_code_span.style.color = codeColor;
+      });
+      const duration_slider = document.getElementById("duration_slider");
+      const duration_slider_span = document.getElementById(
+        "duration_slider_span"
+      );
+      const duration_code_span = document.getElementById("duration_code_span");
+      let duration_value = 1000;
+      duration_slider.addEventListener("input", (e) => {
+        duration_value = parseInt(e.currentTarget.value);
+        duration_slider_span.textContent = duration_value;
+        duration_code_span.textContent = duration_value;
+        duration_code_span.style.color = codeColor;
+      });
+      const endDelay_slider = document.getElementById("endDelay_slider");
+      const endDelay_slider_span = document.getElementById(
+        "endDelay_slider_span"
+      );
+      const endDelay_code_span = document.getElementById("endDelay_code_span");
+      let endDelay_value = 0;
+      endDelay_slider.addEventListener("input", (e) => {
+        endDelay_value = parseInt(e.currentTarget.value);
+        endDelay_slider_span.textContent = endDelay_value;
+        if (endDelay_value < 0) {
+          endDelay_slider_span.style.color = "red";
+        } else {
+          endDelay_slider_span.style.color = "#333";
+        }
+        endDelay_code_span.textContent = endDelay_value;
+        endDelay_code_span.style.color = codeColor;
+      });
+      const iterations_slider = document.getElementById("iterations_slider");
+      const iterations_slider_span = document.getElementById(
+        "iterations_slider_span"
+      );
+      const iterations_code_span = document.getElementById(
+        "iterations_code_span"
+      );
+      let iterations_value = 1;
+      iterations_slider.addEventListener("input", (e) => {
+        iterations_value = parseInt(e.currentTarget.value);
+        iterations_slider_span.textContent = iterations_value;
+        iterations_code_span.textContent = iterations_value;
+        iterations_code_span.style.color = codeColor;
+      });
+      const iterationStart_slider = document.getElementById(
+        "iterationStart_slider"
+      );
+      const iterationStart_slider_span = document.getElementById(
+        "iterationStart_slider_span"
+      );
+      const iterationStart_code_span = document.getElementById(
+        "iterationStart_code_span"
+      );
+      let iterationStart_value = 0;
+      iterationStart_slider.addEventListener("input", (e) => {
+        iterationStart_value = parseFloat(e.currentTarget.value);
+        iterationStart_slider_span.textContent = iterationStart_value;
+        iterationStart_code_span.textContent = iterationStart_value;
+        iterationStart_code_span.style.color = codeColor;
+      });
+      const target_animate_sample02 =
+        document.getElementById("animate_sample02");
+      const finished_msg_div = document.getElementById("finished_msg");
+      finished_msg_div.style.setProperty("display", "none");
+      document
+        .getElementById("start_animate_sample02")
+        .addEventListener("click", () => {
+          target_animate_sample02
+            .getAnimations()
+            .forEach((anim) => anim.cancel());
+          const animate_sample02 = target_animate_sample02.animate(
+            [
+              { transform: "translate(0px, 0px)", backgroundColor: "green" },
+              {
+                transform: "translate(200px, 85px)",
+                backgroundColor: "lightblue",
+              },
+              { transform: "translate(400px, 0px)", backgroundColor: "pink" },
+            ],
+            {
+              delay: delay_value,
+              duration: duration_value,
+              endDelay: endDelay_value,
+              iterations: iterations_value,
+              iterationStart: iterationStart_value,
+              direction: direction_value,
+              fill: fill_value,
+              easing: easing_value,
+            }
+          );
+          finished_msg_div.style.setProperty("display", "none");
+          animate_sample02.finished.then(() => {
+            finished_msg_div.style.setProperty("display", "block");
+            animate_sample02.cancel();
+          });
+        });
+    </script>
+  </body>
+</html>

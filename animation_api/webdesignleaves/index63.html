@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      @keyframes（CSS アニメーション）と getAnimations() の組み合わせ
+    </title>
+    <style>
+      #target {
+        display: flex;
+        height: 170px;
+        width: 300px;
+        border: 1px solid #eee;
+      }
+      #target div {
+        animation: cssAnimation 3s ease-in-out 0s infinite alternate;
+        width: 20px;
+        height: 20px;
+        background-color: pink;
+        border-radius: 50%;
+      }
+      @keyframes cssAnimation {
+        0% {
+          transform: translateY(0px) scaleX(1);
+          border-radius: 50%;
+          background-color: pink;
+          opacity: 0.8;
+        }
+        50% {
+          background-color: mediumpurple;
+        }
+        100% {
+          transform: translateY(150px) scaleX(0.8);
+          border-radius: 0%;
+          background-color: lightskyblue;
+          opacity: 1;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="target">
+      <!--アニメーション用の div 要素-->
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+    <button type="button" id="play">Play</button>
+    <button type="button" id="pause">Pause</button>
+    <button type="button" id="cancel">Cancel</button>
+
+    <script>
+      //対象の全ての要素を取得（15個の div 要素）
+      const targets = document.querySelectorAll("#target div");
+
+      //アニメーションを格納する配列の初期化
+      const animations = [];
+
+      //getAnimations() で取得したアニメーションを配列に追加
+      targets.forEach((elem) => {
+        animations.push(elem.getAnimations()[0]);
+      });
+
+      //取得した全てのアニメーションをキャンセルして停止
+      animations.forEach((anim) => {
+        anim.cancel();
+      });
+
+      //play ボタンのクリックイベント
+      document.getElementById("play").addEventListener("click", (e) => {
+        //ドキュメントのタイムラインの現在時刻を取得
+        const now = document.timeline.currentTime;
+        //アニメーションの現在時間（再生位置）を取得（pause 後の再生用）
+        const ct = animations[0].currentTime;
+
+        animations.forEach((anim, i) => {
+          if (anim.playState === "idle") {
+            //アニメーションの状態が idle の場合はタイムラインの現在時刻を使って startTime を設定
+            anim.startTime = now + i * 300;
+          } else {
+            //idle 以外の場合はアニメーションの現在時間（再生位置）を使って startTime を設定
+            anim.startTime = ct + i * 300;
+          }
+        });
+      });
+
+      document.getElementById("pause").addEventListener("click", (e) => {
+        animations.forEach((anim, i) => {
+          anim.pause();
+        });
+      });
+
+      document.getElementById("cancel").addEventListener("click", (e) => {
+        animations.forEach((anim, i) => {
+          anim.cancel();
+        });
+      });
+    </script>
+  </body>
+</html>

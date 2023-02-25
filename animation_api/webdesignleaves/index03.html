@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      @keyframes fade-out-keyframes {
+        0% {
+          opacity: 1;
+          width: 100px;
+          height: 100px;
+        }
+        100% {
+          opacity: 0;
+          width: 0px;
+          height: 0px;
+        }
+      }
+
+      .fade-out {
+        animation-name: fade-out-keyframes; /*キーフレーム名 */
+        animation-duration: 1s; /*アニメーションにかかる時間（再生時間）*/
+        animation-timing-function: linear; /*イージング*/
+        /* 以下は上記をショートハンドで指定する場合
+        animation: fade-out-keyframes 1s linear;
+        */
+      }
+      .square-target {
+        width: 100px;
+        height: 100px;
+        background-color: #85a0f5;
+      }
+      .target-wrapper {
+        width: 100px;
+        height: 100px;
+        margin: 40px 0 20px;
+      }
+    </style>
+    <title>CSS animation</title>
+  </head>
+  <body>
+    <div class="target-wrapper">
+      <div id="target" class="square-target"></div>
+    </div>
+    <button id="start" type="button">Start</button>
+
+    <script>
+      //アニメーションの対象の要素を取得
+      const target = document.getElementById("target");
+      //ボタンの要素を取得
+      const start = document.getElementById("start");
+
+      //ボタンの要素にクリックイベントを設定
+      start.addEventListener("click", () => {
+        //対象の要素に CSS アニメーションのクラスを追加
+        target.classList.add("fade-out");
+
+        //アニメーション終了時のイベントを設定
+        target.addEventListener("animationend", () => {
+          // アニメーション終了後にクラスを削除
+          target.classList.remove("fade-out");
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      .controls input {
+        margin-right: 5px;
+      }
+      .controls input[type="range"] {
+        max-width: 300px;
+      }
+      .controls label {
+        margin-right: 15px;
+      }
+      .controls input:checked + label {
+        color: green;
+      }
+      .target-wrapper {
+        width: 100px;
+        height: 100px;
+        margin: 40px 0 20px;
+      }
+      .circle-target-sm {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        position: absolute;
+      }
+      .bg-blue {
+        background-color: #85a0f5;
+      }
+      .bg-pink {
+        background-color: #f39294;
+      }
+      .bg-green {
+        background-color: #72de87;
+      }
+      #target1 {
+        left: 0px;
+      }
+      #target2 {
+        left: 100px;
+      }
+      #target3 {
+        left: 200px;
+      }
+    </style>
+    <title>終了したら実行（順番に再生する）</title>
+  </head>
+  <body>
+    <div id="targets" class="target-wrapper" style="position: relative">
+      <div id="target1" class="target circle-target-sm bg-blue"></div>
+      <div id="target2" class="target circle-target-sm bg-pink"></div>
+      <div id="target3" class="target circle-target-sm bg-green"></div>
+    </div>
+    <div class="table-responsive">
+      <table class="table controls" style="max-width: 400px">
+        <tbody>
+          <tr>
+            <th scope="row">delay</th>
+            <td>
+              <input
+                type="range"
+                id="delay_slider"
+                min="-500"
+                max="1000"
+                value="0"
+                step="10"
+              />
+            </td>
+            <td style="width: 100px">
+              <span id="delay_slider_span">0</span>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row">endDelay</th>
+            <td>
+              <input
+                type="range"
+                id="endDelay_slider"
+                min="-500"
+                max="1000"
+                value="0"
+                step="10"
+              />
+            </td>
+            <td style="width: 100px">
+              <span id="endDelay_slider_span">0</span>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row">easing</th>
+            <th colspan="2" scope="row">
+              <select name="easing">
+                <option value="linear" selected>linear</option>
+                <option value="ease">ease</option>
+                <option value="ease-in">ease-in</option>
+                <option value="ease-out">ease-out</option>
+                <option value="ease-in-out">ease-in-out</option>
+                <option value="cubic-bezier(1, 0, 0, 1)">
+                  cubic-bezier(1, 0, 0, 1)
+                </option>
+                <option value="cubic-bezier(0.68, -0.6, 0.32, 1.6)">
+                  cubic-bezier(0.68,-0.6 0.32,1.6)
+                </option>
+                <option value="cubic-bezier(0.16, 1, 0.3, 1)">
+                  cubic-bezier(0.16,1,0.3,1)
+                </option>
+                <option value="cubic-bezier(0.36, 0, 0.66, -0.56)">
+                  cubic-bezier(0.36,0,0.66,-0.56)
+                </option>
+              </select>
+            </th>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <button type="button" id="play">Play</button>
+
+    <script>
+      const delay_slider = document.getElementById("delay_slider");
+      const delay_slider_span = document.getElementById("delay_slider_span");
+      const delay_code_span = document.getElementById("delay_code_span");
+      let delay_value = 0;
+      delay_slider.addEventListener("input", (e) => {
+        delay_value = e.currentTarget.value;
+        delay_slider_span.textContent = delay_value;
+        if (parseInt(delay_value) < 0) {
+          delay_slider_span.style.color = "red";
+        } else {
+          delay_slider_span.style.color = "#333";
+        }
+        delay_code_span.textContent = delay_value;
+        delay_code_span.style.color = "aqua";
+      });
+      const endDelay_slider = document.getElementById("endDelay_slider");
+      const endDelay_slider_span = document.getElementById(
+        "endDelay_slider_span"
+      );
+      const endDelay_code_span = document.getElementById("endDelay_code_span");
+      let endDelay_value = 0;
+      endDelay_slider.addEventListener("input", (e) => {
+        endDelay_value = e.currentTarget.value;
+        endDelay_slider_span.textContent = endDelay_value;
+        if (parseInt(endDelay_value) < 0) {
+          endDelay_slider_span.style.color = "red";
+        } else {
+          endDelay_slider_span.style.color = "#333";
+        }
+        endDelay_code_span.textContent = endDelay_value;
+        endDelay_code_span.style.color = "aqua";
+      });
+      const easingSelect = document.querySelector('select[name="easing"]');
+      const easing_code_span = document.getElementById("easing_code_span");
+      let easing_value = "linear";
+      easingSelect.addEventListener("change", (e) => {
+        easing_value = e.currentTarget.value;
+        easing_code_span.textContent = easing_value;
+        easing_code_span.style.color = codeColor;
+      });
+      //全ての対象の要素を取得して配列に変換
+      const targets = Array.from(document.querySelectorAll("#targets .target"));
+      //生成したアニメーションを格納する配列
+      const animations = [];
+
+      //取得した要素にアニメーションを設定
+      const timing = {
+        duration: 500,
+        easing: "cubic-bezier(0.755, 0.05, 0.855, 0.06)",
+        fill: "forwards",
+      };
+      targets.forEach((target, i) => {
+        const animation = target.animate(
+          [{ transform: "translateX(0px)" }, { transform: "translateX(60px)" }],
+          timing
+        );
+        animation.cancel();
+        animations.push(animation);
+      });
+
+      //ボタンにクリックイベントを設定
+      document.getElementById("play").addEventListener("click", () => {
+        animations.forEach((anim) => {
+          anim.cancel();
+          anim.effect.updateTiming({
+            delay: delay_value,
+            endDelay: endDelay_value,
+            easing: easing_value,
+          });
+        });
+        animations[0].play();
+        //1つ目のアニメーションの finished プロミスの then() に２つ目のアニメーション再生を設定
+        animations[0].finished.then((anim) => {
+          animations[1].play();
+        });
+        //２つ目のアニメーションの finished プロミスの then() に３つ目のアニメーション再生を設定
+        animations[1].finished.then((anim) => {
+          animations[2].play();
+        });
+      });
+    </script>
+  </body>
+</html>

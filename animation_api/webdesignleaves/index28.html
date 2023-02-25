@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      .target-wrapper {
+        width: 100px;
+        height: 100px;
+        margin: 40px 0 20px;
+      }
+      .circle-target {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+      }
+      .bg-blue {
+        background-color: #85a0f5;
+      }
+    </style>
+    <title>キーフレームの変更</title>
+  </head>
+  <body>
+    <div class="target-wrapper">
+      <div id="target" class="circle-target bg-blue"></div>
+    </div>
+    <button type="button" id="start">Start</button>
+    <button type="button" id="change">Change</button>
+
+    <script>
+      //アニメーションの対象の要素を取得
+      const target = document.getElementById("target");
+
+      //キーフレーム（１）
+      const keyframe1 = [
+        { transform: "translateX(0px)" },
+        { transform: "translateX(300px)" },
+      ];
+      //キーフレーム（２）
+      const keyframe2 = [
+        { backgroundColor: "#85A0F5" },
+        { backgroundColor: "pink" },
+      ];
+
+      //アニメーションを生成
+      const animation = new Animation(
+        new KeyframeEffect(
+          target, //アニメーションの対象の要素
+          keyframe1, //キーフレーム（１）
+          {
+            duration: 1000,
+            easing: "ease-in-out",
+          }
+        ),
+        document.timeline
+      );
+
+      //start ボタンの要素を取得
+      const start = document.getElementById("start");
+
+      //start ボタンにクリックイベントを設定
+      start.addEventListener("click", (e) => {
+        animation.play(); //クリックしたらアニメーションを再生
+      });
+
+      //change ボタンの要素を取得
+      const change = document.getElementById("change");
+
+      //どちらのキーフレームが使用されているかの判定用の変数
+      let isKeyframe1 = true;
+
+      //change ボタンにクリックイベントを設定
+      change.addEventListener("click", (e) => {
+        //対象要素のアニメーションのキーフレームを置き換え
+        animation.effect.setKeyframes(isKeyframe1 ? keyframe2 : keyframe1);
+        //アニメーションを停止（keyframeEffects の適用を消去）
+        animation.cancel();
+        //判定用の変数の値を更新（反転）
+        isKeyframe1 = !isKeyframe1;
+      });
+    </script>
+  </body>
+</html>

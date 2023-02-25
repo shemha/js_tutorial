@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      .target-wrapper {
+        width: 100px;
+        height: 100px;
+        margin: 40px 0 20px;
+      }
+      .circle-target {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+      }
+      .bg-blue {
+        background-color: #85a0f5;
+      }
+    </style>
+    <title>スタイルとタイミングの取得</title>
+  </head>
+  <body>
+    <div class="target-wrapper">
+      <div id="target" class="circle-target bg-blue"></div>
+    </div>
+    <button type="button" id="left">Left</button>
+    <button type="button" id="right">Right</button>
+
+    <script>
+      //対象の要素を取得
+      const target = document.getElementById("target");
+
+      //アニメーションを入れる変数の宣言
+      let animation;
+
+      //要素を移動するアニメーションを生成する関数の定義
+      const move = (transformStart, transformEnd) => {
+        //現在アニメーションが存在すれば停止して初期状態に戻す
+        animation?.cancel();
+        //または if(animation) animation.cancel();
+
+        //animate() メソッドでアニメーションを生成して実行
+        animation = target.animate(
+          //引数で指定された値分移動（transform）するキーフレーム
+          [{ transform: transformStart }, { transform: transformEnd }],
+          {
+            duration: 1000,
+            easing: "ease-in",
+            fill: "forwards", //アニメーション終了後に効果を保持
+          }
+        );
+      };
+
+      //右に移動する関数（上記で定義した関数 move を利用）
+      const moveRight = () => {
+        move("translateX(0)", "translateX(300px)");
+      };
+
+      //左に移動する関数（上記で定義した関数 move を利用）
+      const moveLeft = () => {
+        move("translateX(300px)", "translateX(0)");
+      };
+
+      //Right ボタンをクリックしたら関数 moveRight() を実行
+      document.getElementById("right").addEventListener("click", () => {
+        moveRight();
+      });
+
+      //Left ボタンをクリックしたら関数 moveLeft() を実行
+      document.getElementById("left").addEventListener("click", () => {
+        moveLeft();
+      });
+    </script>
+  </body>
+</html>

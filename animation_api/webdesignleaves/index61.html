@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>フェードインを追加</title>
+    <style>
+      #target {
+        width: 400px;
+        height: 300px;
+        background-color: #021250;
+        overflow: hidden;
+      }
+      #target div {
+        width: 15px;
+        height: 15px;
+        background-color: #f8f8d0;
+        border-radius: 50%;
+        display: inline-block;
+        margin: 15px;
+        opacity: 0; /*追加*/
+      }
+    </style>
+  </head>
+  <body>
+    <div id="target">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+    <button type="button" id="toggle">Play All</button>
+    <button type="button" id="reset" class="control">Reset</button>
+
+    <script>
+      //アニメーション対象の要素をすべて取得
+      const targets = Array.from(document.querySelectorAll("#target div"));
+
+      //取得した全ての要素それぞれに animate() メソッドでアニメーションを設定
+      targets.forEach((elem, i) => {
+        //キーフレームの transform: translate() に指定する値を乱数とインデックスから作成
+        const to = {
+          //x軸方向の場合は2つに1つは反対方向へ
+          x: Math.random() * (i % 2 === 0 ? -200 : 200),
+          y: Math.random() * 200,
+        };
+
+        elem.animate(
+          [
+            { transform: "translate(0,0)" },
+            { transform: "translate(" + to.x + "px," + to.y + "px)" },
+          ],
+          {
+            //持続時間を乱数を使って設定
+            duration: (Math.random() + 1) * 1600,
+            direction: "alternate",
+            fill: "both",
+            iterations: Infinity,
+            easing: "ease-in-out",
+            delay: 800, // 追加
+          }
+        );
+      });
+
+      //追加のアニメーション
+      targets.forEach((elem, i) => {
+        elem.animate([{ opacity: 0 }, { opacity: 1 }], {
+          duration: 1000,
+          fill: "forwards",
+          iterations: 1,
+          easing: "ease-in-out",
+        });
+      });
+
+      //ボタンの要素
+      const toggle = document.getElementById("toggle");
+
+      //animate() で生成直後にアニメーションを取得
+      const animations = document
+        .getElementById("target")
+        .getAnimations({ subtree: true });
+
+      //ボタンの要素にクリックイベントを設定
+      toggle.addEventListener("click", (e) => {
+        if (animations && animations.length) {
+          //playState の値により play または pause が代入される変数を宣言
+          let action;
+          //1つ目のアニメーションの状態（playState）を調べて変数 action に値を設定
+          if (animations[0].playState === "running") {
+            action = "pause";
+          } else {
+            action = "play";
+          }
+          animations.forEach((animation, i) => {
+            if (animation.playState === "running") {
+              animation.pause();
+            } else if (
+              animation.playState === "paused" ||
+              animation.playState === "idle"
+            ) {
+              animation.play();
+            }
+          });
+          toggle.textContent = action === "play" ? "Pause" : "Play";
+        }
+      });
+
+      // Reset ボタン
+      const reset = document.getElementById("reset");
+      // Reset ボタンにクリックイベントを設定
+      reset.addEventListener("click", (e) => {
+        animations.forEach((animation, i) => {
+          animation.cancel();
+        });
+        toggle.textContent = "Start";
+      });
+
+      //ボタンをクリックしてアニメーションを停止
+      toggle.click();
+    </script>
+  </body>
+</html>

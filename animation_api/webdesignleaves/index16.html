@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>イージングの効果</title>
+  </head>
+  <body>
+    <div class="target-wrapper">
+      <div id="target"></div>
+    </div>
+    <button id="start" type="button">Start</button>
+
+    <style>
+      .target-wrapper {
+        width: 300px;
+        height: 300px;
+        border: 1px solid #ccc;
+        position: relative;
+        margin: 30px 0;
+      }
+      #target {
+        position: absolute;
+        width: 30px;
+        height: 30px;
+        background-color: red;
+        border-radius: 50%;
+      }
+    </style>
+
+    <script>
+      //アニメーションの対象の要素を取得
+      const target = document.getElementById("target");
+
+      //クリックするボタンの要素を取得
+      const startBtn = document.getElementById("start");
+
+      //ボタンの要素にクリックイベントを設定
+      startBtn.addEventListener("click", () => {
+        //transform プロパティのアニメーション（右斜下に移動）を設定
+        target.animate(
+          [
+            { transform: "translate(0px, 0px)" },
+            { transform: "translate(270px, 270px)" },
+          ],
+          {
+            duration: 2000,
+          }
+        );
+
+        //transform プロパティのアニメーション（左斜上に移動）を設定
+        target.animate(
+          [
+            { transform: "translate(270px, 200px)" },
+            { transform: "translate(100px, 100px)" },
+          ],
+          {
+            duration: 1000,
+            delay: 500,
+          }
+        );
+      });
+    </script>
+  </body>
+</html>

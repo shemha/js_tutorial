@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      .square-target {
+        width: 100px;
+        height: 100px;
+      }
+      .bg-blue {
+        background-color: #85a0f5;
+      }
+    </style>
+    <title>getAnimations() アニメーションの取得</title>
+  </head>
+  <body>
+    <div id="target" class="square-target bg-blue"></div>
+    <button type="button" id="play">Play</button>
+    <button type="button" id="get">Get</button>
+    <button type="button" id="cancel">Cancel</button>
+    <div id="output"></div>
+
+    <script>
+      //対象の要素
+      const target = document.getElementById("target");
+      //メッセージの出力先の要素
+      const output = document.getElementById("output");
+
+      //play ボタンにクリックイベントを設定
+      document.getElementById("play").addEventListener("click", () => {
+        //この要素のアニメーションを全て停止
+        target.getAnimations().forEach((anim) => anim.cancel());
+        //メッセージをクリア
+        output.textContent = "";
+        //以下4つのアニメーションを作成して実行
+        target.animate({ opacity: [0, 1] }, { duration: 1500 });
+        target.animate(
+          { transform: ["translateX(0px)", "translateX(400px)"] },
+          { duration: 2000, easing: "ease-in" }
+        );
+        target.animate(
+          { backgroundColor: ["#85A0F5", "pink"] },
+          { duration: 3000, fill: "both" }
+        );
+        target.animate(
+          { borderRadius: ["0%", "50%"] },
+          { duration: 4000, fill: "forwards" }
+        );
+      });
+
+      //get ボタンにクリックイベントを設定
+      document.getElementById("get").addEventListener("click", () => {
+        //現在実行または適用中のアニメーションを取得してその数を表示
+        output.textContent =
+          "実行（適用）中アニメーション： " + target.getAnimations().length;
+      });
+
+      document.getElementById("cancel").addEventListener("click", () => {
+        //この要素のアニメーションを全て停止
+        target.getAnimations().forEach((anim) => anim.cancel());
+        //メッセージをクリア
+        output.textContent = "";
+      });
+    </script>
+  </body>
+</html>

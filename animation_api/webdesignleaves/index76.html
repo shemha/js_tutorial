@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>テキストを Mortion Path でアニメーション</title>
+    <style>
+      .motion-demo-wrapper {
+        position: relative;
+        width: 220px;
+        height: 120px;
+        margin: 30px 0;
+      }
+      #target {
+        position: relative;
+      }
+      #target span {
+        position: absolute;
+        opacity: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="motion-demo-wrapper">
+      <svg
+        width="200"
+        height="120"
+        viewBox="0 0 200 120"
+        style="position: absolute"
+      >
+        <path fill="none" stroke="#ccc" d="M20,20 C20,100 200,0 200,100" />
+      </svg>
+      <div id="target">Motion Path</div>
+    </div>
+    <button type="button" id="play">Play</button>
+    <button type="button" id="pause">Pause</button>
+    <button type="button" id="cancel">Cancel</button>
+
+    <script>
+      //対象の要素を取得
+      const target = document.getElementById("target");
+
+      //対象の要素のテキストを分割して取得した配列の要素の順番を逆に
+      const chars = target.textContent.split("").reverse();
+
+      //対象の要素のテキストを空に
+      target.innerHTML = "";
+
+      //各文字を使った span 要素を生成して対象の要素に追加
+      chars.forEach((char) => {
+        const span = document.createElement("span");
+        span.textContent = char;
+        target.appendChild(span);
+      });
+
+      //全てのアニメーションで共通のタイミング
+      let timing = {
+        duration: 4000,
+        easing: "ease-in-out",
+        iterations: Infinity,
+      };
+
+      //全ての span 要素に Mortion Path によるアニメーションを設定
+      document.querySelectorAll("#target span").forEach((elem, i) => {
+        elem.style.offsetPath = "path('M20,20 C20,100 200,0 200,100')";
+        //1文字ずつずらして開始（文字の間隔を調整）
+        timing.delay = 150 * i;
+        elem.animate(
+          {
+            offsetDistance: ["0%", "100%"],
+            opacity: [0, 1, 1, 0],
+            offset: [0, 0.3, 0.9, 1],
+          },
+          //共通のタイミングにそれぞれで異なる delay を指定したものを設定
+          timing
+        );
+      });
+      //対象の要素に設定されている全てのアニメーションを取得
+      const animations = target.getAnimations({ subtree: true });
+
+      //全てのアニメーションを停止
+      animations.forEach((animation) => {
+        animation.cancel();
+      });
+
+      //ボタンにクリックイベントを設定
+      document.getElementById("play").addEventListener("click", () => {
+        animations.forEach((animation) => {
+          animation.play();
+        });
+      });
+
+      document.getElementById("pause").addEventListener("click", () => {
+        animations.forEach((animation) => {
+          animation.pause();
+        });
+      });
+
+      document.getElementById("cancel").addEventListener("click", () => {
+        animations.forEach((animation) => {
+          animation.cancel();
+        });
+      });
+    </script>
+  </body>
+</html>

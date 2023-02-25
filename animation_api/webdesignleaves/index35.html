@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      .target-wrapper {
+        width: 100px;
+        height: 100px;
+        margin: 40px 0 20px;
+      }
+      .circle-target {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+      }
+      .bg-blue {
+        background-color: #85a0f5;
+      }
+      .control {
+        margin: 20px 15px 20px 0;
+      }
+      .controls input {
+        margin-right: 5px;
+      }
+      .controls label {
+        margin-right: 15px;
+      }
+      .output {
+        border: 1px solid #ccc;
+        padding: 10px;
+        color: #267a31;
+        font-size: 13px;
+        line-height: 20px;
+      }
+    </style>
+    <title>アニメーションの制御</title>
+  </head>
+  <body>
+    <div class="target-wrapper">
+      <div id="target-anim01" class="circle-target bg-blue"></div>
+    </div>
+    <div class="table-responsive">
+      <table class="table controls" style="max-width: 640px">
+        <tbody>
+          <tr>
+            <th scope="row">direction</th>
+            <th scope="row">
+              <input
+                type="radio"
+                name="direction2"
+                id="direction2_normal"
+                value="normal"
+                checked
+              />
+              <label for="direction2_normal"> normal </label>
+              <input
+                type="radio"
+                name="direction2"
+                id="direction2_reverse"
+                value="reverse"
+              />
+              <label for="direction2_reverse"> reverse </label>
+            </th>
+          </tr>
+          <tr>
+            <th scope="row">fill</th>
+            <th scope="row">
+              <input
+                type="radio"
+                name="fill2"
+                id="fill2_none"
+                value="none"
+                checked
+              />
+              <label for="fill2_none"> none </label>
+              <input
+                type="radio"
+                name="fill2"
+                id="fill2_forwards"
+                value="forwards"
+              />
+              <label for="fill2_forwards"> forwards </label>
+              <input
+                type="radio"
+                name="fill2"
+                id="fill2_backwards"
+                value="backwards"
+              />
+              <label for="fill2_backwards"> backwards </label>
+              <input type="radio" name="fill2" id="fill2_both" value="both" />
+              <label for="fill2_both"> both </label>
+            </th>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <button type="button" class="control" id="play01">Play</button>
+    <button type="button" class="control" id="pause01">Pause</button>
+    <button type="button" class="control" id="reverse01">Reverse</button>
+    <button type="button" class="control" id="finish01">Finish</button>
+    <button type="button" class="control" id="cancel01">Cancel</button>
+    <div
+      class="output"
+      id="output01"
+      style="min-height: 100px; max-width: 420px"
+    ></div>
+
+    <script>
+      const targetAnim01 = document.getElementById("target-anim01");
+      const direction2Radios = document.querySelectorAll(
+        'input[name="direction2"]'
+      );
+      const direction2_code_span = document.getElementById(
+        "direction2_code_span"
+      );
+      let direction2_value = "normal";
+      for (let i = 0; i < direction2Radios.length; i++) {
+        direction2Radios[i].addEventListener("change", (e) => {
+          direction2_value = e.currentTarget.value;
+          targetAnim01.getAnimations().forEach((anim) => anim.cancel());
+          const anim01Timing = {
+            duration: 4000,
+            easing: "ease",
+            direction: direction2_value,
+            fill: fill2_value,
+          };
+          anim01.effect.updateTiming(anim01Timing);
+        });
+      }
+      const fill2Radios = document.querySelectorAll('input[name="fill2"]');
+      const fill2_code_span = document.getElementById("fill2_code_span");
+      let fill2_value = "none";
+      for (let i = 0; i < fill2Radios.length; i++) {
+        fill2Radios[i].addEventListener("change", (e) => {
+          fill2_value = e.currentTarget.value;
+          targetAnim01.getAnimations().forEach((anim) => anim.cancel());
+          const anim01Timing = {
+            duration: 4000,
+            easing: "ease",
+            direction: direction2_value,
+            fill: fill2_value,
+          };
+          anim01.effect.updateTiming(anim01Timing);
+        });
+      }
+      const anim01 = targetAnim01.animate(
+        [
+          { transform: "translateX(0px)", backgroundColor: "#85A0F5 " },
+          { transform: "translateX(500px)", backgroundColor: "pink" },
+        ],
+        {
+          duration: 4000,
+          easing: "ease",
+          direction: "normal",
+          fill: "none",
+        }
+      );
+      anim01.cancel();
+      const play01 = document.getElementById("play01");
+      const pause01 = document.getElementById("pause01");
+      const reverse01 = document.getElementById("reverse01");
+      const finish01 = document.getElementById("finish01");
+      const cancel01 = document.getElementById("cancel01");
+      const output01 = document.getElementById("output01");
+      const addClickEventListener = (elem, anim, method, output) => {
+        elem.addEventListener("click", (e) => {
+          const ps1 = anim.playState;
+          let pbr = "";
+          switch (method) {
+            case "play":
+              anim.play();
+              pbr = anim.playbackRate;
+              break;
+            case "pause":
+              anim.pause();
+              pbr = anim.playbackRate;
+              break;
+            case "reverse":
+              anim.reverse();
+              pbr = anim.playbackRate;
+              break;
+            case "finish":
+              anim.finish();
+              pbr = anim.playbackRate;
+              break;
+            case "cancel":
+              anim.cancel();
+              pbr = anim.playbackRate;
+              break;
+            default:
+              console.log("不明");
+          }
+          const ps2 = anim.playState;
+          output.innerText =
+            "実行前： " +
+            ps1 +
+            "\n" +
+            method +
+            "() を実行" +
+            "\n" +
+            "実行後： " +
+            ps2 +
+            "\n" +
+            "playbackRate:" +
+            pbr;
+        });
+      };
+      addClickEventListener(play01, anim01, "play", output01);
+      addClickEventListener(pause01, anim01, "pause", output01);
+      addClickEventListener(reverse01, anim01, "reverse", output01);
+      addClickEventListener(finish01, anim01, "finish", output01);
+      addClickEventListener(cancel01, anim01, "cancel", output01);
+    </script>
+  </body>
+</html>

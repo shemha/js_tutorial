@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      .circle-target {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+      }
+      .bg-blue {
+        background-color: #85a0f5;
+      }
+      #target {
+        animation: cssAnimation 1s linear 0s 4 forwards;
+      }
+      @keyframes cssAnimation {
+        0% {
+          transform: translateX(0px);
+          background-color: #85a0f5;
+        }
+        100% {
+          transform: translateX(300px);
+          background-color: pink;
+        }
+      }
+    </style>
+    <title>getAnimations() アニメーションの取得</title>
+  </head>
+  <body>
+    <div id="target" class="circle-target bg-blue"></div>
+    <button type="button" id="play">Play</button>
+    <button type="button" id="pause">Pause</button>
+    <button type="button" id="reverse">Reverse</button>
+    <button type="button" id="cancel">Cancel</button>
+    <div id="output"></div>
+    <p
+      id="iterationCount"
+      style="height: 30px; margin-top: 20px; color: #999; font-size: 13px"
+    ></p>
+
+    <script>
+      //アニメーションが設定されている要素を取得
+      const target = document.getElementById("target");
+      //要素に設定されている CSS アニメーションを取得（配列なので最初の要素を取得）
+      const animation = target.getAnimations()[0];
+      //アニメーションの自動再生を停止
+      animation.cancel();
+
+      //ボタンの要素にクリックイベントを設定して操作
+      document.getElementById("play").addEventListener("click", () => {
+        animation.play(); //再生
+      });
+      document.getElementById("pause").addEventListener("click", () => {
+        animation.pause(); //一時停止
+      });
+      document.getElementById("reverse").addEventListener("click", () => {
+        animation.reverse(); //逆方向に再生
+      });
+      document.getElementById("cancel").addEventListener("click", () => {
+        animation.cancel(); //停止（キャンセル）
+      });
+
+      //メッセージの出力先
+      const output = document.getElementById("output");
+      //繰り返し回数を入れる変数
+      const iterationCountText = document.getElementById("iterationCount");
+      //繰り返し回数の初期値
+      let iterationCount = 0;
+
+      //HTMLElement の animationstart イベントにリスナーを登録
+      target.addEventListener("animationstart", () => {
+        output.textContent = "アニメーション開始";
+      });
+
+      //HTMLElement の animationiteration イベントにリスナーを登録
+      target.addEventListener("animationiteration", () => {
+        iterationCount++; //繰り返し回数を増加
+        iterationCountText.textContent = `${iterationCount} 回終了`;
+      });
+
+      //HTMLElement の animationend イベントにリスナーを登録
+      target.addEventListener("animationend", () => {
+        output.textContent = "アニメーション終了";
+      });
+
+      //HTMLElement の animationcancel イベントにリスナーを登録
+      target.addEventListener("animationcancel", () => {
+        output.textContent = "アニメーションが取り消されました";
+      });
+
+      //Animation オブジェクトの finish イベントにリスナーを登録
+      animation.addEventListener("finish", (e) => {
+        iterationCount = 0;
+        iterationCountText.textContent = "";
+      });
+
+      //Animation オブジェクトの cancel イベントにリスナーを登録
+      animation.addEventListener("cancel", (e) => {
+        iterationCount = 0;
+        iterationCountText.textContent = "";
+      });
+    </script>
+  </body>
+</html>

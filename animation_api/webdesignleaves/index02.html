@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      .square-target {
+        width: 100px;
+        height: 100px;
+        background-color: #85a0f5;
+      }
+      .target-wrapper {
+        width: 100px;
+        height: 100px;
+        margin: 40px 0 20px;
+      }
+    </style>
+    <title>Element.animate() メソッドの構文 - 別解</title>
+  </head>
+  <body>
+    <div class="target-wrapper">
+      <div id="target" class="square-target"></div>
+    </div>
+    <button id="start" type="button">Start</button>
+
+    <script>
+      const target = document.getElementById("target");
+      const start = document.getElementById("start");
+
+      //keyframes
+      const keyframes = [
+        { opacity: 1, width: "100px", height: "100px" },
+        { opacity: 0, width: "0px", height: "0px" },
+      ];
+
+      //options（タイミングオプション）
+      const options = {
+        duration: 1000,
+        easing: "linear",
+      };
+
+      //ボタンの要素にクリックイベントを設定
+      start.addEventListener("click", () => {
+        //Element.animate() メソッドを使ったアニメーション
+        target.animate(keyframes, options);
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>モーフィングアニメーション</title>
+    <style>
+      svg {
+        position: absolute;
+        margin-top: 20px;
+        margin-left: 10px;
+      }
+      button {
+        margin-top: 150px;
+      }
+    </style>
+  </head>
+  <body>
+    <svg width="200" height="100" viewBox="0 0 200 100">
+      <path id="target" fill="green" d="M 0,0 L50,0 L100,0 L50,100z" />
+    </svg>
+    <button type="button" id="start" class="control">Start</button>
+
+    <script>
+      //ボタン要素にクリックイベントを設定
+      document.getElementById("start").addEventListener("click", () => {
+        //対象の path 要素に animate メソッドでアニメーションを設定
+        document.getElementById("target").animate(
+          {
+            d: [
+              //path() を使ったパスデータを指定
+              "path('M 0,0    L50,0  L100,0    L50,100z')",
+              "path('M 0,100  L50,0  L100,100  L50,100z')",
+              "path('M 0,100  L50,0  L100,100  L50,0z')",
+              "path('M 0,0    L50,0  L100,0    L50,100z')",
+            ],
+          },
+          {
+            duration: 3000,
+            easing: "ease-out",
+          }
+        );
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      .small-target-red {
+        position: absolute;
+        width: 30px;
+        height: 30px;
+        background-color: red;
+        border-radius: 50%;
+      }
+    </style>
+    <title>iterationComposite 反復による累積</title>
+  </head>
+  <body>
+    <div
+      style="
+        border: 1px solid #ccc;
+        padding: 100px;
+        width: 230px;
+        height: 230px;
+        position: relative;
+      "
+    >
+      <div id="targetIC" class="small-target-red"></div>
+    </div>
+
+    <div style="margin: 50px 0 30px">
+      <input
+        type="radio"
+        name="iterationComposite"
+        id="ic_replace"
+        value="replace"
+        checked
+      />
+      <label for="ic_replace"> replace </label>
+      <input
+        type="radio"
+        name="iterationComposite"
+        id="ic_accumulate"
+        value="accumulate"
+      />
+      <label for="ic_accumulate"> accumulate </label>
+    </div>
+    <button id="startIC" type="button" class="start-button">Start</button>
+
+    <script>
+      let ic_value = "replace";
+      const icRadio = document.querySelectorAll(
+        'input[name="iterationComposite"]'
+      );
+      for (let i = 0; i < icRadio.length; i++) {
+        icRadio[i].addEventListener("change", (e) => {
+          ic_value = e.currentTarget.value;
+        });
+      }
+
+      const targetIC = document.getElementById("targetIC");
+
+      document.getElementById("startIC").addEventListener("click", () => {
+        console.log(ic_value);
+        targetIC.getAnimations().forEach((anim) => anim.cancel());
+        const animationIC = targetIC.animate(
+          [
+            { transform: "rotate(0deg) translateX(0px)", opacity: 0 },
+            { transform: "rotate(360deg) translateX(50px)", opacity: 0.5 },
+          ],
+          {
+            duration: 2000,
+            iterations: 2,
+            fill: "forwards",
+            iterationComposite: ic_value, //'accumulate'
+          }
+        );
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>clip-path アニメーション</title>
+    <style>
+      .cp-sample {
+        position: relative; /* 絶対配置の基準に */
+        width: 300px;
+      }
+      .cp-sample img {
+        max-width: 100%;
+      }
+      .bg-image {
+        opacity: 0.4;
+      }
+      .cp-image {
+        position: absolute; /*背景の同じ画像に重ねて表示*/
+        top: 0;
+        left: 0;
+        clip-path: circle(0% at 100% 0);
+        /*アニメーションを設定*/
+        animation: clipPathAnimation 7s ease-in-out infinite alternate;
+      }
+
+      /*clip-path のアニメーション*/
+      @keyframes clipPathAnimation {
+        0% {
+          clip-path: circle(0% at 100% 0);
+        }
+        50% {
+          clip-path: circle(90% at 0 100%);
+        }
+        75% {
+          clip-path: circle(40%);
+        }
+        100% {
+          clip-path: circle(30% at 47% 50%);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="cp-sample">
+      <img class="bg-image" src="01.jpeg" alt="" />
+      <img class="cp-image" src="01.jpeg" alt="" />
+    </div>
+    <button type="button" id="play">Play</button>
+    <button type="button" id="pause">Pause</button>
+    <button type="button" id="cancel">Cancel</button>
+
+    <script>
+      //CSS アニメーション対象の要素
+      const cpImage = document.querySelector(".cp-image");
+
+      //対象の要素の CSS アニメーションをを取得
+      const animation = cpImage.getAnimations()[0];
+      //取得したアニメーションを停止
+      animation.cancel();
+
+      //ボタンにアニメーションを制御するクリックイベントを設定
+      document.getElementById("play").addEventListener("click", () => {
+        animation.play();
+      });
+      document.getElementById("pause").addEventListener("click", () => {
+        animation.pause();
+      });
+      document.getElementById("cancel").addEventListener("click", () => {
+        animation.cancel();
+      });
+    </script>
+  </body>
+</html>

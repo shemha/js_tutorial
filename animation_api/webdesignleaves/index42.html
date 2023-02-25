@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      .target-wrapper {
+        width: 100px;
+        height: 100px;
+        margin: 40px 0 20px;
+      }
+      .circle-target {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+      }
+      .bg-blue {
+        background-color: #85a0f5;
+      }
+    </style>
+    <title>getComputedTiming() でアニメーションからタイミング情報を取得</title>
+  </head>
+  <body>
+    <div class="target-wrapper">
+      <div id="target" class="circle-target bg-blue"></div>
+    </div>
+    <button type="button" id="left">Left</button>
+    <button type="button" id="right">Right</button>
+
+    <script>
+      const target = document.getElementById("target");
+      let animation;
+
+      const move = (transformEnd) => {
+        animation?.pause();
+        let transformStart = getComputedStyle(target).transform;
+        let duration = 1000; //duration の初期値を変数に代入
+        if (animation) {
+          //アニメーションからタイミング情報（オブジェクト）を取得して変数に代入
+          const timing = animation.effect.getComputedTiming();
+          //アニメーションの持続時間
+          const activeDuration = timing.activeDuration;
+          //アニメーションの進捗状況（0〜1）
+          const activeProgress = timing.progress;
+          //duration を算出
+          duration -= activeDuration - activeProgress * activeDuration;
+        }
+        animation?.cancel();
+        animation = target.animate(
+          [{ transform: transformStart }, { transform: transformEnd }],
+          {
+            duration: duration, //動的な duration の値（上記で算出）
+            easing: "ease-in",
+            fill: "forwards",
+          }
+        );
+      };
+
+      const moveRight = () => {
+        move("translateX(300px)");
+      };
+      const moveLeft = () => {
+        move("translateX(0)");
+      };
+      document.getElementById("left").addEventListener("click", () => {
+        moveLeft();
+      });
+      document.getElementById("right").addEventListener("click", () => {
+        moveRight();
+      });
+    </script>
+  </body>
+</html>

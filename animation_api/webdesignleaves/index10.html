@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      #target {
+        width: 100px;
+        height: 100px;
+        background-color: #ffa500;
+      }
+      .target-wrapper {
+        width: 100px;
+        height: 100px;
+        margin: 40px 0 20px;
+      }
+    </style>
+    <title>keyframes の書式</title>
+  </head>
+  <body>
+    <div class="target-wrapper">
+      <div id="target"></div>
+    </div>
+    <button id="start" type="button">Start</button>
+
+    <script>
+      const target = document.getElementById("target");
+      const start = document.getElementById("start");
+
+      const keyframes = [
+        {
+          transform: "translateX(0)",
+          borderRadius: "0%",
+          backgroundColor: "orange",
+        },
+        {
+          transform: "translateX(100px)",
+          borderRadius: "20%",
+          backgroundColor: "yellow",
+        },
+        {
+          transform: "translateX(200px)",
+          borderRadius: "50%",
+          backgroundColor: "green",
+        },
+      ];
+
+      /* //または以下でも同じこと
+const keyframes02 =  {
+  transform:['translateX(0)','translateX(100px)', 'translateX(200px)'],
+  borderRadius:['0%','20%','50%'],
+  backgroundColor:['orange', 'yellow', 'green']
+};
+*/
+
+      start.addEventListener("click", () => {
+        target.animate(keyframes, 2000);
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      #target {
+        width: 300px;
+        height: 300px;
+        display: flex;
+        justify-content: center;
+        background-color: #111;
+      }
+      #target div {
+        width: 20px;
+        height: 10px;
+        background-color: #111;
+      }
+    </style>
+    <title>複数アニメーションの適用</title>
+  </head>
+  <body>
+    <div id="target" class="margin_top50">
+      <!--アニメーション用の div 要素-->
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+    <button type="button" id="play" class="control">Play</button>
+    <button type="button" id="pause" class="control">Pause</button>
+    <button type="button" id="cancel" class="control">Cancel</button>
+
+    <script>
+      const targets = Array.prototype.slice.call(
+        document.querySelectorAll("#target div")
+      );
+      let timings = {
+        easing: "ease-in-out",
+        iterations: Infinity,
+        direction: "alternate",
+        fill: "both",
+      };
+      let animation1, animation2, animation3;
+      const animations = [];
+      targets.forEach((elem, i) => {
+        timings.delay = i * 98;
+        timings.duration = 2500;
+        animation1 = elem.animate(
+          [
+            { transform: "translateY(0) scaleX(.8)" },
+            { transform: "translateY(290px) scaleX(1)" },
+          ],
+          timings
+        );
+        animation1.cancel();
+        animations.push(animation1);
+        timings.duration = 2000;
+        animation2 = elem.animate([{ opacity: 1 }, { opacity: 0 }], timings);
+        animation2.cancel();
+        animations.push(animation2);
+        timings.duration = 3000;
+        animation3 = elem.animate(
+          [{ backgroundColor: "#fff" }, { backgroundColor: "#F32F03" }],
+          timings
+        );
+        animation3.cancel();
+        animations.push(animation3);
+      });
+      document.getElementById("play").addEventListener("click", () => {
+        animations.forEach((anim) => {
+          anim.play();
+        });
+      });
+      document.getElementById("pause").addEventListener("click", () => {
+        animations.forEach((anim) => {
+          anim.pause();
+        });
+      });
+      document.getElementById("cancel").addEventListener("click", () => {
+        animations.forEach((anim) => {
+          anim.cancel();
+        });
+      });
+    </script>
+  </body>
+</html>

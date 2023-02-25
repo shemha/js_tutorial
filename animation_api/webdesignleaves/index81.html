@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>モーフィングアニメーション2 CSS アニメーションで定義</title>
+    <style>
+      svg {
+        position: absolute;
+      }
+      button {
+        margin-top: 170px;
+      }
+    </style>
+  </head>
+  <body>
+    <svg width="150" height="150" viewBox="0 0 200 200">
+      <path
+        id="target"
+        fill="lightblue"
+        d="M32.93,45.82C58.31,25,92.46,13.09,122.62,32.94s60.57,53.35,52.32,84.53S80.35,205.1,50.2,166.19,23.3,53.73,32.93,45.82Z"
+      />
+      <defs>
+        <style>
+          #target {
+            animation: morpAnim 5s ease-in-out 0s infinite alternate;
+          }
+          @keyframes morpAnim {
+            0% {
+              d: path(
+                "M32.93,45.82C58.31,25,92.46,13.09,122.62,32.94s60.57,53.35,52.32,84.53S80.35,205.1,50.2,166.19,23.3,53.73,32.93,45.82Z"
+              );
+              fill: lightblue;
+            }
+            20% {
+              d: path(
+                "M60,72.63c25.38-20.82,32.47-59.54,62.63-39.69s76.54,67.52,68.3,98.71S80.35,205.1,50.2,166.19,50.36,80.53,60,72.63Z"
+              );
+              fill: lightgreen;
+            }
+            40% {
+              d: path(
+                "M60,72.63c25.38-20.82,78.35-75.26,108.5-55.41s30.67,83.24,22.43,114.43S51.74,204.07,21.59,165.15,50.36,80.53,60,72.63Z"
+              );
+              fill: mediumpurple;
+            }
+            60% {
+              d: path(
+                "M54.58,55.36c25.37-20.81,63.91-34,94.07-14.17s3.09,54.89-5.16,86.08-63.14,43.3-93.29,4.38S44.94,63.26,54.58,55.36Z"
+              );
+              fill: pink;
+            }
+            80% {
+              d: path(
+                "M60.76,39.38c25.38-20.81,57.73-18,87.89,1.81s42.27,80.41,34,111.59S62.05,209,31.9,170.07,51.13,47.28,60.76,39.38Z"
+              );
+              fill: orange;
+            }
+            100% {
+              d: path(
+                "M32.93,45.82C58.31,25,92.46,13.09,122.62,32.94s60.57,53.35,52.32,84.53S80.35,205.1,50.2,166.19,23.3,53.73,32.93,45.82Z"
+              );
+              fill: gold;
+            }
+          }
+        </style>
+      </defs>
+    </svg>
+    <button type="button" id="start" class="control">Start</button>
+    <button type="button" id="cancel" class="control">Cancel</button>
+
+    <script>
+      const target = document.getElementById("target");
+      const start = document.getElementById("start");
+      //アニメーションを取得
+      const animation = target.getAnimations()[0];
+      if (animation) animation.cancel();
+
+      start.addEventListener("click", (e) => {
+        if (animation) {
+          if (animation.playState === "running") {
+            animation.pause();
+            //Start ボタンのラベル
+            e.currentTarget.textContent = "Play";
+          } else {
+            animation.play();
+            e.currentTarget.textContent = "Pause";
+          }
+        }
+      });
+
+      document.getElementById("cancel").addEventListener("click", (e) => {
+        if (animation) {
+          animation.cancel();
+          start.textContent = "Start";
+        }
+      });
+    </script>
+  </body>
+</html>

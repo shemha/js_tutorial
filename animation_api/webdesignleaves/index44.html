@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      .target-wrapper {
+        width: 100px;
+        height: 100px;
+        margin: 40px 0 20px;
+      }
+      .circle-target {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+      }
+      .bg-blue {
+        background-color: #85a0f5;
+      }
+    </style>
+    <title>delay の値をスライダーで変更</title>
+  </head>
+  <body>
+    <div class="target-wrapper">
+      <div id="target" class="circle-target bg-blue"></div>
+    </div>
+    <div>
+      delay
+      <input
+        type="range"
+        id="delay_slider"
+        min="0"
+        max="3000"
+        value="0"
+        step="100"
+      />
+      <span id="delay_slider_span">0</span>
+    </div>
+    <button type="button" id="play">Play</button>
+    <button type="button" id="fiftyPercent">50%</button>
+    <button type="button" id="finish">Finish</button>
+    <button type="button" id="pause">Pause</button>
+    <button type="button" id="cancel">Cancel</button>
+    <div class="output" id="output"></div>
+    <script>
+      const target = document.getElementById("target");
+      const animation = target.animate(
+        [
+          { transform: "translateX(0px)", backgroundColor: "#85A0F5" },
+          { transform: "translateX(300px)", backgroundColor: "lightgreen" },
+        ],
+        {
+          duration: 3000,
+          fill: "forwards",
+          delay: 0,
+        }
+      );
+      animation.cancel();
+      const play = document.getElementById("play");
+      const fiftyPercent = document.getElementById("fiftyPercent");
+      const finish = document.getElementById("finish");
+      const pause = document.getElementById("pause");
+      const cancel = document.getElementById("cancel");
+      const output = document.getElementById("output");
+      play.addEventListener("click", () => {
+        animation.play();
+        output.innerText =
+          "animation.currentTime : " +
+          animation.currentTime +
+          "\n" +
+          "delay: " +
+          animation.effect.getComputedTiming().delay;
+      });
+      fiftyPercent.addEventListener("click", () => {
+        animation.pause();
+        animation.currentTime =
+          animation.effect.getComputedTiming().delay +
+          animation.effect.getComputedTiming().activeDuration / 2;
+        output.innerText =
+          "animation.currentTime : " +
+          animation.currentTime +
+          "\n" +
+          "delay: " +
+          animation.effect.getComputedTiming().delay;
+      });
+      finish.addEventListener("click", () => {
+        animation.finish();
+        output.innerText =
+          "animation.currentTime : " +
+          animation.currentTime +
+          "\n" +
+          "delay: " +
+          animation.effect.getComputedTiming().delay;
+      });
+      pause.addEventListener("click", () => {
+        animation.pause();
+        output.innerText =
+          "animation.currentTime : " +
+          animation.currentTime +
+          "\n" +
+          "delay: " +
+          animation.effect.getComputedTiming().delay;
+      });
+      cancel.addEventListener("click", () => {
+        animation.cancel();
+        output.innerText =
+          "animation.currentTime : " +
+          animation.currentTime +
+          "\n" +
+          "delay: " +
+          animation.effect.getComputedTiming().delay;
+      });
+      const delay_slider = document.getElementById("delay_slider");
+      const delay_slider_span = document.getElementById("delay_slider_span");
+      delay_slider.addEventListener("input", (e) => {
+        const delay_value = e.currentTarget.value;
+        delay_slider_span.textContent = delay_value;
+        const timing = {
+          duration: 3000,
+          fill: "forwards",
+          delay: delay_value,
+        };
+        animation.effect.updateTiming(timing); //タイミングプロパティを変更
+        output.innerText =
+          "animation.currentTime : " +
+          animation.currentTime +
+          "\n" +
+          "delay: " +
+          animation.effect.getComputedTiming().delay;
+      });
+    </script>
+  </body>
+</html>

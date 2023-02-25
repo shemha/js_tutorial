@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      .target-wrapper {
+        width: 100px;
+        height: 100px;
+        margin: 40px 0 20px;
+      }
+      .circle-target {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+      }
+      .bg-blue {
+        background-color: #85a0f5;
+      }
+    </style>
+    <title>タイミングプロパティの変更</title>
+  </head>
+  <body>
+    <div class="target-wrapper">
+      <div id="target" class="circle-target bg-blue"></div>
+    </div>
+    <button type="button" id="start">Start</button>
+    <button type="button" id="change">Change</button>
+
+    <script>
+      const target = document.getElementById("target");
+      //タイミングプロパティ（１）
+      const timing1 = {
+        delay: 500,
+        duration: 500,
+        easing: "ease",
+        iterations: 4,
+        fill: "none",
+        direction: "alternate",
+      };
+      //タイミングプロパティ（２）
+      const timing2 = {
+        delay: 0,
+        duration: 1000,
+        easing: "ease-in-out",
+        iterations: 1,
+        fill: "forwards",
+        direction: "normal",
+      };
+
+      //アニメーションを生成
+      const animation = target.animate(
+        [{ transform: "translateX(0px)" }, { transform: "translateX(300px)" }],
+        timing1
+      );
+      //自動的に再生されないように一度停止
+      animation.cancel();
+
+      //start ボタンの要素を取得
+      const start = document.getElementById("start");
+      //start ボタンにクリックイベントを設定
+      start.addEventListener("click", (e) => {
+        animation.play();
+      });
+
+      //change ボタンの要素を取得
+      const change = document.getElementById("change");
+      //どちらのタイミングプロパティが使用されているかの判定用の変数
+      let isTiming1 = true;
+
+      change.addEventListener("click", (e) => {
+        //対象要素のアニメーションのタイミングプロパティを入れ替え
+        animation.effect.updateTiming(isTiming1 ? timing2 : timing1);
+        //アニメーションを停止（keyframeEffects の適用を消去）
+        animation.cancel();
+        //判定用の変数の値を更新（反転）
+        isTiming1 = !isTiming1;
+      });
+    </script>
+  </body>
+</html>

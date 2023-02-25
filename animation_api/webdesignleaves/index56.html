@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Promise.all</title>
+    <style>
+      .target-wrapper {
+        width: 100px;
+        height: 100px;
+        margin: 40px 0 20px;
+      }
+      .circle-target-sm {
+        margin-top: 20px;
+        margin-bottom: 20px;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        /* position: absolute; */
+      }
+      .bg-blue {
+        background-color: #85a0f5;
+      }
+      .bg-pink {
+        background-color: #f39294;
+      }
+      .bg-green {
+        background-color: #72de87;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="target circle-target-sm bg-blue"></div>
+    <div class="target circle-target-sm bg-pink"></div>
+    <div class="target circle-target-sm bg-green"></div>
+    <button type="button" id="play">Play</button>
+    <button type="button" id="pause">Pause</button>
+    <button type="button" id="reverse">Reverse</button>
+    <button type="button" id="cancel">Cancel</button>
+    <script>
+      //全てのアニメーションの対象の要素
+      const targets = document.querySelectorAll(".target");
+      //作成した Animation オブジェクトを格納する配列
+      const animations = [];
+
+      //全ての対象の要素にアニメーションを作成
+      targets.forEach((target, index) => {
+        //Animation オブジェクトを生成
+        const animation = new Animation(
+          new KeyframeEffect(
+            target,
+            [
+              { transform: "translateX(0px)" },
+              { transform: "translateX(300px)" },
+            ],
+            {
+              duration: 1000 + index * 300, //持続時間を少しずつ異なるように指定
+              easing: "ease-in",
+              fill: "forwards",
+              iterations: 1,
+            }
+          ),
+          document.timeline
+        );
+        //生成した Animation オブジェクトを配列に追加
+        animations.push(animation);
+      });
+
+      //play ボタンのクリックイベント
+      document.getElementById("play").addEventListener("click", () => {
+        Promise.all(
+          //各アニメーションの ready プロミスの配列を作成
+          animations.map((animation) => animation.ready)
+        ).then(
+          (anims) =>
+            //全てのアニメーションの準備ができたら各アニメーションの play() を実行
+            anims.forEach((anim) => anim.play())
+          //または anims.forEach( (anim) => anim.startTime = document.timeline.currentTime)
+        );
+      });
+
+      //reverse ボタンのクリックイベント
+      document.getElementById("reverse").addEventListener("click", () => {
+        Promise.all(
+          //各アニメーションの ready プロミスの配列を作成
+          animations.map((animation) => animation.ready)
+        ).then((anims) =>
+          //全てのアニメーションの準備ができたら各アニメーションの reverse() を実行
+          anims.forEach((anim) => anim.reverse())
+        );
+      });
+      //pause ボタンのクリックイベント
+      document.getElementById("pause").addEventListener("click", () => {
+        animations.forEach((anim) => anim.pause());
+      });
+      //cancel ボタンのクリックイベント
+      document.getElementById("cancel").addEventListener("click", () => {
+        animations.forEach((anim) => anim.cancel());
+      });
+    </script>
+  </body>
+</html>

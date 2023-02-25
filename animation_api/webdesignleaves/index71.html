@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>複数のトランジション</title>
+    <style>
+      #target {
+        width: 60px;
+        height: 60px;
+        margin: 30px 0;
+        background-color: #85a0f5;
+        /* background-color の transition を追加 */
+        transition: background-color 3s, transform 3s ease-in-out;
+      }
+      #start:checked ~ #target {
+        transform: translateX(300px) rotate(720deg);
+        background-color: pink; /* 追加 */
+      }
+    </style>
+  </head>
+  <body>
+    <input type="checkbox" id="start" />
+    <label for="start"> Transition Start </label>
+    <div><button type="button" id="pause">Pause</button></div>
+    <div id="target"></div>
+
+    <script>
+      const target = document.getElementById("target");
+      document.getElementById("pause").addEventListener("click", (e) => {
+        //対象の要素のアニメーションを全て取得
+        const animations = target.getAnimations();
+        //取得したアニメーションがあれば
+        if (animations.length > 0) {
+          //それぞれのアニメーションに対してメソッドを実行
+          animations.forEach((animation) => {
+            if (animation.playState === "running") {
+              animation.pause();
+              e.currentTarget.textContent = "Play";
+            } else {
+              animation.play();
+              e.currentTarget.textContent = "Pause";
+            }
+          });
+        }
+      });
+    </script>
+  </body>
+</html>

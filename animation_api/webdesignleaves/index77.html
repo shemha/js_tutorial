@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SVG のアニメーション</title>
+    <style>
+      svg {
+        position: absolute;
+        margin-top: 20px;
+      }
+      button {
+        margin-top: 100px;
+      }
+    </style>
+  </head>
+  <body>
+    <svg width="50" height="50" viewBox="0 0 50 50">
+      <rect
+        id="target"
+        x="0"
+        y="0"
+        width="50"
+        height="50"
+        rx="10"
+        ry="10"
+        fill="darkseagreen"
+      >
+        <animate
+          attributeType="CSS"
+          attributeName="opacity"
+          dur="3s"
+          values="1; 0.5; 0.2; 0.8; 1"
+          repeatCount="indefinite"
+        />
+      </rect>
+    </svg>
+    <!-- ボタンを押しても何も起きない -->
+    <button type="button" id="toggle">Pause</button>
+
+    <script>
+      const target = document.getElementById("target");
+
+      document.getElementById("toggle").addEventListener("click", (e) => {
+        //アニメーションを取得
+        const animation = target.getAnimations()[0];
+        //アニメーションを取得できれば以下を実行（animation は undefined になるので実行されない）
+        if (animation) {
+          if (animation.playState === "running") {
+            animation.pause();
+            e.currentTarget.textContent = "Play";
+          } else {
+            animation.play();
+            e.currentTarget.textContent = "Pause";
+          }
+        }
+      });
+    </script>
+  </body>
+</html>
