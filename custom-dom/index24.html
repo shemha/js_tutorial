@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>レンダリング用メソッドで Shadow DOM の文書構造を定義</title>
+  </head>
+  <body>
+    <hello-greeting name="Foo"></hello-greeting>
+    <script>
+      class HelloGreeting extends HTMLElement {
+        //コンストラクター
+        constructor() {
+          //super を最初に呼び出す
+          super();
+          //カスタム要素 <hello-greeting> に空のシャドウ DOM を取り付ける
+          this.attachShadow({ mode: "open" });
+        }
+
+        //レンダリング用メソッド
+        _render() {
+          //変数 helloTo の初期化
+          let helloTo = "World";
+          // name 属性が設定されていれば
+          if (this.hasAttribute("name")) {
+            // その値を変数 helloTo に代入
+            helloTo = this.getAttribute("name");
+          }
+
+          //シャドウルートにシャドウ DOM の文書構造を定義
+          this.shadowRoot.innerHTML = `
+      <style>
+        p {
+          font-size: 18px;
+          font-weight: bold;
+          color: green;
+        }
+      </style>
+      <p class="hello">
+        Hello, ${helloTo}
+      </p>
+    `;
+        }
+
+        //カスタム要素が DOM に挿入される際に呼び出されるライフサイクルメソッド
+        connectedCallback() {
+          if (!this.rendered) {
+            //レンダリング用メソッドを呼び出す
+            this._render();
+            this.rendered = true;
+          }
+        }
+      }
+      //カスタム要素を登録
+      customElements.define("hello-greeting", HelloGreeting);
+    </script>
+  </body>
+</html>

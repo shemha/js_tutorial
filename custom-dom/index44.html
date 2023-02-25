@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>スロットコンテンツのスタイリング</title>
+  </head>
+  <body>
+    <style>
+      /* ドキュメントのスタイル */
+      span {
+        font-weight: bold;
+      }
+    </style>
+
+    <user-info>
+      <span slot="username">Foo</span>
+      <span slot="birthday">1989.03.21</span>
+    </user-info>
+
+    <script>
+      customElements.define(
+        "user-info",
+        class extends HTMLElement {
+          constructor() {
+            super();
+
+            this.attachShadow({ mode: "open" });
+
+            this.shadowRoot.innerHTML = `
+      <style>
+        span { color: red; }
+      </style>
+      <div>Name:
+        <slot name="username"></slot>
+      </div>
+      <div>Birthday:
+        <slot name="birthday"></slot>
+      </div>
+    `;
+          }
+        }
+      );
+    </script>
+  </body>
+</html>

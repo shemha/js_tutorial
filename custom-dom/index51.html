@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Element.assignedSlot</title>
+  </head>
+  <body>
+    <custom-menu id="c-menu">
+      <span slot="title">Menu</span>
+      <li slot="item">Item 1</li>
+      <li slot="item">Item 2</li>
+      <li slot="item">Item 3</li>
+    </custom-menu>
+
+    <script>
+      customElements.define(
+        "custom-menu",
+        class extends HTMLElement {
+          constructor() {
+            super();
+            this.attachShadow({ mode: "open" });
+            this.shadowRoot.innerHTML = `
+          <div class="menu">
+            <slot name="title"></slot>
+            <ul>
+              <slot name="item"></slot>
+            </ul>
+          </div>
+        `;
+          }
+        }
+      );
+
+      const slottedSpan = document.querySelector("custom-menu span");
+      console.log(slottedSpan.assignedSlot);
+      //出力 <slot name="title"></slot>
+
+      const slottedLi0 = document.querySelectorAll("custom-menu li")[0];
+      console.log(slottedLi0.assignedSlot);
+      //出力 <slot name="item"></slot>
+    </script>
+  </body>
+</html>

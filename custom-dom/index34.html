@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CSS 変数を使ったスタイルフック</title>
+  </head>
+  <body>
+    <style>
+      /*  ドキュメントのスタイル  */
+      my-element.dark {
+        --my-elem-bg: black; /* CSS 変数を宣言（定義） */
+        --my-elem-color: yellow; /* CSS 変数を宣言（定義） */
+      }
+    </style>
+
+    <div>
+      <my-element></my-element>
+      <!-- 文字色は azure で背景色は #9E9E9E （デフォルト）-->
+    </div>
+
+    <div>
+      <my-element class="dark"></my-element>
+      <!-- 文字色は yellow で背景色は black-->
+    </div>
+
+    <script>
+      customElements.define(
+        "my-element",
+        class extends HTMLElement {
+          constructor() {
+            super();
+            const shadow = this.attachShadow({ mode: "open" });
+            shadow.innerHTML = `
+    <style>
+      :host {
+        display: block;
+        background: var(--my-elem-bg, #9E9E9E); /* CSS 変数を受け取れるように */
+        color: var(--my-elem-color, azure);; /* CSS 変数を受け取れるように */
+        border-radius: 10px;
+        padding: 10px;
+      }
+    </style>
+    <div class="foo">
+      <h3>Foo</h3>
+      <p class="desc">Lorem ipsum dolor sit amet.</p>
+      <p>Porro velit nulla dolores cupiditate aspernatur</p>
+    </div>
+    `;
+          }
+        }
+      );
+    </script>
+  </body>
+</html>

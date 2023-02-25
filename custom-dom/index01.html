@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>カスタム要素を作成</title>
+  </head>
+  <body>
+    <my-element></my-element>
+    <script>
+      class MyElement extends HTMLElement {
+        constructor() {
+          super();
+        }
+        // 要素が document に追加された時に呼び出されるライフサイクルコールバック
+        connectedCallback() {
+          //this は <my-element>
+          this.textContent = "This is My Element!";
+        }
+      }
+      customElements.define("my-element", MyElement);
+    </script>
+  </body>
+</html>

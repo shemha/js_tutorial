@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>シャドウDOM - attachShadow()</title>
+  </head>
+  <body>
+    <hello-greeting></hello-greeting>
+    <script>
+      class HelloGreeting extends HTMLElement {
+        //コンストラクター
+        constructor() {
+          //super を最初に呼び出す
+          super();
+          //カスタム要素 <hello-greeting> に空のシャドウ DOM を取り付ける
+          // shadow はシャドウルートへの参照
+          const shadow = this.attachShadow({ mode: "open" });
+
+          //変数 helloTo の初期化
+          let helloTo = "World";
+          // name 属性が設定されていれば
+          if (this.hasAttribute("name")) {
+            // その値を変数 helloTo に代入
+            helloTo = this.getAttribute("name");
+          }
+
+          //シャドウルートにシャドウ DOM の文書構造を定義
+          shadow.innerHTML = `
+    <style>
+      p {
+        font-size: 18px;
+        font-weight: bold;
+        color: green;
+      }
+    </style>
+    <p class="hello">
+      Hello, ${helloTo}
+    </p>`;
+        }
+      }
+      //カスタム要素を登録
+      customElements.define("hello-greeting", HelloGreeting);
+    </script>
+  </body>
+</html>

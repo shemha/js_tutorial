@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>背景色や文字色を変更</title>
+  </head>
+  <body>
+    <color-button color="white" background-color="red">
+      <span slot="label">Click</span>
+    </color-button>
+
+    <color-button>
+      <span slot="label">Click</span>
+    </color-button>
+
+    <script>
+      class colorButton extends HTMLElement {
+        constructor() {
+          super();
+
+          //カスタム要素にシャドウ DOM を取り付ける
+          this.attachShadow({ mode: "open" });
+
+          // シャドウ DOM の文書構造を定義
+          this.shadowRoot.innerHTML = `
+      <style>
+        button {
+          border: none;
+          border-radius: 4px;
+          padding: 6px 12px;
+          background-color: ${this.bgColor};
+          color: ${this.color};
+          cursor: pointer;
+        }
+      </style>
+      <button type="button">
+      <slot name="label" />
+      </button>
+    `;
+        }
+
+        // getter を定義
+        get bgColor() {
+          // 属性が指定されていてその値が空でなければ、その値を
+          if (
+            this.hasAttribute("background-color") &&
+            this.getAttribute("background-color")
+          ) {
+            return this.getAttribute("background-color");
+          } else {
+            // 属性が指定されていなければ、初期値を返す
+            return "#ccc";
+          }
+        }
+
+        // getter を定義
+        get color() {
+          // 属性が指定されていてその値が空でなければ、その値を
+          if (this.hasAttribute("color") && this.getAttribute("color")) {
+            return this.getAttribute("color");
+          } else {
+            // 属性が指定されていなければ、初期値を返す
+            return "#333";
+          }
+        }
+
+        // setter を定義
+        set bgColor(val) {
+          this.setAttribute("background-color", val);
+        }
+
+        // setter を定義
+        set color(val) {
+          this.setAttribute("color", val);
+        }
+
+        //監視する属性を指定
+        static get observedAttributes() {
+          return ["color", "background-color"];
+        }
+
+        //属性が変更された際に呼び出される
+        attributeChangedCallback(attr, oldValue, newValue) {
+          if (oldValue === newValue) return;
+          // 属性（プロパティ）の値を更新（getter/setter があるので省略可能）
+          this[attr] = newValue;
+          //button 要素の属性の値でスタイルを更新（属性名がスタイルのプロパティ名と一致している）
+          this.shadowRoot
+            .querySelector("button")
+            .style.setProperty(attr, newValue);
+        }
+      }
+      // カスタム要素を登録
+      customElements.define("color-button", colorButton);
+
+      const button = document.querySelector("color-button");
+
+      button.setAttribute("color", "white");
+      button.setAttribute("background-color", "green");
+
+      button.color = "yellow";
+      button.bgColor = "black";
+    </script>
+  </body>
+</html>

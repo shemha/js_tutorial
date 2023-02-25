@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>innerHTML を使う場合の例</title>
+  </head>
+  <body>
+    <hello-greeting></hello-greeting>
+    <hello-greeting name="Foo"></hello-greeting>
+
+    <script>
+      class HelloGreeting extends HTMLElement {
+        constructor() {
+          super();
+
+          const shadow = this.attachShadow({ mode: "open" });
+
+          let helloTo = "World";
+          if (this.hasAttribute("name")) {
+            helloTo = this.getAttribute("name");
+          }
+
+          // link 要素を使って外部スタイルシートを参照
+          shadow.innerHTML = `
+    <link rel="stylesheet" href="style.css">
+    <p class="hello">
+      Hello, ${helloTo}
+    </p>
+    `;
+        }
+      }
+      customElements.define("hello-greeting", HelloGreeting);
+    </script>
+  </body>
+</html>

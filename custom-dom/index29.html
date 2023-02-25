@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>属性の値からスタイルを設定</title>
+  </head>
+  <body>
+    <custom-rect c="pink" w="100" h="70"></custom-rect>
+    <script>
+      class Rect extends HTMLElement {
+        // 監視する属性を指定
+        static get observedAttributes() {
+          return ["w", "h", "c"];
+        }
+
+        constructor() {
+          // コンストラクタでは super() を最初に呼び出す
+          super();
+          //カスタム要素に空のシャドウ DOM を取り付ける
+          const shadow = this.attachShadow({ mode: "open" });
+          //div 要素を生成
+          const div = document.createElement("div");
+          //style 要素を生成
+          const style = document.createElement("style");
+          //生成した要素をシャドウ DOM に追加
+          shadow.appendChild(style);
+          shadow.appendChild(div);
+        }
+
+        //属性からスタイルを更新するメソッド
+        updateStyle() {
+          //シャドウルート
+          const shadow = this.shadowRoot;
+          //属性が指定されていれば、その値を使い、指定されていなければデフォルトを使う
+          const width = this.getAttribute("w") || "200";
+          const height = this.getAttribute("h") || "100";
+          const color = this.getAttribute("c") || "green";
+          //シャドウ DOM に追加した style 要素の内容を更新
+          shadow.querySelector("style").textContent = `
+     div {
+       width: ${width}px;
+       height: ${height}px;
+       background-color: ${color};
+     }
+   `;
+        }
+
+        connectedCallback() {
+          console.log("カスタム要素がページに追加されました");
+          this.updateStyle();
+        }
+
+        attributeChangedCallback(name, oldValue, newValue) {
+          console.log("カスタム要素の属性が変更されました");
+          this.updateStyle();
+        }
+      }
+      customElements.define("custom-rect", Rect);
+    </script>
+  </body>
+</html>

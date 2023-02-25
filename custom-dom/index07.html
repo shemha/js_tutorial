@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>プロパティの初期値を設定</title>
+  </head>
+  <body>
+    <my-element></my-element>
+    <script>
+      class MyElement extends HTMLElement {
+        constructor() {
+          //super を最初に呼び出す
+          super();
+          // foo 属性に対応するプロパティの初期化
+          this._foo = "Foo";
+        }
+
+        // get 属性名() でプロパティの getter を定義
+        get foo() {
+          if (this.hasAttribute("foo")) {
+            // foo 属性が設定されていればその値を返す
+            return this.getAttribute("foo");
+          }
+          // foo 属性が設定されていなければ _foo の値を返す
+          return this._foo;
+        }
+
+        // set 属性名() でプロパティの setter を定義
+        set foo(val) {
+          // foo 属性の値を更新
+          this.setAttribute("foo", val);
+          // _foo の値を更新
+          this._foo = val;
+        }
+
+        connectedCallback() {
+          if (this.foo) {
+            this.textContent = this.foo;
+          } else {
+            this.textContent = this._foo;
+          }
+        }
+      }
+      customElements.define("my-element", MyElement);
+    </script>
+  </body>
+</html>

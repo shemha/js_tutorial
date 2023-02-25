@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>プロパティと属性</title>
+  </head>
+  <body>
+    <div id="elem" foo="Foo!"></div>
+
+    <script>
+      const elem = document.getElementById("elem");
+
+      //非標準の属性でも getAttribute() で値を取得可能
+      console.log(elem.getAttribute("foo")); //Foo!
+      //非標準の属性でも hasAttribute() で確認可能
+      console.log(elem.hasAttribute("foo")); //true
+
+      //非標準の属性でも setAttribute() で値を設定可能
+      elem.setAttribute("foo", "Bar!");
+      console.log(elem.getAttribute("foo")); //Bar!
+
+      //但し、非標準の属性の場合、対応するプロパティは生成されない
+      console.log(elem.foo); //undefined
+
+      //非標準の属性でも removeAttribute() で削除可能
+      elem.removeAttribute("foo");
+      console.log(elem.hasAttribute("foo")); //false
+    </script>
+  </body>
+</html>

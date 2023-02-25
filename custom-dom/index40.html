@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      タイトルとアイテムは名前付きスロットを使ってユーザー側でマークアップを挿入
+    </title>
+  </head>
+  <body>
+    <custom-menu>
+      <span slot="title">Menu</span>
+      <li slot="item">Item 1</li>
+      <li slot="item">Item 2</li>
+    </custom-menu>
+
+    <script>
+      customElements.define(
+        "custom-menu",
+        class extends HTMLElement {
+          constructor() {
+            super();
+            this.attachShadow({ mode: "open" });
+            this.shadowRoot.innerHTML = `
+    <style>
+      ul {
+        margin: 10px 0 0;
+        list-style: none;
+        padding-left: 20px;
+      }
+      .closed ul {
+        display: none;
+      }
+      ::slotted([slot="title"]) {
+        font-weight: bold;
+        cursor: pointer;
+        border: 1px solid #999;
+        padding: 5px 10px;
+      }
+    </style>
+    <div class="menu">
+      <slot name="title"></slot>
+      <ul>
+        <slot name="item"></slot>
+      </ul>
+    </div>
+    `;
+            //name="title" のスロット（シャドウルートからクエリ）をクリックした際の処理
+            this.shadowRoot.querySelector('slot[name="title"]').onclick =
+              () => {
+                //メニュー（ul 要素）の表示・非表示をトグル
+                this.shadowRoot
+                  .querySelector(".menu")
+                  .classList.toggle("closed");
+              };
+          }
+        }
+      );
+    </script>
+  </body>
+</html>

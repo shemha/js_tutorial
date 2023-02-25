@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>値がない属性の場合</title>
+  </head>
+  <body>
+    <my-element foo="My element!"></my-element>
+
+    <script>
+      class MyElement extends HTMLElement {
+        // get 属性名() でプロパティの getter を定義
+        get disabled() {
+          //hasAttribute() で disabled 属性が指定されているかどうかの真偽値を返す
+          return this.hasAttribute("disabled");
+        }
+
+        set disabled(val) {
+          // val が指定されている（true の）場合
+          if (val) {
+            // disabled 属性に値はいらないので、空文字列をセット
+            this.setAttribute("disabled", "");
+          } else {
+            // disabled 属性を削除
+            this.removeAttribute("disabled");
+          }
+        }
+      }
+      customElements.define("my-element", MyElement);
+
+      const myElement = document.querySelector("my-element");
+      //プロパティで参照
+      console.log(myElement.foo); //My element!
+      //プロパティで設定（但し、表示には反映されない）
+      myElement.foo = "123";
+      console.log(myElement.foo); //123
+      //setAttribute() で設定
+      myElement.setAttribute("foo", "ABC");
+      console.log(myElement.foo); //ABC
+    </script>
+  </body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>内部スタイルと外部スタイル</title>
+  </head>
+  <body>
+    <hello-greeting></hello-greeting>
+    <hello-greeting name="Foo"></hello-greeting>
+
+    <script>
+      class HelloGreeting extends HTMLElement {
+        constructor() {
+          super();
+
+          const shadow = this.attachShadow({ mode: "open" });
+
+          let helloTo = "World";
+          if (this.hasAttribute("name")) {
+            helloTo = this.getAttribute("name");
+          }
+
+          const p = document.createElement("p");
+          p.setAttribute("class", "hello");
+          p.textContent = `Hello, ${helloTo}`;
+
+          // link 要素を生成し、外部のスタイルをシャドウ DOM に適用
+          const linkElem = document.createElement("link");
+          // link 要素に rel 属性を設定
+          linkElem.setAttribute("rel", "stylesheet");
+          // link 要素に href 属性を設定
+          linkElem.setAttribute("href", "style.css");
+          // 生成した要素をシャドウ DOM に追加
+          shadow.appendChild(linkElem);
+          shadow.appendChild(p);
+        }
+      }
+      customElements.define("hello-greeting", HelloGreeting);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      name 属性が指定されていれば、アラートで表示する内容をその値を使って変更
+    </title>
+  </head>
+  <body>
+    <button is="hello-button">Click</button>
+
+    <button is="hello-button" disabled>Disabled</button>
+
+    <button is="hello-button" name="Foo">Click</button>
+
+    <script>
+      // HTMLButtonElement を拡張
+      class HelloButton extends HTMLButtonElement {
+        constructor() {
+          super();
+          //変数の初期化
+          let helloTo = "World";
+          //クリックイベントのリスナーを設定
+          this.addEventListener("click", () => alert("Hello " + helloTo + "!"));
+          // name 属性が指定されていれば、その値を helloTo に設定
+          if (this.hasAttribute("name")) {
+            helloTo = this.getAttribute("name");
+          }
+        }
+      }
+      customElements.define("hello-button", HelloButton, { extends: "button" });
+    </script>
+  </body>
+</html>

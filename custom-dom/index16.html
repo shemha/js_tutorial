@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>カスタマイズされた組み込み要素 - 別解</title>
+  </head>
+  <body>
+    <button is="hello-button">Click</button>
+
+    <button is="hello-button" disabled>Disabled</button>
+
+    <script>
+      // HTMLButtonElement を拡張
+      class HelloButton extends HTMLButtonElement {
+        constructor() {
+          super();
+          //クリックイベントのリスナーを設定
+          this.addEventListener("click", () => alert("Hello!"));
+        }
+      }
+
+      //第3引数に具体的な要素を指定する必要があります
+      customElements.define(
+        "hello-button",
+        class extends HTMLButtonElement {
+          constructor() {
+            super();
+            this.addEventListener("click", () => alert("Hello!"));
+          }
+        },
+        { extends: "button" }
+      );
+    </script>
+  </body>
+</html>

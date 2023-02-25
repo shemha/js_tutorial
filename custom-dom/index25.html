@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>シャドウツリー内で要素を取得</title>
+  </head>
+  <body>
+    <hello-greeting></hello-greeting>
+    <hello-greeting name="Foo"></hello-greeting>
+
+    <script>
+      class HelloGreeting extends HTMLElement {
+        constructor() {
+          super();
+          const shadow = this.attachShadow({ mode: "open" });
+          let helloTo = "World";
+          if (this.hasAttribute("name")) {
+            helloTo = this.getAttribute("name");
+          }
+          shadow.innerHTML = `
+    <style>
+      p {
+        font-size: 18px;
+        font-weight: bold;
+        color: green;
+      }
+    </style>
+    <p class="hello">
+      Hello, ${helloTo}
+    </p>`;
+        }
+        connectedCallback() {
+          //document からはシャドウツリー内の要素を取得できない
+          console.log(document.querySelectorAll("p.hello").length); //0
+          //シャドウルートからはシャドウツリー内の要素を取得できる
+          console.log(this.shadowRoot.querySelectorAll("p.hello").length); //1
+        }
+      }
+      customElements.define("hello-greeting", HelloGreeting);
+    </script>
+  </body>
+</html>

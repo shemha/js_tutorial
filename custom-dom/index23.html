@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>シャドウ DOM</title>
+  </head>
+  <body>
+    <hello-greeting name="Foo"></hello-greeting>
+    <script>
+      class HelloGreeting extends HTMLElement {
+        constructor() {
+          super();
+          const shadow = this.attachShadow({ mode: "open" });
+          const p = document.createElement("p");
+          p.setAttribute("class", "hello");
+          const style = document.createElement("style");
+          style.textContent = `
+      p {
+        font-size: 18px;
+        font-weight: bold;
+        color: green;
+      }
+    `;
+          shadow.appendChild(style);
+          shadow.appendChild(p);
+        }
+
+        connectedCallback() {
+          let helloTo = "World";
+          if (this.hasAttribute("name")) {
+            helloTo = this.getAttribute("name");
+          }
+          this.shadowRoot.querySelector(
+            "p.hello"
+          ).textContent = ` Hello, ${helloTo}`;
+        }
+      }
+      customElements.define("hello-greeting", HelloGreeting);
+    </script>
+  </body>
+</html>

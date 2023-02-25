@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HTMLSlotElement.assignedNodes()</title>
+  </head>
+  <body>
+    <custom-menu id="c-menu">
+      <span slot="title">Menu</span>
+      <li slot="item">Item 1</li>
+      <li slot="item">Item 2</li>
+      <li slot="item">Item 3</li>
+    </custom-menu>
+
+    <script>
+      customElements.define(
+        "custom-menu",
+        class extends HTMLElement {
+          constructor() {
+            super();
+            this.attachShadow({ mode: "open" });
+            this.shadowRoot.innerHTML = `
+      <div class="menu">
+        <slot name="title"></slot>
+        <ul>
+          <slot name="item"></slot>
+        </ul>
+      </div>
+    `;
+
+            // class="menu" の div 要素にリスナを設定
+            this.shadowRoot
+              .querySelector("div.menu")
+              .addEventListener("slotchange", (e) => {
+                //変更のあった（slotchange イベントを発生した）スロットを取得
+                let slot = e.target;
+                // スロットの名前が item であれば
+                if (slot.name == "item") {
+                  // スロットへ割り当てられている DOM ノード（配列）を取得
+                  const nodes = slot.assignedNodes();
+                  // それぞれの DOM ノードを調べる
+                  nodes.forEach((node) => {
+                    // DOM ノードのテキストを出力
+                    console.log(node.textContent);
+                  });
+                }
+              });
+          }
+        }
+      );
+
+      const menu = document.getElementById("c-menu");
+      //1秒後にメニューアイテムを追加
+      setTimeout(() => {
+        const item = document.createElement("li");
+        item.setAttribute("slot", "item");
+        item.textContent = "Item 4";
+        menu.appendChild(item);
+        console.log("1秒後: メニューアイテムを追加");
+      }, 1000);
+    </script>
+  </body>
+</html>

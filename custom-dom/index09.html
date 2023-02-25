@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>レンダリングするメソッドを用意</title>
+  </head>
+  <body>
+    <hello-element foo="World"></hello-element>
+    <script>
+      class HelloElement extends HTMLElement {
+        constructor() {
+          super();
+        }
+        get foo() {
+          return this.getAttribute("foo");
+        }
+        set foo(val) {
+          this.setAttribute("foo", val);
+        }
+
+        //カスタム要素をレンダリングするメソッド
+        _render() {
+          if (this.foo) {
+            this.textContent = `Hello ${this.foo}!`;
+          } else {
+            this.textContent = "Hello Foo!";
+          }
+        }
+
+        //監視する属性を指定
+        static get observedAttributes() {
+          return ["foo"];
+        }
+
+        //上記で指定した属性が変更された際に呼び出される
+        attributeChangedCallback(attr, oldValue, newValue) {
+          if (attr === "foo") {
+            if (oldValue === newValue) return;
+            this._render();
+          }
+        }
+
+        connectedCallback() {
+          //要素がページに挿入されたときは1回だけ _render() を呼び出します
+          if (!this.rendered) {
+            this._render();
+            this.rendered = true;
+          }
+        }
+      }
+      customElements.define("hello-element", HelloElement);
+    </script>
+  </body>
+</html>

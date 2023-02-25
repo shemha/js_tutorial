@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      my-element {
+        color: red;
+      }
+    </style>
+    <title>シャドウホストとCSS ルール</title>
+  </head>
+  <body>
+    <my-element></my-element>
+    <script>
+      customElements.define(
+        "my-element",
+        class extends HTMLElement {
+          constructor() {
+            super();
+
+            const shadow = this.attachShadow({ mode: "open" });
+
+            shadow.innerHTML = `
+    <style>
+      :host {
+        color: green;
+      }
+    </style>
+    <div class="foo">
+      <h3>Foo</h3>
+      <p class="desc">Lorem ipsum dolor sit amet.</p>
+      <p>Porro velit nulla dolores cupiditate aspernatur</p>
+    </div>
+    `;
+          }
+        }
+      );
+    </script>
+  </body>
+</html>

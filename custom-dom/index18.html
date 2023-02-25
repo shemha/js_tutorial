@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ライフサイクルフックの利用</title>
+  </head>
+  <body>
+    <button is="hello-button">Click</button>
+
+    <button is="hello-button" disabled>Disabled</button>
+
+    <button is="hello-button" name="Foo">Click</button>
+
+    <script>
+      // HTMLButtonElement を拡張
+      class HelloButton extends HTMLButtonElement {
+        constructor() {
+          super();
+          //プロパティの初期値を設定
+          this.helloTo = "World";
+          this.addEventListener("click", () =>
+            alert("Hello " + this.helloTo + "!")
+          );
+          if (this.hasAttribute("name")) {
+            this.helloTo = this.getAttribute("name");
+          }
+        }
+
+        //監視する属性のリスト（配列）を指定
+        static get observedAttributes() {
+          return ["name"];
+        }
+
+        //ライフサイクルフック
+        attributeChangedCallback(name, oldValue, newValue) {
+          //属性（プロパティ）が変更された場合の何らかの処理
+          if (name === "name") {
+            if (oldValue === newValue) return;
+            //name 属性の値が変更されたら、その値で helloTo プロパティを更新
+            this.helloTo = newValue;
+          }
+        }
+
+        //ライフサイクルフック
+        connectedCallback() {
+          if (this.hasAttribute("name")) {
+            this.helloTo = this.getAttribute("name");
+          }
+        }
+      }
+      customElements.define("hello-button", HelloButton, { extends: "button" });
+    </script>
+  </body>
+</html>

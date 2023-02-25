@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>カスタム要素に設定した独自の属性</title>
+  </head>
+  <body>
+    <my-element foo="My element!"></my-element>
+
+    <script>
+      class MyElement extends HTMLElement {
+        connectedCallback() {
+          const foo = this.getAttribute("foo") || "Foo";
+          this.textContent = foo;
+        }
+      }
+      customElements.define("my-element", MyElement);
+
+      const myElement = document.querySelector("my-element");
+      console.log(myElement.getAttribute("foo")); //My element!
+      console.log(myElement.hasAttribute("foo")); //true
+      myElement.setAttribute("foo", "Bar!");
+      console.log(myElement.getAttribute("foo")); //Bar!
+
+      //対応するプロパティは生成されない
+      console.log(myElement.foo); //undefined
+    </script>
+  </body>
+</html>
