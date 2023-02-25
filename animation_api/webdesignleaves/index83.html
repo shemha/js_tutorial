@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>requestAnimationFrame() の利用</title>
+    <style>
+      .small-target-red {
+        position: absolute;
+        margin-top: 30px;
+        margin-left: 50px;
+        width: 30px;
+        height: 30px;
+        background-color: red;
+        border-radius: 50%;
+      }
+      button {
+        margin-top: 170px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="target" class="small-target-red"></div>
+
+    <button type="button" id="play">Play</button>
+    <div id="completed">
+      Completed :
+      <input
+        type="range"
+        min="0"
+        max="100"
+        step="1"
+        value="0"
+        disabled
+      /><span></span>
+    </div>
+    <p>currentIteration: <span id="currentIteration"></span></p>
+
+    <script>
+      const target = document.getElementById("target");
+      const play = document.getElementById("play");
+      const rangeCompleted = document.querySelector(
+        '#completed input[type="range"]'
+      );
+      const spanCompleted = document.querySelector("#completed span");
+      const currentIteration = document.getElementById("currentIteration");
+      const animation = target.animate(
+        {
+          transform: ["rotate(0deg)", "rotate(360deg)"],
+          transformOrigin: ["50px 50px", "50px 50px"],
+        },
+        {
+          duration: 1000,
+          delay: 500,
+          direction: "alternate",
+          easing: "ease-in-out",
+          fill: "forwards",
+          iterations: 5,
+        }
+      );
+      animation.pause();
+      play.addEventListener("click", () => {
+        animation.play();
+        animation.ready.then(displayTiming);
+      });
+
+      const displayTiming = () => {
+        //タイミング情報を取得
+        const timing = animation.effect.getComputedTiming();
+        //進捗状況をパーセントでスライダーとテキストで表示
+        rangeCompleted.value = Math.floor(
+          (timing.localTime * 100) / timing.endTime
+        );
+        spanCompleted.textContent =
+          Math.floor((timing.localTime * 100) / timing.endTime) + "%";
+        //現在のアニメーションの繰り返し回数（最初は0）を表示
+        currentIteration.textContent = timing.currentIteration;
+        if (animation.playState === "running") {
+          requestAnimationFrame(displayTiming);
+        }
+      };
+    </script>
+  </body>
+</html>

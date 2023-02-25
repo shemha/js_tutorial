@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>進捗度を逆転（逆方向に移動）</title>
+    <style>
+      .elem {
+        background-color: green;
+        width: 50px;
+        height: 50px;
+        color: #fff;
+        line-height: 50px;
+        text-align: center;
+      }
+      button {
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="elem"></div>
+    <button type="button" id="play">Play</button>
+    <button type="button" id="reverse">Reverse</button>
+
+    <script>
+      //対象の要素
+      const elem = document.querySelector(".elem");
+      //開始時刻を代入する変数（最初は未定義）
+      let start;
+
+      //アニメーションの持続時間
+      const duration = 2000;
+      //アニメーションの移動距離
+      const distance = 200;
+      //逆方向に進む場合は true
+      let reverse = false;
+
+      const transX = (timestamp) => {
+        if (start === undefined) {
+          start = timestamp;
+        }
+        //経過時間
+        const elapsed = start ? timestamp - start : 0;
+        //進捗度
+        const relativeProgress = Math.min(1, elapsed / duration);
+
+        //要素が移動する距離を進捗度を使って設定（reverse が true の場合は進捗度を逆転）
+        const x = reverse
+          ? distance * (1 - relativeProgress)
+          : distance * relativeProgress;
+
+        //進捗度が1に満たない場合
+        if (relativeProgress < 1) {
+          elem.style.transform = `translateX(${x}px)`;
+          requestAnimationFrame(transX);
+        }
+      };
+
+      //Play ボタンをクリックしたら関数を実行するイベント
+      document.getElementById("play").addEventListener("click", (e) => {
+        //開始時刻を初期化
+        start = undefined;
+        //順方向に進捗度を適用
+        reverse = false;
+        //関数を実行
+        transX();
+      });
+
+      //Reverse ボタンをクリックしたら関数を実行するイベント
+      document.getElementById("reverse").addEventListener("click", (e) => {
+        //開始時刻を初期化
+        start = undefined;
+        //逆方向に進捗度を適用
+        reverse = true;
+        //関数を実行
+        transX();
+      });
+    </script>
+  </body>
+</html>

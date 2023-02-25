@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>undefined で初期化</title>
+    <style>
+      .elem {
+        background-color: blue;
+        width: 50px;
+        height: 50px;
+        color: #fff;
+        line-height: 50px;
+        text-align: center;
+      }
+      button {
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="elem"></div>
+    <button type="button" id="play">Play</button>
+    <div class="table-responsive">
+      <table class="table table-bordered margin_top30" style="max-width: 420px">
+        <tr>
+          <td style="width: 220px">relativeProgress（進捗度）</td>
+          <td id="completed_val"></td>
+        </tr>
+        <tr>
+          <td>value of x（移動距離）</td>
+          <td id="x_val"></td>
+        </tr>
+        <tr>
+          <td>relativeProgress（※）</td>
+          <td id="completed_val2"></td>
+        </tr>
+        <tr>
+          <td>value of x（※）</td>
+          <td id="x_val2"></td>
+        </tr>
+      </table>
+    </div>
+    <p>
+      ※ 3番目と4番目の値は、18行目で Math.min()
+      を使わなかった場合の値を表示しています（ほんの少しだけですが、値が大きくなってしまいます）。
+    </p>
+
+    <script>
+      const elem = document.querySelector(".elem");
+      let start;
+      const duration = 2000;
+      const distance = 200;
+      const completed_val = document.getElementById("completed_val");
+      const x_val = document.getElementById("x_val");
+      const completed_val2 = document.getElementById("completed_val2"); //add
+      const x_val2 = document.getElementById("x_val2"); //add
+      const transX = (timestamp) => {
+        if (start === undefined) {
+          start = timestamp;
+        }
+        const elapsed = start ? timestamp - start : 0;
+        const completed = Math.min(1, elapsed / duration);
+        const completed2 = elapsed / duration; //add
+        completed_val2.textContent = completed2; //add
+        completed_val.textContent = completed;
+        const x = distance * completed;
+        x_val.textContent = x;
+        const x2 = distance * completed2; //add
+        x_val2.textContent = x2; //add
+        if (completed < 1) {
+          elem.style.transform = `translateX(${x}px)`;
+          requestAnimationFrame(transX);
+        }
+      };
+      const play = document.getElementById("play");
+      play.addEventListener("click", (e) => {
+        start = undefined;
+        transX();
+      });
+    </script>
+  </body>
+</html>

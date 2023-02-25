@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>現在時刻の取得</title>
+    <style>
+      .elem {
+        width: 50px;
+        height: 50px;
+        color: #fff;
+        line-height: 50px;
+        text-align: center;
+      }
+      button {
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      class="elem"
+      style="
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        border: 1px solid silver;
+      "
+    ></div>
+    <p>background-color: <span id="bgcolor"></span></p>
+    <button type="button" id="start">Start</button>
+    <button type="button" id="stop">Stop</button>
+
+    <script>
+      //アニメーション対象の要素
+      const elem = document.querySelector(".elem");
+      //開始時刻を代入する変数（最初は未定義）
+      let start;
+      //requestAnimationFrame() の戻り値のIDを格納する変数
+      let requestID;
+      //background-color の値を出力する要素
+      const bgcolor = document.getElementById("bgcolor");
+
+      //コールバック関数の定義
+      const changeBGC = (timestamp) => {
+        if (start === undefined) {
+          //初回実行時の timestamp を start に代入
+          start = timestamp;
+        }
+        //経過時間（start が未定義の場合は0）
+        const elapsed = start ? timestamp - start : 0;
+        //h (hsl の hue の値)を経過時間を使って生成
+        const h = Math.floor(0.03 * elapsed) % 360;
+        //要素の背景色を hsl() で設定
+        elem.style.backgroundColor = `hsl(${h}, 90%, 50%)`;
+        //background-color の値を出力
+        bgcolor.textContent = elem.style.backgroundColor;
+        //requestAnimationFrame() を呼び出して戻り値のIDを変数に代入
+        requestID = requestAnimationFrame(changeBGC);
+      };
+
+      const startBtn = document.getElementById("start");
+      const stopBtn = document.getElementById("stop");
+      //Start ボタンにクリックイベントを設定
+      startBtn.addEventListener("click", (e) => {
+        //アニメーションを開始
+        changeBGC();
+        //Start ボタンを disabled に
+        e.currentTarget.setAttribute("disabled", true);
+      });
+
+      //Stop ボタンにクリックイベントを設定
+      stopBtn.addEventListener("click", () => {
+        //アニメーションを中止（キャンセル）
+        cancelAnimationFrame(requestID);
+        //Start ボタンの disabled を解除
+        startBtn.removeAttribute("disabled");
+      });
+    </script>
+  </body>
+</html>

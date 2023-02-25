@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>アニメーションの持続時間と移動距離</title>
+    <style>
+      .elem {
+        background-color: green;
+        width: 100px;
+        height: 50px;
+        color: #fff;
+        line-height: 50px;
+        text-align: center;
+      }
+      button {
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="elem"></div>
+
+    <script>
+      const elem = document.querySelector(".elem");
+      //開始時刻を代入する変数（最初は未定義）
+      let start;
+
+      //アニメーションの持続時間
+      const duration = 2000;
+      //アニメーションの移動距離
+      const distance = 200;
+
+      const transX = (timestamp) => {
+        if (start === undefined) {
+          start = timestamp;
+        }
+        const elapsed = start ? timestamp - start : 0;
+        //要素が移動する距離を速度（distance/duration）と経過時間を使って設定
+        const x = Math.min((distance / duration) * elapsed, distance);
+
+        //経過時間が持続時間に満たない場合
+        if (elapsed < duration) {
+          elem.style.transform = `translateX(${x}px)`;
+          requestAnimationFrame(transX);
+        }
+      };
+      //関数を実行
+      transX();
+    </script>
+  </body>
+</html>

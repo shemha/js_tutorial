@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>経過時間によるアニメーション</title>
+    <style>
+      .elem {
+        background-color: green;
+        width: 100px;
+        height: 50px;
+        color: #fff;
+        line-height: 50px;
+        text-align: center;
+      }
+      button {
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="elem"></div>
+
+    <script>
+      //対象の要素
+      const elem = document.querySelector(".elem");
+      //開始時刻を代入する変数（最初は未定義）
+      let start;
+
+      const transX = (timestamp) => {
+        if (start === undefined) {
+          //初回実行時の timestamp を start に代入
+          start = timestamp;
+        }
+        //経過時間（start が未定義の場合は0）
+        const elapsed = start ? timestamp - start : 0;
+        //要素が移動する距離を経過時間を使って設定（Math.min() で最大値を調整）
+        const x = Math.min(0.1 * elapsed, 200);
+
+        //経過時間が2秒未満の場合
+        if (elapsed < 2000) {
+          //要素を x の値だけ移動
+          elem.style.transform = `translateX(${x}px)`;
+          //requestAnimationFrame() で繰り返し
+          requestAnimationFrame(transX);
+        }
+      };
+      //関数を実行
+      transX();
+    </script>
+  </body>
+</html>

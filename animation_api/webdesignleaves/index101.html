@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .elem1 {
+        background-color: red;
+      }
+      .elem2 {
+        background-color: blue;
+      }
+      .elem1,
+      .elem2 {
+        width: 100px;
+        height: 50px;
+        color: #fff;
+        line-height: 50px;
+        text-align: center;
+      }
+      button {
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="elem1">RAF <span>0</span></div>
+    <div class="elem2">ST <span>0</span></div>
+    <button type="button" id="play">Play</button>
+
+    <script>
+      let x1 = 0; //x 軸方向に移動する距離
+      const elem1 = document.querySelector(".elem1"); //対象の要素
+      const elem1Span = document.querySelector(".elem1 span");
+
+      let x2 = 0; //x 軸方向に移動する距離
+      const elem2 = document.querySelector(".elem2"); //対象の要素
+      const elem2Span = document.querySelector(".elem2 span");
+
+      //play ボタン
+      const play = document.getElementById("play");
+
+      //requestAnimationFrame() を使った関数の定義
+      const transX1 = () => {
+        if (x1 < 200) {
+          x1++;
+          elem1.style.transform = `translateX(${x1}px)`;
+          //span 要素に x1 の値を出力
+          elem1Span.textContent = x1;
+          //requestAnimationFrame() で繰り返し
+          requestAnimationFrame(transX1);
+        }
+        if (x1 === 200 && play.hasAttribute("disabled")) {
+          //Play ボタンの要素の disabled 属性を削除
+          play.removeAttribute("disabled");
+        }
+      };
+
+      //setTimeout() を使った関数の定義
+      const transX2 = () => {
+        if (x2 < 200) {
+          x2++;
+          elem2.style.transform = `translateX(${x2}px)`;
+          elem2Span.textContent = x2;
+          //setTimeout() で繰り返し
+          setTimeout(transX2, 1000 / 60);
+        }
+        if (x2 === 200 && play.hasAttribute("disabled")) {
+          play.removeAttribute("disabled");
+        }
+      };
+
+      //play ボタンにクリックイベントを設定
+      play.addEventListener("click", (e) => {
+        //要素の位置を初期化
+        elem1.style.transform = "translateX(0px)";
+        elem2.style.transform = "translateX(0px)";
+        //移動する距離の値を初期化
+        x1 = 0;
+        x2 = 0;
+        //関数を実行
+        transX1();
+        transX2();
+        //play ボタンの要素に disabled 属性を設定
+        e.currentTarget.setAttribute("disabled", true);
+      });
+    </script>
+  </body>
+</html>

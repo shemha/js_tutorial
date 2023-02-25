@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>経過時間の取得</title>
+    <style>
+      .elem {
+        background-color: green;
+        width: 100px;
+        height: 50px;
+        color: #fff;
+        line-height: 50px;
+        text-align: center;
+      }
+      button {
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="elem"><span>0</span> ms</div>
+    <button type="button" id="play">Play</button>
+
+    <script>
+      //アニメーションの開始時刻と経過時間を格納する変数
+      let start, elapsed;
+
+      let x = 0; //移動する距離
+      const elem = document.querySelector(".elem");
+      const elemSpan = document.querySelector(".elem span");
+      const play = document.getElementById("play");
+
+      //引数にタイムスタンプ（timestamp）を受け取る
+      const transX = (timestamp) => {
+        if (start === undefined) {
+          //初回実行時の timestamp を start に代入
+          start = timestamp;
+        }
+        //経過時間の算出
+        elapsed = timestamp - start;
+
+        if (x < 200) {
+          x++;
+          elem.style.transform = `translateX(${x}px)`;
+          //経過時間を出力（小数点以下は切り捨てて出力）
+          elemSpan.textContent = Math.floor(elapsed);
+          requestAnimationFrame(transX);
+        }
+        if (x === 200 && play.hasAttribute("disabled")) {
+          play.removeAttribute("disabled");
+        }
+      };
+
+      play.addEventListener("click", (e) => {
+        elem.style.transform = "translateX(0px)";
+        x = 0;
+        //経過時間の初期化
+        elapsed = 0;
+        //開始時刻の初期化
+        start = undefined;
+        transX();
+        e.currentTarget.setAttribute("disabled", true);
+      });
+    </script>
+  </body>
+</html>

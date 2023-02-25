@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>経過時間と移動距離を出力</title>
+    <style>
+      .elem {
+        background-color: red;
+        width: 50px;
+        height: 50px;
+        color: #fff;
+        line-height: 50px;
+        text-align: center;
+      }
+      button {
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="elem"></div>
+    <button type="button" id="play">Play</button>
+    <div>Elapsed Time : <span id="et_val"></span></div>
+    <div>value of x : <span id="x_val"></span></div>
+
+    <script>
+      const elem = document.querySelector(".elem");
+      let start;
+      const duration = 2000;
+      const distance = 200;
+
+      //経過時間と移動距離の出力先の要素
+      const et_val = document.getElementById("et_val");
+      const x_val = document.getElementById("x_val");
+      const transX = (timestamp) => {
+        if (start === undefined) {
+          start = timestamp;
+        }
+        const elapsed = start ? timestamp - start : 0;
+        //経過時間を出力
+        et_val.textContent = elapsed;
+        //要素が移動する距離を速度（distance/duration）と経過時間を使って設定
+        const x = Math.min((distance / duration) * elapsed, distance);
+        //移動距離を出力
+        x_val.textContent = x;
+        if (elapsed < duration) {
+          elem.style.transform = `translateX(${x}px)`;
+          requestAnimationFrame(transX);
+        }
+      };
+      //ボタンの要素
+      const play = document.getElementById("play");
+      //ボタンの要素にクリックイベントを設定
+      play.addEventListener("click", (e) => {
+        //開始時刻を初期化
+        start = undefined;
+        //関数を実行
+        transX();
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>約1秒に1ずつ値をカウントアップして表示</title>
+  </head>
+  <body>
+    <div class="table-responsive">
+      <table style="max-width: 420px">
+        <tr>
+          <td style="width: 120px">Count</td>
+          <td class="count">0</td>
+        </tr>
+        <tr>
+          <td>Value</td>
+          <td class="value">0</td>
+        </tr>
+        <tr>
+          <td>Elapsed (ms)</td>
+          <td class="elapsed">0</td>
+        </tr>
+      </table>
+    </div>
+    <button type="button" id="start">Start</button>
+
+    <script>
+      //値を出力する対象の要素
+      const countOut = document.querySelector(".count");
+      const valueOut = document.querySelector(".value");
+      const elapsedOut = document.querySelector(".elapsed");
+      //開始時刻を代入する変数（最初は未定義）
+      let start;
+
+      //アニメーションの持続時間
+      const duration = 6000;
+      //アニメーションで表示する値の上限 +1
+      const maxCount = 6;
+      //カウント
+      let count = 0;
+
+      const showCount = (timestamp) => {
+        if (start === undefined) {
+          start = timestamp;
+        }
+
+        //経過時間
+        const elapsed = start ? timestamp - start : 0;
+
+        //進捗度
+        const relativeProgress = Math.min(1, elapsed / duration);
+
+        //進捗度を使ってカウントの値を設定（小数点以下切り捨て）
+        count = Math.floor(maxCount * relativeProgress);
+
+        //経過時間が持続時間に満たない場合は繰り返し
+        if (elapsed < duration) {
+          //カウントの値を出力
+          countOut.textContent = count;
+          //小数点以下を切り捨てない値を出力
+          valueOut.textContent = maxCount * relativeProgress;
+          //経過時間を出力
+          elapsedOut.textContent = elapsed;
+          //requestAnimationFrame() でコールバック関数を呼び出し
+          requestAnimationFrame(showCount);
+        }
+      };
+
+      //ボタンの要素
+      const startBtn = document.getElementById("start");
+      //ボタンの要素にクリックイベントを設定
+      startBtn.addEventListener("click", () => {
+        //開始時刻を初期化
+        start = undefined;
+        //関数を実行
+        showCount();
+      });
+    </script>
+  </body>
+</html>

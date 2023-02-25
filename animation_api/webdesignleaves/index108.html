@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>undefined で初期化</title>
+    <style>
+      .elem {
+        background-color: red;
+        width: 50px;
+        height: 50px;
+        color: #fff;
+        line-height: 50px;
+        text-align: center;
+      }
+      button {
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="elem"></div>
+    <button type="button" id="play">Play</button>
+
+    <script>
+      const elem = document.querySelector(".elem");
+      let start; //開始時刻を代入する変数
+      const duration = 2000;
+      const distance = 200;
+
+      const transX = (timestamp) => {
+        if (start === undefined) {
+          start = timestamp;
+        }
+        const elapsed = start ? timestamp - start : 0;
+
+        //各値をコンソールに出力
+        console.log("timestamp:" + timestamp);
+        console.log("start:" + start);
+        console.log("elapsed:" + elapsed);
+
+        const x = Math.min((distance / duration) * elapsed, distance);
+
+        if (elapsed < duration) {
+          elem.style.transform = `translateX(${x}px)`;
+          requestAnimationFrame(transX);
+        }
+      };
+
+      //ボタンをクリックしたら関数を実行するイベント
+      document.getElementById("play").addEventListener("click", (e) => {
+        //開始時刻を undefined で初期化
+        start = undefined;
+        //関数を実行
+        transX();
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FPS の取得</title>
+    <style>
+      .table-responsive {
+        overflow-x: auto;
+        min-height: 0.01%;
+      }
+      @media screen and (max-width: 767px) {
+        .table-responsive {
+          width: 100%;
+          margin-bottom: 15px;
+          overflow-y: hidden;
+          -ms-overflow-style: -ms-autohiding-scrollbar;
+          border: 1px solid #ddd;
+        }
+        .table-responsive > .table {
+          margin-bottom: 0;
+        }
+        .table-responsive > .table > thead > tr > th,
+        .table-responsive > .table > tbody > tr > th,
+        .table-responsive > .table > tfoot > tr > th,
+        .table-responsive > .table > thead > tr > td,
+        .table-responsive > .table > tbody > tr > td,
+        .table-responsive > .table > tfoot > tr > td {
+          white-space: nowrap;
+        }
+        .table-responsive > .table-bordered {
+          border: 0;
+        }
+        .table-responsive > .table-bordered > thead > tr > th:first-child,
+        .table-responsive > .table-bordered > tbody > tr > th:first-child,
+        .table-responsive > .table-bordered > tfoot > tr > th:first-child,
+        .table-responsive > .table-bordered > thead > tr > td:first-child,
+        .table-responsive > .table-bordered > tbody > tr > td:first-child,
+        .table-responsive > .table-bordered > tfoot > tr > td:first-child {
+          border-left: 0;
+        }
+        .table-responsive > .table-bordered > thead > tr > th:last-child,
+        .table-responsive > .table-bordered > tbody > tr > th:last-child,
+        .table-responsive > .table-bordered > tfoot > tr > th:last-child,
+        .table-responsive > .table-bordered > thead > tr > td:last-child,
+        .table-responsive > .table-bordered > tbody > tr > td:last-child,
+        .table-responsive > .table-bordered > tfoot > tr > td:last-child {
+          border-right: 0;
+        }
+        .table-responsive > .table-bordered > tbody > tr:last-child > th,
+        .table-responsive > .table-bordered > tfoot > tr:last-child > th,
+        .table-responsive > .table-bordered > tbody > tr:last-child > td,
+        .table-responsive > .table-bordered > tfoot > tr:last-child > td {
+          border-bottom: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div style="margin-top: 30px">
+      <button type="button" id="check" style="margin-right: 30px">
+        Check FPS
+      </button>
+      <button type="button" id="clear">Stop</button>
+    </div>
+    <div class="table-responsive">
+      <table style="max-width: 420px">
+        <tr>
+          <td>FPS（Frame Per Second）</td>
+          <td id="fpsOut"></td>
+        </tr>
+        <tr>
+          <td style="width: 280px">frame time（1 frame の時間 ms）</td>
+          <td><span id="ftOut"></span></td>
+        </tr>
+      </table>
+    </div>
+
+    <script>
+      //FPS の値を入れる変数の初期化
+      let fps;
+      //フレームの表示回数（コールバック関数が呼び出された回数）
+      let frameCount = 0;
+      //開始時刻と前回のタイムスタンプを入れる変数の初期化
+      let start, prevTimestamap;
+      let requestID;
+      //FPS の値を表示する要素
+      const fpsOut = document.getElementById("fpsOut");
+      //１回のフレームの表示時間を表示する要素
+      const ftOut = document.getElementById("ftOut");
+
+      const show = (timestamp) => {
+        if (start === undefined) {
+          start = timestamp;
+        }
+        //１回のフレームの表示時間（小数点以下4桁で切り捨て）を表示
+        ftOut.textContent = prevTimestamap
+          ? Math.floor((timestamp - prevTimestamap) * 10000) / 10000
+          : 0;
+        //prevTimestamap に現在のタイムスタンプを代入
+        prevTimestamap = timestamp;
+        //経過時間
+        const elapsed = timestamp - start;
+        //フレームの表示回数を１増加
+        frameCount++;
+        //経過時間が１秒を経過したら
+        if (elapsed >= 1000) {
+          //その時点のフレームの表示回数を fps に代入
+          fps = frameCount;
+          //フレームの表示回数をリセット
+          frameCount = 0;
+          //開始時刻をこの時点でのタイムスタンプに
+          start = timestamp;
+        }
+        requestID = requestAnimationFrame(show);
+        //fps に値が入っていれば表示
+        fpsOut.textContent = fps ? fps : "";
+      };
+
+      const check = document.getElementById("check");
+      check.addEventListener("click", (e) => {
+        //関数を実行
+        show();
+        e.currentTarget.setAttribute("disabled", true);
+      });
+
+      document.getElementById("clear").addEventListener("click", (e) => {
+        cancelAnimationFrame(requestID);
+        fps = undefined;
+        frameCount = 0;
+        check.removeAttribute("disabled");
+      });
+    </script>
+  </body>
+</html>

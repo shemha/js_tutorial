@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SVG Ellipse 要素の ry 属性をアニメーション - ホバーイベント</title>
+  </head>
+  <body>
+    <div class="svg-wrapper" style="width: 100px">
+      <svg viewBox="0 0 100 100" class="svg-e01">
+        <ellipse
+          cx="50"
+          cy="50"
+          rx="50"
+          ry="20"
+          fill="pink"
+          style="cursor: pointer"
+        />
+      </svg>
+    </div>
+
+    <script>
+      //楕円の要素
+      const ellipse = document.querySelector(".svg-e01 ellipse");
+
+      //開始時刻を代入する変数（最初は未定義）
+      let start;
+
+      //アニメーションの持続時間
+      const duration = 400;
+
+      //楕円のX軸方向の半径
+      const rx = parseInt(ellipse.getAttribute("rx"));
+      //楕円のY軸方向の半径
+      const ry = parseInt(ellipse.getAttribute("ry"));
+      //X軸方向とY軸方向の半径の差分
+      const diff = rx - ry;
+
+      //マウスオーバーの際は true、マウスアウトの際は false にする変数
+      let mouseEnter = true;
+
+      //リクエストID（キャンセル時に使用）
+      let requestID;
+
+      //コールバック関数の定義
+      const transitionRY = (timestamp) => {
+        if (start === undefined) {
+          start = timestamp;
+        }
+        //経過時間
+        const elapsed = start ? timestamp - start : 0;
+        //進捗度を算出
+        const relativeProgress = Math.min(1, elapsed / duration);
+
+        //mouseEnter の値により進捗度を使って ry 属性の値を設定
+        let y;
+        if (mouseEnter) {
+          //マウスオーバー
+          y = ry + diff * relativeProgress;
+        } else {
+          //現在の楕円または円のY軸方向の半径を取得（マウスアウト）
+          const currentY = parseInt(ellipse.getAttribute("ry"));
+          y = currentY - (currentY - ry) * relativeProgress;
+        }
+
+        //進捗度が1に満たない場合
+        if (relativeProgress < 1) {
+          ellipse.setAttribute("ry", y);
+          //requestAnimationFrame() を使ってコールバック関数を繰り返す
+          requestID = requestAnimationFrame(transitionRY);
+        } else if (relativeProgress === 1) {
+          ellipse.setAttribute("ry", y);
+        }
+      };
+
+      //マウスオーバーイベント
+      ellipse.addEventListener("mouseenter", (e) => {
+        //実行中のアニメーションがあれば停止
+        if (requestID) cancelAnimationFrame(requestID);
+        //開始時刻を初期化
+        start = undefined;
+        //mouseEnter を true に
+        mouseEnter = true;
+        transitionRY();
+      });
+
+      //マウスアウトイベント
+      ellipse.addEventListener("mouseleave", (e) => {
+        //実行中のアニメーションがあれば停止
+        if (requestID) cancelAnimationFrame(requestID);
+        //開始時刻を初期化
+        start = undefined;
+        //mouseEnter を false に
+        mouseEnter = false;
+        transitionRY();
+      });
+    </script>
+  </body>
+</html>

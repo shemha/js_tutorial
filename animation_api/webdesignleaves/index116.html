@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SVG Ellipse 要素の ry 属性をアニメーション</title>
+  </head>
+  <body>
+    <div class="svg-wrapper" style="width: 100px">
+      <svg viewBox="0 0 100 100" class="svg-e01">
+        <ellipse
+          cx="50"
+          cy="50"
+          rx="50"
+          ry="20"
+          fill="pink"
+          style="cursor: pointer"
+        />
+      </svg>
+    </div>
+
+    <script>
+      //イージング関数（easeInOutExpo）の定義
+      const easeOutBounce = (x) => {
+        const n1 = 7.5625;
+        const d1 = 2.75;
+        if (x < 1 / d1) {
+          return n1 * x * x;
+        } else if (x < 2 / d1) {
+          return n1 * (x -= 1.5 / d1) * x + 0.75;
+        } else if (x < 2.5 / d1) {
+          return n1 * (x -= 2.25 / d1) * x + 0.9375;
+        } else {
+          return n1 * (x -= 2.625 / d1) * x + 0.984375;
+        }
+      };
+
+      //楕円の要素
+      const ellipse = document.querySelector(".svg-e01 ellipse");
+
+      //開始時刻を代入する変数（最初は未定義）
+      let start;
+
+      //アニメーションの持続時間
+      const duration = 1000;
+
+      //楕円のX軸方向の半径
+      const rx = parseInt(ellipse.getAttribute("rx"));
+      //楕円のY軸方向の半径
+      const ry = parseInt(ellipse.getAttribute("ry"));
+      //X軸方向とY軸方向の半径の差分
+      const diff = rx - ry;
+
+      //楕円から円に変化させる場合は true にする変数
+      let increase = true;
+
+      //コールバック関数の定義
+      const changeRY = (timestamp) => {
+        if (start === undefined) {
+          start = timestamp;
+        }
+        //経過時間
+        const elapsed = start ? timestamp - start : 0;
+
+        //進捗度を算出してイージングを適用
+        const relativeProgress = easeOutBounce(Math.min(1, elapsed / duration));
+
+        //increase の値により進捗度を使って ry 属性の値を設定
+        const y = increase
+          ? ry + diff * relativeProgress
+          : rx - diff * relativeProgress;
+
+        //進捗度が1に満たない場合
+        if (relativeProgress < 1) {
+          ellipse.setAttribute("ry", y);
+          //requestAnimationFrame() を使ってコールバック関数を繰り返す
+          requestAnimationFrame(changeRY);
+        } else if (relativeProgress === 1) {
+          //進捗度が1の場合（完全な円にするため）
+          ellipse.setAttribute("ry", y);
+        }
+      };
+
+      //ellipse の要素にクリックイベントを設定
+      ellipse.addEventListener("click", (e) => {
+        //開始時刻を初期化
+        start = undefined;
+        //現在のX軸方向とY軸方向の半径の値が同じでない場合（楕円の場合）
+        if (ellipse.getAttribute("rx") !== ellipse.getAttribute("ry")) {
+          increase = true;
+        } else {
+          //現在のX軸方向とY軸方向の半径の値が同じ場合（円の場合）
+          increase = false;
+        }
+        //関数を実行
+        changeRY();
+      });
+    </script>
+  </body>
+</html>

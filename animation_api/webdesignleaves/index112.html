@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>現在時刻の取得</title>
+    <style>
+      .elem {
+        background-color: green;
+        width: 50px;
+        height: 50px;
+        color: #fff;
+        line-height: 50px;
+        text-align: center;
+      }
+      button {
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="elem"></div>
+    <button type="button" id="play">Play</button>
+
+    <script>
+      const elem = document.querySelector(".elem");
+      let start;
+      const duration = 2000;
+      const distance = 200;
+
+      //引数のタイムスタンプを使わない例
+      const transX = () => {
+        if (start === undefined) {
+          //開始時刻に performance.now() で取得した値を代入
+          start = performance.now();
+        }
+        //経過時間（現在時刻を performance.now() で取得）
+        const elapsed = start ? performance.now() - start : 0;
+        const relativeProgress = Math.min(1, elapsed / duration);
+        const x = distance * relativeProgress;
+
+        if (elapsed < duration) {
+          elem.style.transform = `translateX(${x}px)`;
+          requestAnimationFrame(transX);
+        }
+        console.log("x: " + x);
+        console.log("relativeProgress: " + relativeProgress);
+      };
+
+      //ボタンの要素にクリックイベントを設定
+      document.getElementById("play").addEventListener("click", (e) => {
+        //開始時刻を初期化
+        start = undefined;
+        //または start = performance.now();
+        //関数を実行
+        transX();
+      });
+    </script>
+  </body>
+</html>
